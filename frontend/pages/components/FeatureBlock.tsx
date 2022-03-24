@@ -1,5 +1,6 @@
 import React from "react";
 import { Avatar, Grid, Typography } from "@mui/material";
+import { flexbox } from "@mui/system";
 
 interface Props {
   title: string;

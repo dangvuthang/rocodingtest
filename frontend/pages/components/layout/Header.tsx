@@ -22,7 +22,7 @@ export default function Header(): JSX.Element {
         <Grid container alignItems="center">
           <Grid item xs={2}>
             <Typography variant="body1" align="center" sx={{ fontWeight: 600 }}>
-              SaaS Product
+              HACKERMIT
             </Typography>
           </Grid>
           <Grid container item xs={10} justifyContent="flex-end">
@@ -31,7 +31,7 @@ export default function Header(): JSX.Element {
                 sx={{ mr: 2 }}
                 color={router.pathname === "/" ? "primary" : "secondary"}
               >
-                Home
+                Sign In
               </Button>
             </Link>
             <Link href="/page2" passHref>
@@ -39,7 +39,7 @@ export default function Header(): JSX.Element {
                 sx={{ mr: 2 }}
                 color={router.pathname === "/" ? "primary" : "secondary"}
               >
-                Page 2
+                Sign Up
               </Button>
             </Link>
           </Grid>

@@ -16,7 +16,7 @@ export default function HomePage(): JSX.Element {
   return (
     <Page maxWidth={false}>
       <HeroSection
-        title="SaaS Product"
+        title="HACKERMIT"
         subtitle="Modern, beautiful, bold. Solve problems, today"
         image="/assets/city.svg"
       >
@@ -38,23 +38,24 @@ export default function HomePage(): JSX.Element {
             icon={<PeopleIcon />}
             content={
               <>
-                Consequat id porta nibh venenatis cras sed felis eget velit. Ac
-                felis donec et odio pellentesque diam volutpat commodo.
+                    Embedded code editor supports multiple languages<br/>
+                    Real time coding<br/>
+                    Exam notification system<br/>
               </>
             }
           />
           <FeatureBlock
-            title="Simple"
+            title="Manageble"
             icon={<StarIcon />}
             content={
               <>
-                Ultricies leo integer malesuada nunc vel. Egestas pretium aenean
-                pharetra magna ac placerat vestibulum.
+                hehe
+                huhu
               </>
             }
           />
           <FeatureBlock
-            title="Cost effective"
+            title="Secure"
             icon={<CodeIcon />}
             content={
               <>

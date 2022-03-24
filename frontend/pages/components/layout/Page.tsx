@@ -27,9 +27,9 @@ export default function Page({
 }
 
 function PageWrapper({ children, title, maxWidth = "md" }: Props): JSX.Element {
-  let titleString = "SaaS Product";
+  let titleString = "HACKERMIT";
   if (title) {
-    titleString = "SaaS Product | " + title;
+    titleString = "HACKERMIT | " + title;
   }
   if (maxWidth === false) {
     return (
