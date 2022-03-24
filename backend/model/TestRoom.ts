@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, connect, Types } from 'mongoose';
 import {ITest} from './Test';
+import {IUser} from './User';
 
 export interface ITestRoom extends Document {
     name: string;
@@ -9,9 +10,11 @@ export interface ITestRoom extends Document {
     link: string;
     duration: number;
     tests: Types.Array<Types.ObjectId>;
+    studentsId: Types.Array<Types.ObjectId>;
+    teacherId: Types.ObjectId;
   }
 
-  const TestSchema: Schema = new Schema({
+  const TestRoomSchema: Schema = new Schema({
     name: {type: 'string', required: true},
     description: {type: 'string', required: true},
     createdDate: {type: 'string', required: true},
@@ -19,7 +22,9 @@ export interface ITestRoom extends Document {
     link: {type: 'string', required: true},
     duration: {type: 'string', required: true},
     tests: [{type: Schema.Types.ObjectId, ref: 'Test'}],
+    studentsId: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    teacherId: {type: Schema.Types.ObjectId, ref: 'User'}
   });
 
   // Export the model and return your IUser interface
-  export default mongoose.model<ITest>('Record', TestSchema);
+  export default mongoose.model<ITestRoom>('TestRoom', TestRoomSchema);
