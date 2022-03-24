@@ -1,37 +1,18 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export enum Gender {
-  male = 'male',
-  female = 'female',
-  undisclosed = 'undisclosed'
-}
-
-export interface Address extends Document {
-  street: string;
-  city: string;
-  postCode: string;
-}
-
-export interface IUser extends Document {
+export interface ISubmission extends Document {
   email: string;
-  firstName: string;
-  lastName: string;
-  gender?: Gender;
-  address?: Address;
+  submissionDate: Date;
+  content: string;
+  numberOfUnitsTestPassed: Number
 }
 
-const UserSchema: Schema = new Schema({
+const SubmissionSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  // Gets the Mongoose enum from the TypeScript enum
-  gender: { type: String, enum: Object.values(Gender) },
-  address: {
-    street: { type: String },
-    city: { type: String },
-    postCode: { type: String }
-  }
+  submissionDate: { type: Date, required: true},
+  content: { type: String, required: true},
+  numberOfUnitsTestPassed: { type: Number, required: true}
 });
 
 // Export the model and return your IUser interface
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<ISubmission>('Submission', SubmissionSchema);
