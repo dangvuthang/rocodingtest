@@ -1,21 +1,9 @@
-import { Container } from "@mui/material";
+import { Grid, Typography, Container } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
-import dynamic from "next/dynamic";
-
-const SignInButton = dynamic(() => import("../components/SignInButton"), {
-  ssr: false,
-});
-const SignOutButton = dynamic(() => import("../components/SignOutButton"), {
-  ssr: false,
-});
+import Image from "next/image";
 
 const Home: NextPage = () => {
-  const isAuthenticated = useIsAuthenticated();
-  const [account] = useMsal().accounts;
-  console.log(isAuthenticated);
-  console.log(account);
   return (
     <>
       <Head>
@@ -26,7 +14,9 @@ const Home: NextPage = () => {
 
       <main>
         <Container>
-          {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+          <Grid>
+            <Typography>Hello World</Typography>
+          </Grid>
         </Container>
       </main>
     </>
