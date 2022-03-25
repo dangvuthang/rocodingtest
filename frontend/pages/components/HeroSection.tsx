@@ -16,7 +16,7 @@ export default function HeroSection({
   children,
 }: Props): JSX.Element {
   return (
-    <Box sx={{ backgroundColor: "#EDE7F6" }}>
+    <Box sx={{ backgroundColor: "#94c5e9" }}>
       <Container maxWidth="md">
         <Grid container alignItems="center" sx={{ py: 12 }}>
           <Grid item xs={12} sm={6}>

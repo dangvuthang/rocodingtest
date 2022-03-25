@@ -21,9 +21,11 @@ export default function Header(): JSX.Element {
       <Container maxWidth="md" sx={{ py: 1 }}>
         <Grid container alignItems="center">
           <Grid item xs={2}>
-            <Typography variant="body1" align="center" sx={{ fontWeight: 600 }}>
-              HACKERMIT
-            </Typography>
+            <Link href="/" passHref>
+              <Typography variant="body1" align="center" sx={{ fontWeight: 600 }}>
+                HACKERMIT
+              </Typography>
+            </Link>
           </Grid>
           <Grid container item xs={10} justifyContent="flex-end">
             <Link href="/" passHref>
