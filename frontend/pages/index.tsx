@@ -18,7 +18,7 @@ export default function HomePage(): JSX.Element {
       <HeroSection
         title="HACKERMIT"
         subtitle="Modern, beautiful, bold. Solve problems, today"
-        image="/assets/city.svg"
+        image="/assets/Education_Background_vector_5.jpg"
       >
         {/* <Link href="/react" passHref> */}
         <Button variant="contained" disableElevation sx={{ mr: 2, mt: 2 }}>
