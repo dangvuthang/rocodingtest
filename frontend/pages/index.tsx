@@ -40,7 +40,7 @@ export default function HomePage(): JSX.Element {
               <>
                     Embedded code editor supports multiple languages<br/>
                     Real time coding<br/>
-                    Exam notification system<br/>
+                    Exam notification system
               </>
             }
           />
@@ -49,8 +49,9 @@ export default function HomePage(): JSX.Element {
             icon={<StarIcon />}
             content={
               <>
-                hehe
-                huhu
+                Allow managing separate examination<br/>
+                Can host room and invite students easily<br/>
+                Secure identification system
               </>
             }
           />
@@ -59,8 +60,10 @@ export default function HomePage(): JSX.Element {
             icon={<CodeIcon />}
             content={
               <>
-                Vitae turpis massa sed elementum tempus egestas. Commodo sed
-                egestas egestas fringilla phasellus faucibus.
+                Screen tracking system can detect unusual behaviour<br/>
+                Camera tracking can record facial expressions<br/>
+                Be able to notify the teacher in real-time<br/>
+                Provide evidence.
               </>
             }
           />

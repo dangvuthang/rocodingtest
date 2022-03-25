@@ -30,6 +30,7 @@ export default function Header(): JSX.Element {
               <Button
                 sx={{ mr: 2 }}
                 color={router.pathname === "/" ? "primary" : "secondary"}
+                variant="outlined"
               >
                 Sign In
               </Button>
@@ -38,6 +39,7 @@ export default function Header(): JSX.Element {
               <Button
                 sx={{ mr: 2 }}
                 color={router.pathname === "/" ? "primary" : "secondary"}
+                variant="contained"
               >
                 Sign Up
               </Button>

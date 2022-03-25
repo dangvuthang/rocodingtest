@@ -23,7 +23,7 @@ export default function FeatureBlock({
       <Typography variant="h3" sx={{ mb: 1 }}>
         {title}
       </Typography>
-      <Typography variant="body2">{content}</Typography>
+      <Typography variant="body1">{content}</Typography>
     </Grid>
   );
 }
