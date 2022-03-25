@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, connect, Types } from 'mongoose';
 
 export interface IRecord {
-    attendanceDate: string;
+    attendanceDate: Date;
     numberOfCheats: number;
     evidence: Types.Array<string>;
     userId: Types.ObjectId;
@@ -9,7 +9,7 @@ export interface IRecord {
   }
 
   const RecordSchema: Schema = new Schema({
-    attendanceDate: { type: String, required: true, unique: true },
+    attendanceDate: { type: Date, required: true, unique: true },
     numberOfCheats: { type: Number, required: true},
     evidence: { type: String, required: true},
     userId: { type: Types.ObjectId, ref: 'User'},

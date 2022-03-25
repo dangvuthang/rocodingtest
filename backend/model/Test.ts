@@ -13,8 +13,8 @@ export interface ITest {
 
   const TestSchema: Schema = new Schema({
     name: {type: String, required: true},
-    createdDate: {type: String, required: true},
-    endDate: {type: String, required: true},
+    createdDate: {type: Date, required: true},
+    endDate: {type: Date, required: true},
     link: {type: String, required: true},
     duration: {type: Number, required: true},
     question: {type: String, required: true},
