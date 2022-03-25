@@ -8,7 +8,7 @@ export interface ISubmission extends Document {
 }
 
 const SubmissionSchema: Schema = new Schema({
-  submissionTime: { type: Date, required: true},
+  submissionTime: { type: Date, required: true, default: Date.now()},
   content: { type: String, required: true},
   testId: { type: Types.ObjectId, required: true, ref: "Test"},
   studentId: { type: Types.ObjectId, required: true, ref: "User"}
