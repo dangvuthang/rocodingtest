@@ -1,17 +1,25 @@
 import mongoose, { Schema, model, connect, Types } from 'mongoose';
 
-export interface ITest extends Document {
+export interface ITest {
+    name: string;
     createdDate: Date;
-    contents: string;
-    testRoom: Types.ObjectId;
-    unitTests: Types.Array<Types.ObjectId>;
+    endDate: Date;
+    link: string;
+    duration: number;
+    question: string;
+    teacherId: Types.ObjectId;
+    submission: Types.Array<Types.ObjectId>;
   }
 
   const TestSchema: Schema = new Schema({
-    createdDate: { type: Date},
-    contents: { type: String, required: true},
-    testRoom: { type: Types.ObjectId, ref: 'TestRoom'},
-    unitTests: [{ type: Types.ObjectId, ref: 'UnitTest'}],
+    name: {type: String, required: true},
+    createdDate: {type: String, required: true},
+    endDate: {type: String, required: true},
+    link: {type: String, required: true},
+    duration: {type: Number, required: true},
+    question: {type: String, required: true},
+    teacherId: {type: Schema.Types.ObjectId, ref: 'User'},
+    submission: [{type: Schema.Types.ObjectId, ref : 'Submission'}]
   });
 
   // Export the model and return your IUser interface
