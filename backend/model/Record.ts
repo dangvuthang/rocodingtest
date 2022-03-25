@@ -11,7 +11,7 @@ export interface IRecord {
   const RecordSchema: Schema = new Schema({
     attendanceDate: { type: Date, required: true, unique: true },
     numberOfCheats: { type: Number, required: true, default: 0},
-    evidence: { type: String, required: true},
+    evidence: [{ type: String, required: true, default: []}],
     userId: { type: Types.ObjectId, ref: 'User'},
     testRoomId: { type: Types.ObjectId, ref: 'TestRoom' },
   });

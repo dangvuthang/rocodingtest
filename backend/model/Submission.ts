@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
-export interface ISubmission extends Document {
+export interface ISubmission {
   submissionTime: Date;
   content: string;
   testId: Types.ObjectId;
