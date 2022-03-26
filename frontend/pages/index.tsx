@@ -1,17 +1,15 @@
 import { Title } from "@mui/icons-material";
-import { Grid, Typography, Container,Button, Box } from "@mui/material";
+import { Grid, Typography, Container, Button, Box } from "@mui/material";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+import ShieldIcon from '@mui/icons-material/Shield';
+import SettingsIcon from '@mui/icons-material/Settings';
 import HeroSection from "../components/HeroSection";
 import Page from "../components/layout/Page";
 import ContactSection from "../components/ContactSection";
 import FeatureContainer from "../components/FeatureContainer";
 import FeatureBlocksContainer from "../components/FeatureBlocksContainer";
 import FeatureBlock from "../components/FeatureBlock";
-import CodeIcon from "@mui/icons-material/Code";
 import StarIcon from "@mui/icons-material/Star";
-import PeopleIcon from "@mui/icons-material/People";
 import BigSection from "../components/BigSection";
 import TeammateSection from "../components/TeammateSection";
 import { teammates } from "../components/data/teammate";
@@ -21,7 +19,7 @@ export default function HomePage(): JSX.Element {
     <Page maxWidth={false}>
       <HeroSection
         title="HACKERMIT"
-        subtitle="Modern, beautiful, bold. Solve problems, today"
+        subtitle="Easy to organize online exams. Stability and Anti-cheating."
         image="https://assets3.lottiefiles.com/packages/lf20_fGseie.json"
       >
         {/* <Link href="/react" passHref> */}
@@ -38,7 +36,7 @@ export default function HomePage(): JSX.Element {
         <FeatureBlocksContainer>
           <FeatureBlock
             title="Intuitive"
-            icon={<PeopleIcon />}
+            icon={<StarIcon />}
             content={
               <>
                 Embedded code editor supports multiple languages
@@ -49,7 +47,7 @@ export default function HomePage(): JSX.Element {
           />
           <FeatureBlock
             title="Manageble"
-            icon={<StarIcon />}
+            icon={<SettingsIcon />}
             content={
               <>
                 Allow managing separate examination
@@ -60,7 +58,7 @@ export default function HomePage(): JSX.Element {
           />
           <FeatureBlock
             title="Secure"
-            icon={<CodeIcon />}
+            icon={<ShieldIcon />}
             content={
               <>
                 Screen tracking system can detect unusual behaviour
@@ -73,17 +71,17 @@ export default function HomePage(): JSX.Element {
         </FeatureBlocksContainer>
       </FeatureContainer>
       <BigSection
-        title="Our Goal!" 
+        title="Our Goal!"
         subtitle="To simplify the process of making online examinations and to lighten the workload of teachers from making online examinations.Thus,
         preventing the online cheating at the minimum rate."
         animation="https://assets4.lottiefiles.com/private_files/lf30_obidsi0t.json"
       />
-      <Box sx={{mb: 8}}>
-          <TeammateSection 
+      <Box sx={{ mb: 8 }}>
+        <TeammateSection
           title="About Us"
-          teammates={teammates}/>
+          teammates={teammates} />
       </Box>
-      <Box sx={{mb: 4}}>
+      <Box sx={{ mb: 4 }}>
         <ContactSection />
       </Box>
     </Page>
