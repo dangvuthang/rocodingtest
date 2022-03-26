@@ -4,7 +4,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#8E44AD",
+      main: "#ffa500",
     },
     secondary: {
       main: "#9575CD",
@@ -19,11 +19,16 @@ const theme = createTheme({
       fontSize: "2.7rem",
       fontWeight: 700,
       color: "#000000",
+      fontFamily: "Bitter",
+      textShadow: ' 0 1px 1px #fccc74',
     },
     h2: {
-      fontSize: "2.0rem",
-      fontWeight: 600,
+      fontSize: "2.2rem",
+      fontWeight: 700,
       color: "#000000",
+      fontFamily: "'Raleway',sans-serif",
+      textAlign: "center", 
+      textTransform: 'uppercase',
     },
     h3: {
       fontSize: "1.5rem",
@@ -66,10 +71,12 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
+          borderRadius: "14px",
           textTransform: "none",
-          fontSize: "1.15rem",
-          lineHeight: 1.5,
+          fontSize: "1.10rem",
+          lineHeight: 1.4,
+          font:'bold',
+          fontWeight: 500,
         },
       },
     },

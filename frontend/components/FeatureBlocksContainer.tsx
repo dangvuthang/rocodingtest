@@ -9,7 +9,7 @@ export default function FeatureBlocksContainer({
   children,
 }: Props): JSX.Element {
   return (
-    <Grid container spacing={4}>
+    <Grid sx={{ml:0.7}} container spacing={6}>
       {children}
     </Grid>
   );

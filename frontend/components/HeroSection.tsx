@@ -6,7 +6,7 @@ type Props = {
   title: string;
   subtitle: string;
   image: string;
-  children?: React.ReactNode[];
+  children?: React.ReactNode;/** Replace with ReactNode[] to add more components*/
 };
 
 export default function HeroSection({
@@ -16,17 +16,17 @@ export default function HeroSection({
   children,
 }: Props): JSX.Element {
   return (
-    <Box sx={{ backgroundColor: "#94c5e9" }}>
-      <Container maxWidth="md">
-        <Grid container alignItems="center" sx={{ py: 12 }}>
-          <Grid item xs={12} sm={6}>
+    <Box sx={{  backgroundColor: "	#fccc74" }}>
+      <Container maxWidth="lg">
+        <Grid container alignItems="center" sx={{ py: 6 }} >
+          <Grid item sx={{ml:12}}xs={6} sm={4}>
             <Typography variant="h1">{title}</Typography>
             <Typography variant="body1">{subtitle}</Typography>
             {children}
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item sx={{ flexGrow: 1 }} xs={6} sm={7}>
             <Container>
-              <Image src={image} width={400} height={400} />
+              <Image src={image} width={600} height={600} />
             </Container>
           </Grid>
         </Grid>
