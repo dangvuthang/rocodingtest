@@ -3,18 +3,18 @@ import { Grid, Typography, Container,Button, Box } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import HeroSection from "./components/HeroSection";
-import Page from "./components/layout/Page";
-import ContactSection from "./components/ContactSection";
-import FeatureContainer from "./components/FeatureContainer";
-import FeatureBlocksContainer from "./components/FeatureBlocksContainer";
-import FeatureBlock from "./components/FeatureBlock";
+import HeroSection from "../components/HeroSection";
+import Page from "../components/layout/Page";
+import ContactSection from "../components/ContactSection";
+import FeatureContainer from "../components/FeatureContainer";
+import FeatureBlocksContainer from "../components/FeatureBlocksContainer";
+import FeatureBlock from "../components/FeatureBlock";
 import CodeIcon from "@mui/icons-material/Code";
 import StarIcon from "@mui/icons-material/Star";
 import PeopleIcon from "@mui/icons-material/People";
-import BigSection from "./components/BigSection";
-import TeammateSection from "./components/TeammateSection";
-import { teammates } from "./components/data/teammate";
+import BigSection from "../components/BigSection";
+import TeammateSection from "../components/TeammateSection";
+import { teammates } from "../components/data/teammate";
 
 export default function HomePage(): JSX.Element {
   return (
