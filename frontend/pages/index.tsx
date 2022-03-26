@@ -18,28 +18,30 @@ export default function HomePage(): JSX.Element {
       <HeroSection
         title="HACKERMIT"
         subtitle="Modern, beautiful, bold. Solve problems, today"
-        image="/assets/Education_Background_vector_5.jpg"
+        image="/assets/blogging.svg"
       >
         {/* <Link href="/react" passHref> */}
-        <Button variant="contained" disableElevation sx={{ mr: 2, mt: 2 }}>
+        <Button variant="contained" disableElevation sx={{ color:"white", mr: 2, mt: 2 }}>
           Get started
         </Button>
         {/* </Link> */}
         {/* <Link href="/ios" passHref> */}
-        <Button disableElevation sx={{ mr: 2, mt: 2 }}>
+        {/*<Button disableElevation sx={{ mr: 2, mt: 2 }}>
           Contact us
-        </Button>
+          </Button>*/}
         {/* </Link> */}
       </HeroSection>
-      <FeatureContainer>
+      <FeatureContainer
+        title="Our Web's Princibles"
+      >
         <FeatureBlocksContainer>
           <FeatureBlock
             title="Intuitive"
             icon={<PeopleIcon />}
             content={
               <>
-                    Embedded code editor supports multiple languages<br/>
-                    Real time coding<br/>
+                    Embedded code editor supports multiple languages
+                    Real time coding
                     Exam notification system
               </>
             }
@@ -49,8 +51,8 @@ export default function HomePage(): JSX.Element {
             icon={<StarIcon />}
             content={
               <>
-                Allow managing separate examination<br/>
-                Can host room and invite students easily<br/>
+                Allow managing separate examination
+                Can host room and invite students easily
                 Secure identification system
               </>
             }
@@ -60,9 +62,9 @@ export default function HomePage(): JSX.Element {
             icon={<CodeIcon />}
             content={
               <>
-                Screen tracking system can detect unusual behaviour<br/>
-                Camera tracking can record facial expressions<br/>
-                Be able to notify the teacher in real-time<br/>
+                Screen tracking system can detect unusual behaviour
+                Camera tracking can record facial expressions
+                Be able to notify the teacher in real-time
                 Provide evidence.
               </>
             }
