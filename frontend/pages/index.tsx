@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import dynamic from "next/dynamic";
+import Editor from "../components/Editor";
 
 const SignInButton = dynamic(() => import("../components/SignInButton"), {
   ssr: false,
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
       <main>
         <Container>
           {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+          <Editor />
         </Container>
       </main>
     </>
