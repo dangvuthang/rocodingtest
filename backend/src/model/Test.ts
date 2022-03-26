@@ -8,7 +8,6 @@ export interface ITest {
     duration: number;
     question: string;
     teacherId: Types.ObjectId;
-    submission: Types.Array<Types.ObjectId>;
   }
 
   const TestSchema: Schema = new Schema({
@@ -19,7 +18,6 @@ export interface ITest {
     duration: {type: Number, required: true},
     question: {type: String, required: true},
     teacherId: {type: Schema.Types.ObjectId, ref: 'User'},
-    submission: [{type: Schema.Types.ObjectId, ref : 'Submission'}]
   });
 
   // Export the model and return your IUser interface

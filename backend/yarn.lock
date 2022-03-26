@@ -630,7 +630,7 @@ mongodb@4.3.1:
   optionalDependencies:
     saslprep "^1.0.3"
 
-mongoose@*:
+mongoose@*, mongoose@^6.2.8:
   version "6.2.8"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.2.8.tgz#96fe81ff51a4c588fe810a0c06d7155d0e75e83d"
   integrity sha512-Wq6HG0sOJEQHp5YqMlxrnf93vBFwdY2zlAwqI97EPPSt69kiVV21pTv4cDanrCNWi4upG8ajQ/p9jpDjcECjkQ==

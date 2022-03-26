@@ -17,7 +17,7 @@ export interface IUser {
         values: ["student", "teacher"],
         message: "Role must be student, or teacher",
       },
-      default: "user",
+      default: "student",
     }
   });
 
