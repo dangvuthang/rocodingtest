@@ -5,7 +5,7 @@ export interface IRecord {
     numberOfCheats: number;
     evidence: Types.Array<string>;
     userId: Types.ObjectId;
-    testRoomId: Types.ObjectId;
+    testId: Types.ObjectId;
   }
 
   const RecordSchema: Schema = new Schema({
@@ -13,7 +13,7 @@ export interface IRecord {
     numberOfCheats: { type: Number, required: true, default: 0},
     evidence: [{ type: String, required: true, default: []}],
     userId: { type: Types.ObjectId, ref: 'User'},
-    testRoomId: { type: Types.ObjectId, ref: 'TestRoom' },
+    testId: { type: Types.ObjectId, ref: 'Test' },
   });
 
   // Export the model and return your IUser interface
