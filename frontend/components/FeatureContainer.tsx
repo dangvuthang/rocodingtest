@@ -11,7 +11,7 @@ export default function FeatureContainer({
   children 
 }: Props): JSX.Element {
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 4, md:8 }, pb: { xs: 8, md: 12 } }}>
+    <Container maxWidth="md" sx={{ py: { xs: 4, md:8 }, pb: { xs: 8, md: 10 } }}>
       <Typography sx={{ pb:9}} variant="h2">{title}</Typography>
       {children}
     </Container>

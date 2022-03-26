@@ -22,7 +22,7 @@ export default function HomePage(): JSX.Element {
       <HeroSection
         title="HACKERMIT"
         subtitle="Modern, beautiful, bold. Solve problems, today"
-        image="/assets/blogging.svg"
+        image="https://assets3.lottiefiles.com/packages/lf20_fGseie.json"
       >
         {/* <Link href="/react" passHref> */}
         <Button variant="contained" disableElevation sx={{ mr: 2, mt: 2 }}>
@@ -41,9 +41,9 @@ export default function HomePage(): JSX.Element {
             icon={<PeopleIcon />}
             content={
               <>
-                    Embedded code editor supports multiple languages
-                    Real time coding
-                    Exam notification system
+                Embedded code editor supports multiple languages
+                Real time coding
+                Exam notification system
               </>
             }
           />
@@ -73,12 +73,15 @@ export default function HomePage(): JSX.Element {
         </FeatureBlocksContainer>
       </FeatureContainer>
       <BigSection
-        title="Simplify the process of making online examinations" 
-        subtitle="We expected to reduce the workload of teachers from making online examinations. 
-        Preventing the online cheating at the minimum rate."
+        title="Our Goal!" 
+        subtitle="To simplify the process of making online examinations and to lighten the workload of teachers from making online examinations.Thus,
+        preventing the online cheating at the minimum rate."
+        animation="https://assets4.lottiefiles.com/private_files/lf30_obidsi0t.json"
       />
       <Box sx={{mb: 8}}>
-          <TeammateSection teammates={teammates}/>
+          <TeammateSection 
+          title="About Us"
+          teammates={teammates}/>
       </Box>
       <Box sx={{mb: 4}}>
         <ContactSection />
