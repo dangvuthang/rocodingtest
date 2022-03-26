@@ -1,16 +1,20 @@
 import { Title } from "@mui/icons-material";
-import { Grid, Typography, Container,Button } from "@mui/material";
+import { Grid, Typography, Container,Button, Box } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import HeroSection from "./components/HeroSection";
 import Page from "./components/layout/Page";
+import ContactSection from "./components/ContactSection";
 import FeatureContainer from "./components/FeatureContainer";
 import FeatureBlocksContainer from "./components/FeatureBlocksContainer";
 import FeatureBlock from "./components/FeatureBlock";
 import CodeIcon from "@mui/icons-material/Code";
 import StarIcon from "@mui/icons-material/Star";
 import PeopleIcon from "@mui/icons-material/People";
+import BigSection from "./components/BigSection";
+import TeammateSection from "./components/TeammateSection";
+import { teammates } from "./components/data/teammate";
 
 export default function HomePage(): JSX.Element {
   return (
@@ -69,6 +73,17 @@ export default function HomePage(): JSX.Element {
           />
         </FeatureBlocksContainer>
       </FeatureContainer>
+      <BigSection
+        title="Simplify the process of making online examinations" 
+        subtitle="We expected to reduce the workload of teachers from making online examinations. 
+        Preventing the online cheating at the minimum rate."
+      />
+      <Box sx={{mb: 8}}>
+          <TeammateSection teammates={teammates}/>
+      </Box>
+      <Box sx={{mb: 4}}>
+        <ContactSection />
+      </Box>
     </Page>
   );
 };
