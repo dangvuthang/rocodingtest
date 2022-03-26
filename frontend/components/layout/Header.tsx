@@ -8,6 +8,15 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import dynamic from "next/dynamic";
+
+const SignInButton = dynamic(() => import("./SignInButton"), {
+  ssr: false,
+});
+const SignOutButton = dynamic(() => import("./SignOutButton"), {
+  ssr: false,
+});
 
 const iconstyle = {
   flexDirection: 'column',
@@ -24,7 +33,8 @@ const iconstyle = {
 
 export default function Header(): JSX.Element {
   const router = useRouter();
-
+  const isAuthenticated = useIsAuthenticated();
+  const [account] = useMsal().accounts;
   return (
     <Box
       sx={{
@@ -45,7 +55,7 @@ export default function Header(): JSX.Element {
             </Link>
           </Grid>
           <Grid container item xs={6.5} justifyContent="flex-end" >
-            <Link href="/" passHref>
+            {/*<Link href="/" passHref>
               <Button 
                 sx={{border:' 0.10rem solid', mr: 1 }}
                 color={router.pathname === "/" ? "primary" : "secondary"}
@@ -53,16 +63,8 @@ export default function Header(): JSX.Element {
               >
                 Sign In
               </Button>
-            </Link>
-            <Link href="/" passHref>
-              <Button
-                sx={{ mr: 1, color:"white" }}
-                color={router.pathname === "/" ? "primary" : "secondary"}
-                variant="contained"
-              >
-                Sign Up
-              </Button>
-            </Link>
+            </Link>*/}
+            {isAuthenticated ? <SignOutButton /> : <SignInButton />}
           </Grid>
         </Grid>
       </Container>

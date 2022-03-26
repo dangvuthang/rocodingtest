@@ -7,6 +7,9 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import Layout from "../components/layout/Layout";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "../src/authConfig";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -16,6 +19,7 @@ interface MyAppProps extends AppProps {
 }
 
 export default function MyApp(props: MyAppProps) : JSX.Element{
+  const msalInstance = new PublicClientApplication(msalConfig);
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   
   React.useEffect(() => {
@@ -34,9 +38,11 @@ export default function MyApp(props: MyAppProps) : JSX.Element{
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        <MsalProvider instance={msalInstance}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        </MsalProvider>
       </ThemeProvider>
     </CacheProvider>
   );
