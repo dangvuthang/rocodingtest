@@ -1,68 +1,47 @@
-import 
+import User, { IUser } from '../models/User';
+import express, { Express, Request, Response, Router } from 'express';
+import UserController from './UserController';
 
-const User = require("../models/User");
-const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
-const jwt = require("jsonwebtoken");
-const { promisify } = require("util");
-
-const createJWT = async id =>
-  await promisify(jwt.sign)({ id }, process.env.JWT_SECRET, {
-    expiresIn: 1000 * 60 * 60 * parseInt(process.env.JWT_EXPIRE),
-  });
-
-exports.signup = catchAsync(async (req, res, next) => {
-  const user = await User.create(req.body);
-  const token = await createJWT(user.id);
+export const signup =  (req : Request, res : Response) => {
+  const user = await UserController.createUser(req.body);
   return res.status(200).json({
     status: "success",
     data: {
-      user,
-      token,
+      user
     },
   });
-});
+};
 
-exports.login = catchAsync(async (req, res, next) => {
+export const login =  (req : Request, res : Response) =>  {
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return next(new AppError("No user was found", 404));
-  const token = await createJWT(user.id);
+  if (!user) return res.status(401).json({error : "No user was found"});
   return res.status(200).json({
     status: "success",
     data: {
-      user,
-      token,
+      user
     },
   });
-});
+};
 
-exports.checkUser = catchAsync(async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  )
-    token = req.headers.authorization.split(" ")[1];
-  if (!token)
-    return next(new AppError("Please login to access this route", 401));
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  const user = await User.findById(decoded.id);
-  if (!token) return next(new AppError("User not found", 404));
-  req.user = user;
-  next();
-});
+// export const checkUser =  (req : Request, res : Response) =>  {
+//   let token;
+//   if (
+//     req.headers.authorization &&
+//     req.headers.authorization.startsWith("Bearer")
+//   )
+//     token = req.headers.authorization.split(" ")[1];
+//   if (!token)
+//     return res.status(401).json({error : "Please login to access this route"});
 
-exports.checkIfLoginWithMicrosoft = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({
-    microsoftUniqueId: req.body.microsoftUniqueId,
-  });
-  if (!user) return next(new AppError("User not exist", 404));
-  const token = await createJWT(user.id);
-  res.status(200).json({
-    status: "success",
-    data: {
-      user,
-      token,
-    },
-  });
-});
+//   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+//   const user = await User.findById(decoded.id);
+//   if (!token) return next(new AppError("User not found", 404));
+//   req.user = user;
+//   next();
+// });
+
+
+export default {
+    login,
+    signup,
+  };

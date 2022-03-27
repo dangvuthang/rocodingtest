@@ -1,28 +1,16 @@
-// import dotenv from "dotenv"
+import dotenv from "dotenv"
+import mongoose from "mongoose";
 
-// dotenv.config()
+dotenv.config()
 
-// console.log(process.env)
+function server() {
+ const dbUri:string = process.env.URI as string;
+ return mongoose
+  .connect(
+    dbUri!
+  )
+  .then(() => console.log("CONNECT TO DATABASE"))
+  .catch(e => console.log(e));
+}
 
-
-// dotenv.config({ path: "./config.env" });
-// const mongoose = require("mongoose");
-// const app = require("./index");
-
-// mongoose
-//   .connect(
-//     process.env.URI,
-//     {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//       useCreateIndex: true,
-//       useFindAndModify: false,
-//     }
-//   )
-//   .then(() => console.log("CONNECT TO DATABASE"))
-//   .catch(e => console.log(e));
-
-// const port = process.env.PORT || 3000;
-// const server = app.listen(port, () => {
-//   console.log(`App running on port ${port}...`);
-// });
+export default server;
