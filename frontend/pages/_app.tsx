@@ -17,11 +17,10 @@ const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-
-export default function MyApp(props: MyAppProps) : JSX.Element{
+export default function MyApp(props: MyAppProps) {
   const msalInstance = new PublicClientApplication(msalConfig);
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  
+
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -29,7 +28,7 @@ export default function MyApp(props: MyAppProps) : JSX.Element{
       jssStyles.parentElement?.removeChild(jssStyles);
     }
   }, []);
-  
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -39,9 +38,7 @@ export default function MyApp(props: MyAppProps) : JSX.Element{
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <MsalProvider instance={msalInstance}>
-        <Layout>
           <Component {...pageProps} />
-        </Layout>
         </MsalProvider>
       </ThemeProvider>
     </CacheProvider>
