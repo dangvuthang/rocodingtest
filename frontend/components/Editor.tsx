@@ -31,7 +31,7 @@ const Editor: FC<EditorProps> = () => {
 
   return (
     <Stack spacing={1} alignItems="flex-start">
-      <Box width={130}>
+      <Box width={135}>
         <FormControl fullWidth size="small">
           <InputLabel id="language-label">Language</InputLabel>
           <Select
@@ -42,7 +42,7 @@ const Editor: FC<EditorProps> = () => {
             label="Langugage"
             onChange={handleLanguageChanged}
           >
-            {languages.map(lang => (
+            {languages.map((lang) => (
               <MenuItem key={lang} value={lang}>
                 {upperCaseFirstCharacter(lang)}
               </MenuItem>
@@ -51,7 +51,7 @@ const Editor: FC<EditorProps> = () => {
         </FormControl>
       </Box>
       <MonacoEditor
-        height="70vh"
+        height="85vh"
         defaultLanguage={language}
         language={language}
         theme="vs-dark"
