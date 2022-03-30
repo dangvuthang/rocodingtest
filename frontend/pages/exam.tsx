@@ -1,7 +1,9 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import Editor from "../components/Editor";
-import { Box, Grid, Stack } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import ReactMarkdown from "react-markdown";
-import { DragEvent, useState } from "react";
+import Timer from "../components/Timer";
 
 const testMarkDown = `
 # Spem modo
@@ -66,22 +68,36 @@ veniam. Annorum saecula Tirynthia cruentis crudele semine ensis; loco videtur
 nostrumque petisset laurus?
 `;
 
-const Exam = () => {
-  const [isDrag, setIsDrag] = useState(false);
+const markdownStyle = css`
+  font-size: 0.8rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  pre {
+    background: #f7f9fa;
+    padding: 10px 15px;
+    color: #263238;
+    line-height: 1.6;
+    font-size: 13px;
+    border-radius: 3px;
+    white-space: pre-wrap;
+  }
+`;
 
+const Exam = () => {
   return (
     <Grid container>
-      <Grid item container xs={4} sx={{ height: "100vh" }}>
+      <Grid item container xs={3} sx={{ height: "100vh" }}>
         <Box
           sx={{
             overflowY: "scroll",
-            px: "10px",
+            px: "20px",
             height: "100%",
             display: "flex",
             flexWrap: "wrap",
           }}
         >
-          <ReactMarkdown>{testMarkDown}</ReactMarkdown>
+          <ReactMarkdown css={markdownStyle}>{testMarkDown}</ReactMarkdown>
         </Box>
       </Grid>
       {/*       <Grid
@@ -97,8 +113,19 @@ const Exam = () => {
           backgroundColor: "#b0bec5",
         }}
       / > */}
-      <Grid item xs={8} py={1} sx={{ backgroundColor: "#E5E5E5" }}>
-        <Editor />
+      <Grid item container direction="column" xs={9}>
+        <Grid
+          item
+          sx={{ height: "5vh" }}
+          container
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <Timer />
+        </Grid>
+        <Grid item sx={{ backgroundColor: "#f7f9fa" }} p={1} pr={0}>
+          <Editor />
+        </Grid>
       </Grid>
     </Grid>
   );

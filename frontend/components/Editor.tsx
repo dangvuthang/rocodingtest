@@ -51,7 +51,7 @@ const Editor: FC<EditorProps> = () => {
         </FormControl>
       </Box>
       <MonacoEditor
-        height="85vh"
+        height="80vh"
         defaultLanguage={language}
         language={language}
         theme="vs-dark"
