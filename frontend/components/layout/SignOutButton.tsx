@@ -12,7 +12,7 @@ function handleLogout(instance: IPublicClientApplication) {
 const SignOutButton = () => {
   const { instance } = useMsal();
 
-  return <Button 
+  return  <Button 
             sx={{border:' 0.10rem solid', mr: 1 }} 
             color={router.pathname === "/" ? "primary" : "secondary"} 
             variant="outlined"

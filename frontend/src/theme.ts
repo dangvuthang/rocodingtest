@@ -7,7 +7,7 @@ const theme = createTheme({
       main: "#ffa500",
     },
     secondary: {
-      main: "#9575CD",
+      main: "#FFFFFF",
     },
   },
   typography: {
@@ -102,7 +102,14 @@ const theme = createTheme({
         },
       },
     },
-  },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: "#ffa500" ,
+        },
+      },
+    },
+  }
 });
 
 export default theme;

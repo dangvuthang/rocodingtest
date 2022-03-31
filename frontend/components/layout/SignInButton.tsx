@@ -3,8 +3,9 @@ import { IPublicClientApplication } from "@azure/msal-browser";
 import { Button } from "@mui/material";
 import { loginRequest } from "../../src/authConfig";
 import router from "next/router";
+import { useCallback, useEffect } from 'react'
 
-function handleLogin(instance: IPublicClientApplication) {
+function handleLogin (instance: IPublicClientApplication) {
   instance.loginPopup(loginRequest).catch(e => {
     console.error(e);
   });
