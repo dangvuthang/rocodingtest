@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const UserSchema = new mongoose_1.Schema({
     fullName: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, index: true },
     photoUrl: { type: String, required: true },
     role: {
         type: String,
@@ -35,7 +35,7 @@ const UserSchema = new mongoose_1.Schema({
             message: "Role must be student, or teacher",
         },
         default: "student",
-    }
+    },
 });
-exports.default = mongoose_1.default.model('User', UserSchema);
+exports.default = mongoose_1.default.model("User", UserSchema);
 //# sourceMappingURL=User.js.map

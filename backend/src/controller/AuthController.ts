@@ -1,55 +1,110 @@
-import User from '../models/User';
-import {Request, Response} from 'express';
-import UserController from './UserController';
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import {promisify} from "util";
+import { Request, Response, NextFunction } from "express";
+import axios from "axios";
+import User, { IUser } from "../models/User";
 
-dotenv.config()
-
-
-export const signup =  async (req : Request, res : Response) => {
-  const user = await UserController.createUser(req.body);
-  return res.status(200).json({
-    status: "success",
-    data: {
-      user
-    },
-  });
-};
-
-export const login =  async (req : Request, res : Response) =>  {
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(401).json({error : "No user was found"});
-  return res.status(200).json({
-    status: "success",
-    data: {
-      user
-    },
-  });
-};
-/**
- * Attaches a given access token to a Microsoft Graph API call. Returns information about the user
- */
-export const checkIfLoginWithMicrosoft =  async (req : Request, res : Response) => {
-    let token: string;
-    const authHeader = req.headers.authorization;
-    if(authHeader && authHeader.startsWith("Bearer")) {
-        token = req?.headers?.authorization?.split(" ")[1] as string;
-    }
-    if(token!){
-        return res.status(401).json({error : "Please login again"});
-    }
-    const verifyAsPromise = promisify(jwt.verify);
-    const decoded = await verifyAsPromise(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded?.id);
-    if (!user) return res.status(401).json({error : "User not found"});
-    req?.user = user;
+interface IMicrosoftAccount {
+  displayName: string;
+  mail: string;
+  id: string;
 }
 
+export interface AuthRequest extends Request {
+  microsoftAccount?: IMicrosoftAccount;
+  user?: IUser;
+  photoUrl?: String;
+}
 
-export default {
-    login,
-    signup,
-    checkIfLoginWithMicrosoft,
-  };
+// Check if token sent by client is a valid Microsoft access token
+export const checkMicrosoftLogin = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.body.token;
+  // No token end request immediately
+  if (!token) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Required token from Microsoft",
+    });
+  }
+  try {
+    // Send token to Microsoft to validate
+    const request = await axios.get("https://graph.microsoft.com/v1.0/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = request.data;
+    // Add microsoftAccount to request object for next middleware
+    req.microsoftAccount = data;
+    return next();
+  } catch (error) {
+    // Error end request
+    return res.status(400).json({
+      status: "fail",
+      message: "Invalid token sent to server",
+    });
+  }
+};
+
+// Check if microsoftAccount is already registered in our DB
+export const checkAccountInDb = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const microsoftAccount = req.microsoftAccount;
+  if (!microsoftAccount) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Required login with microsoft to access this route",
+    });
+  }
+  try {
+    // Find user with the email
+    const userSavedInDb = await User.findOne({ email: microsoftAccount.mail });
+    if (userSavedInDb) {
+      req.user = userSavedInDb;
+    }
+    return next();
+  } catch (error) {
+    return res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+export const register = async (req: AuthRequest, res: Response) => {
+  const user = req.user;
+  const microsoftAccount = req.microsoftAccount!;
+  const photoUrl = req.body.photoUrl;
+  if (user) {
+    return res.status(204).end();
+  }
+  if (!photoUrl) {
+    return res.status(400).json({
+      status: "special",
+      message: "Required photoUrl to complete registration",
+    });
+  }
+  try {
+    const newUser = await User.create({
+      email: microsoftAccount.mail,
+      fullName: microsoftAccount.displayName,
+      photoUrl,
+    });
+    return res.status(201).json({
+      status: "success",
+      data: {
+        user: newUser,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};

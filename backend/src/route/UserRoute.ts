@@ -1,16 +1,12 @@
-import express, { Router } from 'express';
-import UserController from '../controller/UserController';
-import AuthController from '../controller/AuthController';
+import express from "express";
+import {
+  checkAccountInDb,
+  checkMicrosoftLogin,
+  register,
+} from "../controller/AuthController";
 
-const routes: Router = express.Router();
+const route = express.Router();
 
-routes.get("/", UserController.getAllUser);
-routes.get("/:id", UserController.getById);
-routes.patch("/update", UserController.update);
+route.post("/register", checkMicrosoftLogin, checkAccountInDb, register);
 
-routes.post("/api/v1/users/login", AuthController.login);
-routes.post("/api/v1/users/signup", AuthController.signup);
-routes.post("/api/v1/users/check", AuthController.checkIfLoginWithMicrosoft);
-
-
-module.exports = routes;
+export default route;

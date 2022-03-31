@@ -1,15 +1,16 @@
-import express, { Request, Response, Application } from 'express';
-import bodyParser from 'body-parser';
-import server from './server';
+import express, { Response, Application } from "express";
+import server from "./server";
+import UserRoute from "./route/UserRoute";
 const app: Application = express();
 const port = 8080;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(express.json());
 
-app.get('/', (req: Request, res: Response) =>
-  res.send('Welcome to the Mongoose & TypeScript example')
+app.get("/", (_, res: Response) =>
+  res.send("Welcome to the Mongoose & TypeScript example")
 );
+
+app.use("/api/v1/users", UserRoute);
 
 app.listen(port, () => {
   console.log(`Application started successfully on port ${port}.`);
