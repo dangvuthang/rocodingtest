@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, connect, Types } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 export interface ITest {
     name: string;

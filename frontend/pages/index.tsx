@@ -14,8 +14,11 @@ import BigSection from "../components/BigSection";
 import TeammateSection from "../components/TeammateSection";
 import { teammates } from "../components/data/teammate";
 import Layout from "../components/layout/Layout";
+import useAccessToken from "../hooks/useAccessToken";
 
 export default function HomePage(): JSX.Element {
+  const token = useAccessToken();
+  console.log(token);
   return (
     <Layout>
       <Page maxWidth={false}>
