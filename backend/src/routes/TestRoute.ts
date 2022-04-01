@@ -9,4 +9,4 @@ routes.post("/", createTest);
 routes.patch("/:id", updateTest);
 routes.delete("/delete/:id", deleteTest);
 
-export { routes as testRouter }
+export default routes;

@@ -1,13 +1,22 @@
-import { submissionRouter } from './routes/SubmissionRoute'
-import { testRouter } from './routes/TestRoute'
-import express from 'express';
+import express, { Response, Application } from "express";
+import server from "./server";
+import UserRoute from "./routes/UserRoute";
+import SubmissionRouter from './routes/SubmissionRoute'
+import TestRouter from './routes/TestRoute'
+const app: Application = express();
+const port = 8080;
 
-const app = express()
+app.use(express.json());
 
-app.use("/api/v1/tests", testRouter);
+app.get("/", (_, res: Response) =>
+  res.send("Welcome to the Mongoose & TypeScript example")
+);
 
-app.use("/api/v1/submission",submissionRouter)
+app.use("/api/v1/users", UserRoute);
+app.use("/api/v1/tests", TestRouter);
+app.use("/api/v1/submission", SubmissionRouter)
 
-app.listen(3000, () => {
-  console.log('server is listening on port 3000')
-})
+app.listen(port, () => {
+  console.log(`Application started successfully on port ${port}.`);
+  server();
+});

@@ -8,4 +8,4 @@ routes.get("/:testId", getSubmissionByTestId)
 routes.get("/:testId/users/:userId", getSubmissionByUserAndTestId);
 routes.post("/", createSubmission);
 
-export { routes as submissionRouter }
+export default routes;

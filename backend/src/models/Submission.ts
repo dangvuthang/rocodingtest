@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 export interface ISubmission {
   submissionTime: Date;
