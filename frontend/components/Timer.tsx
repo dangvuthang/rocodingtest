@@ -24,10 +24,9 @@ const Timer: FC<TimerProps> = () => {
 
   return (
     <Box
-      mr={2}
       px={6}
-      mt={1}
       sx={{
+        marginRight: "10px",
         backgroundColor: red[600],
         opacity: "0.8",
         color: red[50],
