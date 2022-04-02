@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, connect, Types } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 export interface IUser {
     fullName: string;

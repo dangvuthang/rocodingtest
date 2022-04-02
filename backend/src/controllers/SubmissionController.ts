@@ -1,10 +1,10 @@
-import Submission, { ISubmission } from '../models/Submission';
+import Submission from '../models/Submission';
 import {Request, Response} from 'express';
 
 export const getSubmission = async (req: Request, res: Response) => {
     const submission = await Submission.findById(req.params.id);
     if (!submission) {
-        return res.status(404).json({
+        return res.status(400).json({
           errors: [
             {
               msg: "There is no test by this user",
@@ -18,7 +18,7 @@ export const getSubmission = async (req: Request, res: Response) => {
 export const getSubmissionByUserAndTestId = async (req: Request, res: Response) => {
     const submissions = await Submission.find({studentId: req.params.id, testId: req.params.testId});
     if (!submissions) {
-        return res.status(404).json({
+        return res.status(400).json({
           errors: [
             {
               msg: "There is no test by this user",
@@ -32,7 +32,7 @@ export const getSubmissionByUserAndTestId = async (req: Request, res: Response) 
 export const getSubmissionByTestId = async (req: Request, res: Response) => {
     const submissions = await Submission.find({testId: req.params.testId})
     if (!submissions) {
-        return res.status(404).json({
+        return res.status(400).json({
           errors: [
             {
               msg: "There is no test by this user",

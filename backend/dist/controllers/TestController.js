@@ -9,7 +9,7 @@ const getTest = async (req, res) => {
     const id = req.params.id;
     const test = await Test_1.default.findById(id);
     if (!test) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test found in the database",
@@ -24,7 +24,7 @@ exports.getTest = getTest;
 const getTestByUserAndId = async (req, res) => {
     const tests = await Test_1.default.find({ _id: req.params.testId, teacherId: req.params.userId });
     if (!tests) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test by this user",
@@ -45,7 +45,7 @@ exports.createTest = createTest;
 const deleteTest = async (req, res) => {
     const test = Test_1.default.findByIdAndDelete(req.params.id);
     if (!test) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test with that id",
@@ -60,7 +60,7 @@ exports.deleteTest = deleteTest;
 const updateTest = async (req, res) => {
     const test = Test_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!test) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test with that id",

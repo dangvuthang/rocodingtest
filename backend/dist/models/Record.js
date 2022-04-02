@@ -28,8 +28,8 @@ const RecordSchema = new mongoose_1.Schema({
     attendanceDate: { type: Date, required: true, unique: true },
     numberOfCheats: { type: Number, required: true, default: 0 },
     evidence: [{ type: String, required: true, default: [] }],
-    userId: { type: mongoose_1.Types.ObjectId, ref: 'User' },
-    testId: { type: mongoose_1.Types.ObjectId, ref: 'Test' },
+    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    testId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Test' },
 });
 exports.default = mongoose_1.default.model('Record', RecordSchema);
 //# sourceMappingURL=Record.js.map

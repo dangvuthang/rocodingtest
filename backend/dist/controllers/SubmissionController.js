@@ -8,7 +8,7 @@ const Submission_1 = __importDefault(require("../models/Submission"));
 const getSubmission = async (req, res) => {
     const submission = await Submission_1.default.findById(req.params.id);
     if (!submission) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test by this user",
@@ -23,7 +23,7 @@ exports.getSubmission = getSubmission;
 const getSubmissionByUserAndTestId = async (req, res) => {
     const submissions = await Submission_1.default.find({ studentId: req.params.id, testId: req.params.testId });
     if (!submissions) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test by this user",
@@ -38,7 +38,7 @@ exports.getSubmissionByUserAndTestId = getSubmissionByUserAndTestId;
 const getSubmissionByTestId = async (req, res) => {
     const submissions = await Submission_1.default.find({ testId: req.params.testId });
     if (!submissions) {
-        return res.status(404).json({
+        return res.status(400).json({
             errors: [
                 {
                     msg: "There is no test by this user",
