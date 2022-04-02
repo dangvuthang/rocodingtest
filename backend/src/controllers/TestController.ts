@@ -4,7 +4,19 @@ import {Request, Response} from 'express';
 
 export const getTest = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const test = await Test.findById(id);
+    let test;
+    try {
+      test = await Test.findById(id);
+    } catch (err) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: err,
+          },
+        ],
+      })
+    }
+
     if (!test) {
         return res.status(400).json({
           errors: [
@@ -18,22 +30,45 @@ export const getTest = async (req: Request, res: Response) => {
 }
 
 export const getTestByUserAndId = async (req: Request, res: Response) => {
-    const tests = await Test.find({_id: req.params.testId, teacherId: req.params.userId});
-    if (!tests) {
-        return res.status(400).json({
-          errors: [
-            {
-              msg: "There is no test by this user",
-            },
-          ],
-        });
-    };
-    return res.status(200).send(tests);
+  let tests;
+  try {
+    tests = await Test.find({_id: req.params.testId, teacherId: req.params.userId});
+  } catch (err) {
+    return res.status(400).json({
+      errors: [
+        {
+          msg: err,
+        },
+      ],
+    })
+  }
+
+  if (!tests) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: "There is no test by this user",
+          },
+        ],
+      });
+  };
+  return res.status(200).send(tests);
 }
 
 export const createTest = async (req: Request, res: Response) => {
     const {name ,createdDate, endDate, link, duration, question, teacherId} = req.body;
-    const test = Test.create({name ,createdDate, endDate, link, duration, question, teacherId})
+    let test;
+    try {
+      test = await Test.create({name ,createdDate, endDate, link, duration, question, teacherId})
+    } catch (err) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: err,
+          },
+        ],
+      })
+    }
     return res.status(200).send(test);
 }
 
@@ -52,7 +87,18 @@ export const deleteTest = async (req: Request, res: Response) => {
 };
 
 export const updateTest = async (req: Request, res: Response) => {
-    const test = Test.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    let test;
+    try {
+      test = await Test.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    } catch (err) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: err,
+          },
+        ],
+      })
+    }
     if (!test) {
         return res.status(400).json({
           errors: [

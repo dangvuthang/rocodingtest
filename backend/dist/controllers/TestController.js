@@ -7,7 +7,19 @@ exports.updateTest = exports.deleteTest = exports.createTest = exports.getTestBy
 const Test_1 = __importDefault(require("../models/Test"));
 const getTest = async (req, res) => {
     const id = req.params.id;
-    const test = await Test_1.default.findById(id);
+    let test;
+    try {
+        test = await Test_1.default.findById(id);
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!test) {
         return res.status(400).json({
             errors: [
@@ -22,7 +34,19 @@ const getTest = async (req, res) => {
 };
 exports.getTest = getTest;
 const getTestByUserAndId = async (req, res) => {
-    const tests = await Test_1.default.find({ _id: req.params.testId, teacherId: req.params.userId });
+    let tests;
+    try {
+        tests = await Test_1.default.find({ _id: req.params.testId, teacherId: req.params.userId });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!tests) {
         return res.status(400).json({
             errors: [
@@ -38,7 +62,19 @@ const getTestByUserAndId = async (req, res) => {
 exports.getTestByUserAndId = getTestByUserAndId;
 const createTest = async (req, res) => {
     const { name, createdDate, endDate, link, duration, question, teacherId } = req.body;
-    const test = Test_1.default.create({ name, createdDate, endDate, link, duration, question, teacherId });
+    let test;
+    try {
+        test = await Test_1.default.create({ name, createdDate, endDate, link, duration, question, teacherId });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     return res.status(200).send(test);
 };
 exports.createTest = createTest;
@@ -58,7 +94,19 @@ const deleteTest = async (req, res) => {
 };
 exports.deleteTest = deleteTest;
 const updateTest = async (req, res) => {
-    const test = Test_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    let test;
+    try {
+        test = await Test_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!test) {
         return res.status(400).json({
             errors: [

@@ -6,7 +6,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSubmission = exports.getSubmissionByTestId = exports.getSubmissionByUserAndTestId = exports.getSubmission = void 0;
 const Submission_1 = __importDefault(require("../models/Submission"));
 const getSubmission = async (req, res) => {
-    const submission = await Submission_1.default.findById(req.params.id);
+    let submission;
+    try {
+        submission = await Submission_1.default.findById(req.params.id);
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!submission) {
         return res.status(400).json({
             errors: [
@@ -21,7 +33,19 @@ const getSubmission = async (req, res) => {
 };
 exports.getSubmission = getSubmission;
 const getSubmissionByUserAndTestId = async (req, res) => {
-    const submissions = await Submission_1.default.find({ studentId: req.params.id, testId: req.params.testId });
+    let submissions;
+    try {
+        submissions = await Submission_1.default.find({ studentId: req.params.id, testId: req.params.testId });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!submissions) {
         return res.status(400).json({
             errors: [
@@ -36,7 +60,19 @@ const getSubmissionByUserAndTestId = async (req, res) => {
 };
 exports.getSubmissionByUserAndTestId = getSubmissionByUserAndTestId;
 const getSubmissionByTestId = async (req, res) => {
-    const submissions = await Submission_1.default.find({ testId: req.params.testId });
+    let submissions;
+    try {
+        submissions = await Submission_1.default.find({ testId: req.params.testId });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!submissions) {
         return res.status(400).json({
             errors: [
@@ -52,7 +88,19 @@ const getSubmissionByTestId = async (req, res) => {
 exports.getSubmissionByTestId = getSubmissionByTestId;
 const createSubmission = async (req, res) => {
     const { submissionTime, content, testId, studentId } = req.body;
-    const submission = await Submission_1.default.create({ submissionTime, content, testId, studentId });
+    let submission;
+    try {
+        submission = await Submission_1.default.create({ submissionTime, content, testId, studentId });
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     return res.status(200).send(submission);
 };
 exports.createSubmission = createSubmission;
