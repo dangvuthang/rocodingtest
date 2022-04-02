@@ -14,7 +14,10 @@ export interface ITest {
     name: {type: String, required: true},
     createdDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
-    link: {type: String, required: true},
+    link: {type: String, required: true, default: function() {
+      const _t = this as any;
+      return `localhost:3000/exam/${_t._id}`;
+   }},
     duration: {type: Number, required: true},
     question: {type: String, required: true},
     teacherId: {type: Schema.Types.ObjectId, ref: 'User'},

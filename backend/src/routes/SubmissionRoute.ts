@@ -3,9 +3,9 @@ import {getSubmission, getSubmissionByTestId, getSubmissionByUserAndTestId, crea
 
 const routes: Router = express.Router();
 
+routes.post("/", createSubmission);
 routes.get("/:id", getSubmission);
 routes.get("/:testId", getSubmissionByTestId)
 routes.get("/:testId/users/:userId", getSubmissionByUserAndTestId);
-routes.post("/", createSubmission);
 
 export default routes;

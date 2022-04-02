@@ -30,7 +30,12 @@ const getTest = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(test);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            test,
+        },
+    });
 };
 exports.getTest = getTest;
 const getTestByUserAndId = async (req, res) => {
@@ -57,7 +62,12 @@ const getTestByUserAndId = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(tests);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            tests,
+        },
+    });
 };
 exports.getTestByUserAndId = getTestByUserAndId;
 const createTest = async (req, res) => {
@@ -75,11 +85,28 @@ const createTest = async (req, res) => {
             ],
         });
     }
-    return res.status(200).send(test);
+    return res.status(201).json({
+        status: "success",
+        data: {
+            test,
+        },
+    });
 };
 exports.createTest = createTest;
 const deleteTest = async (req, res) => {
-    const test = Test_1.default.findByIdAndDelete(req.params.id);
+    let test;
+    try {
+        test = await Test_1.default.findByIdAndDelete(req.params.id);
+    }
+    catch (err) {
+        return res.status(400).json({
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
     if (!test) {
         return res.status(400).json({
             errors: [
@@ -90,7 +117,7 @@ const deleteTest = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(test);
+    return res.status(204).end();
 };
 exports.deleteTest = deleteTest;
 const updateTest = async (req, res) => {
@@ -117,7 +144,12 @@ const updateTest = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(test);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            test,
+        },
+    });
 };
 exports.updateTest = updateTest;
 //# sourceMappingURL=TestController.js.map

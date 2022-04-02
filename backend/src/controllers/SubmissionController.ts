@@ -23,7 +23,12 @@ export const getSubmission = async (req: Request, res: Response) => {
           ],
         });
     };
-    return res.status(200).send(submission);
+    return res.status(200).json({ 
+      status: "success",
+      data: {
+        submission,
+      },
+    });
 };
 
 export const getSubmissionByUserAndTestId = async (req: Request, res: Response) => {
@@ -48,7 +53,12 @@ export const getSubmissionByUserAndTestId = async (req: Request, res: Response) 
           ],
         });
     };
-    return res.status(200).send(submissions);
+    return res.status(200).json({
+      status: "success",
+      data: {
+        submissions,
+      },
+    });
 }
 
 export const getSubmissionByTestId = async (req: Request, res: Response) => {
@@ -73,7 +83,12 @@ export const getSubmissionByTestId = async (req: Request, res: Response) => {
           ],
         });
     };
-    return res.status(200).send(submissions);
+    return res.status(200).json({ 
+      status: "success",
+      data: {
+        submissions,
+      },
+    });
 }
 
 export const createSubmission = async (req: Request, res: Response) => {
@@ -90,5 +105,10 @@ export const createSubmission = async (req: Request, res: Response) => {
         ],
       })
     }
-    return res.status(200).send(submission);
+    return res.status(201).json({ 
+      status: "success",
+      data: {
+        submission,
+      },
+    });
 };

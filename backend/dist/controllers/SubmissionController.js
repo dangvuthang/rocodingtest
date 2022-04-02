@@ -29,7 +29,12 @@ const getSubmission = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(submission);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            submission,
+        },
+    });
 };
 exports.getSubmission = getSubmission;
 const getSubmissionByUserAndTestId = async (req, res) => {
@@ -56,7 +61,12 @@ const getSubmissionByUserAndTestId = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(submissions);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            submissions,
+        },
+    });
 };
 exports.getSubmissionByUserAndTestId = getSubmissionByUserAndTestId;
 const getSubmissionByTestId = async (req, res) => {
@@ -83,7 +93,12 @@ const getSubmissionByTestId = async (req, res) => {
         });
     }
     ;
-    return res.status(200).send(submissions);
+    return res.status(200).json({
+        status: "success",
+        data: {
+            submissions,
+        },
+    });
 };
 exports.getSubmissionByTestId = getSubmissionByTestId;
 const createSubmission = async (req, res) => {
@@ -101,7 +116,12 @@ const createSubmission = async (req, res) => {
             ],
         });
     }
-    return res.status(200).send(submission);
+    return res.status(201).json({
+        status: "success",
+        data: {
+            submission,
+        },
+    });
 };
 exports.createSubmission = createSubmission;
 //# sourceMappingURL=SubmissionController.js.map

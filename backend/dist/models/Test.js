@@ -28,7 +28,10 @@ const TestSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     createdDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    link: { type: String, required: true },
+    link: { type: String, required: true, default: function () {
+            const _t = this;
+            return `localhost:3000/exam/${_t._id}`;
+        } },
     duration: { type: Number, required: true },
     question: { type: String, required: true },
     teacherId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
