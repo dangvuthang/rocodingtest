@@ -44,8 +44,7 @@ export default function Header(): JSX.Element {
         <Grid container  alignItems="center" rowSpacing={4}>
           <Grid item xs={4}>
             <Link href="/" passHref>
-              <Typography 
-                variant="body1"  
+              <Typography   
                 align="center" 
                 sx={iconstyle}
               >
