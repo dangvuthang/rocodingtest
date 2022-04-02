@@ -30,7 +30,7 @@ const Editor: FC<EditorProps> = () => {
   };
 
   return (
-    <Stack spacing={1} alignItems="flex-start">
+    <Stack spacing={1} alignItems="flex-start" sx={{ height: "100%" }}>
       <Box width={135}>
         <FormControl fullWidth size="small">
           <InputLabel id="language-label">Language</InputLabel>
@@ -51,7 +51,7 @@ const Editor: FC<EditorProps> = () => {
         </FormControl>
       </Box>
       <MonacoEditor
-        height="80vh"
+        height="100%"
         defaultLanguage={language}
         language={language}
         theme="vs-dark"
