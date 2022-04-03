@@ -9,6 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export const mainListItems = (
   <React.Fragment>
@@ -20,15 +21,15 @@ export const mainListItems = (
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <ShoppingCartIcon/>
+        <CheckCircleOutlineIcon />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="Exam" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <PeopleIcon/>
+        <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="Students" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
