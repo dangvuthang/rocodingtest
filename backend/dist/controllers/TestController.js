@@ -8,11 +8,11 @@ const Test_1 = __importDefault(require("../models/Test"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const User_1 = __importDefault(require("../models/User"));
 const checkIfTeacher = async (req, res) => {
-    const id = req.user;
+    const email = req.microsoftAccount.mail;
     let user;
     try {
         user = User_1.default.
-            findById(id).
+            findOne({ email: email }).
             populate({
             path: 'role',
             match: { name: 'teacher' }

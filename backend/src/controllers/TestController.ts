@@ -6,11 +6,11 @@ import {AuthRequest} from '../controllers/AuthController';
 
 
 export const checkIfTeacher = async (req: AuthRequest, res: Response) => {
-  const id = req.user;
+  const email = req.microsoftAccount!.mail;
   let user;
   try {
     user = User.
-    findById(id). // can also use find/findOne depending on your use-case
+    findOne({ email: email}). // can also use find/findOne depending on your use-case
     populate({
       path: 'role',
       match: { name: 'teacher' }
