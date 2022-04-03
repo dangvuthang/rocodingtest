@@ -79,7 +79,7 @@ export const createTest = async (req: Request, res: Response) => {
       ],
     })
   }
-  return res.status(201).json({ 
+  return res.status(201).json({
     status: "success",
     data: {
       test,
