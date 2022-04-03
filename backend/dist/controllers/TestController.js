@@ -3,8 +3,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTest = exports.deleteTest = exports.createTest = exports.getTestByUserAndId = exports.getTest = void 0;
+exports.updateTest = exports.deleteTest = exports.createTest = exports.getTestByUserAndId = exports.getTest = exports.checkIfTeacher = void 0;
 const Test_1 = __importDefault(require("../models/Test"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const User_1 = __importDefault(require("../models/User"));
+const checkIfTeacher = async (req, res) => {
+    const id = req.user;
+    let user;
+    try {
+        user = User_1.default.
+            findById(id).
+            populate({
+            path: 'role',
+            match: { name: 'teacher' }
+        }).
+            exec();
+    }
+    catch (err) {
+        return res.status(400).json({
+            status: "error",
+            errors: [
+                {
+                    msg: err,
+                },
+            ],
+        });
+    }
+    if (!user) {
+        return res.status(400).json({
+            status: "error",
+            msg: "This user does not have the permission to take action",
+        });
+    }
+    ;
+    return res.status(200).json({
+        status: "success",
+        data: {
+            user,
+        },
+    });
+};
+exports.checkIfTeacher = checkIfTeacher;
 const getTest = async (req, res) => {
     const id = req.params.id;
     let test;
@@ -13,6 +52,7 @@ const getTest = async (req, res) => {
     }
     catch (err) {
         return res.status(400).json({
+            status: "error",
             errors: [
                 {
                     msg: err,
@@ -22,11 +62,8 @@ const getTest = async (req, res) => {
     }
     if (!test) {
         return res.status(400).json({
-            errors: [
-                {
-                    msg: "There is no test found in the database",
-                },
-            ],
+            status: "error",
+            msg: "There is no test found in the database",
         });
     }
     ;
@@ -45,6 +82,7 @@ const getTestByUserAndId = async (req, res) => {
     }
     catch (err) {
         return res.status(400).json({
+            status: "error",
             errors: [
                 {
                     msg: err,
@@ -54,11 +92,8 @@ const getTestByUserAndId = async (req, res) => {
     }
     if (!tests) {
         return res.status(400).json({
-            errors: [
-                {
-                    msg: "There is no test by this user",
-                },
-            ],
+            status: "error",
+            msg: "There is no test by this user",
         });
     }
     ;
@@ -71,7 +106,9 @@ const getTestByUserAndId = async (req, res) => {
 };
 exports.getTestByUserAndId = getTestByUserAndId;
 const createTest = async (req, res) => {
-    const { name, createdDate, endDate, link, duration, question, teacherId } = req.body;
+    const _id = new mongoose_1.default.Types.ObjectId();
+    let { name, createdDate, endDate, link, duration, question, teacherId } = req.body;
+    link = "http://localhost:3000/exams/" + _id;
     let test;
     try {
         test = await Test_1.default.create({ name, createdDate, endDate, link, duration, question, teacherId });

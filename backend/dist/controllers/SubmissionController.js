@@ -21,11 +21,8 @@ const getSubmission = async (req, res) => {
     }
     if (!submission) {
         return res.status(400).json({
-            errors: [
-                {
-                    msg: "There is no test by this user",
-                },
-            ],
+            status: "error",
+            msg: "There is no submission found",
         });
     }
     ;
@@ -53,11 +50,8 @@ const getSubmissionByUserAndTestId = async (req, res) => {
     }
     if (!submissions) {
         return res.status(400).json({
-            errors: [
-                {
-                    msg: "There is no test by this user",
-                },
-            ],
+            status: "error",
+            msg: "There is no submission found",
         });
     }
     ;
@@ -85,11 +79,8 @@ const getSubmissionByTestId = async (req, res) => {
     }
     if (!submissions) {
         return res.status(400).json({
-            errors: [
-                {
-                    msg: "There is no test by this user",
-                },
-            ],
+            status: "error",
+            msg: "There is no submission found",
         });
     }
     ;
