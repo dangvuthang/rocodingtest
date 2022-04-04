@@ -15,11 +15,19 @@ import * as React from "react";
 import Dslayout from "../components/dashboard/Dslayout/Dslayout";
 
 export default function Dashboard() {
-  const [check, setCheck] = React.useState(false);
-  const handleCheckBox = () => {
-    setCheck(!check);
-    console.log(check);
+  const [data, setData] = React.useState(
+    [1, 2, 3, 4, 5]
+  )
+  const [check, setCheck]: any = React.useState([]);
+  const handleCheckBox = (index: any) => {
+    const foundExam = check.find((x: any) => x === index)
+    if (foundExam >= 0) {
+      setCheck(check.filter((x: any) => x !== foundExam))
+    } else {
+      setCheck([...check, index]);
+    }
   };
+  console.log(check)
   return (
     <Dslayout>
       <Grid>
@@ -61,149 +69,82 @@ export default function Dashboard() {
               my: 2,
               bgcolor: "white",
               borderRadius: 3.5,
-              height: "80vh",
             }}
           >
             {/* Page Content */}
             <Grid
               container
-              spacing={2}
               direction="column"
               justifyContent="center"
               alignItems="center"
             >
-              <Grid item sx={{ width: "90%" }}>
-                <Box mt={3}>
-                  <Paper elevation={8}>
-                    <Box p={2}>
-                      <Grid
-                        container
-                        spacing={1}
-                      >
-                        {/* Check Box */}
-                        <Grid item xs={1} sx={{ display: 'flex' }} alignItems="center">
-                          {check === false ? (
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxOutlineBlankIcon />
-                            </IconButton>
-                          ) : (
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxIcon />
-                            </IconButton>
-                          )}
-                        </Grid>
-                        {/* Image */}
-                        <Grid item xs={2}>
-                          <img
-                            src="https://picsum.photos/200/200"
-                            alt="hehe"
-                            width="100%"
-                            height="250px"
-                          />
-                        </Grid>
-                        {/* Middle Content */}
-                        <Grid item xs={5}>
-                          <Grid container direction="column" justifyContent="space-between" sx={{ height: '100%' }}>
-                            <Grid item>
-                              <Typography variant="h3" textAlign="left" p={1}>Test</Typography>
-                            </Grid>
-                            <Grid item>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="body2" p={1}>Defaut Category </Typography>
-                                <Typography>|</Typography>
-                                <Typography variant="body2" p={1}>huhu </Typography>
-                              </Box>
-                            </Grid>
-                            <Grid item>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="body2" p={1}>System Admin</Typography>
-                                <Typography variant="body2" p={1}>Created Time: 28/02/2022</Typography>
-                              </Box>
+              {data.map((exam, index) => (
+                <Grid item sx={{ width: "90%" }} key={index} mb={2}>
+                  <Box mt={3}>
+                    <Paper elevation={8}>
+                      <Box p={2}>
+                        <Grid
+                          container
+                          spacing={1}
+                        >
+                          {/* Check Box */}
+                          <Grid item xs={1} sx={{ display: 'flex' }} alignItems="center">
+                            {!check.includes(index) ? (
+                              <IconButton onClick={() => handleCheckBox(index)}>
+                                <CheckBoxOutlineBlankIcon />
+                              </IconButton>
+                            ) : (
+                              <IconButton onClick={() => handleCheckBox(index)}>
+                                <CheckBoxIcon />
+                              </IconButton>
+                            )}
+                          </Grid>
+                          {/* Image */}
+                          <Grid item xs={2}>
+                            <img
+                              src="https://picsum.photos/200/200"
+                              alt="hehe"
+                              width="100%"
+                              height="250px"
+                            />
+                          </Grid>
+                          {/* Middle Content */}
+                          <Grid item xs={5}>
+                            <Grid container direction="column" justifyContent="space-between" sx={{ height: '100%' }}>
+                              <Grid item>
+                                <Typography variant="h3" textAlign="left" p={1}>Test</Typography>
+                              </Grid>
+                              <Grid item>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                  <Typography variant="body2" p={1}>Defaut Category </Typography>
+                                  <Typography>|</Typography>
+                                  <Typography variant="body2" p={1}>huhu </Typography>
+                                </Box>
+                              </Grid>
+                              <Grid item>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                  <Typography variant="body2" p={1}>System Admin</Typography>
+                                  <Typography variant="body2" p={1}>Created Time: 28/02/2022</Typography>
+                                </Box>
+                              </Grid>
                             </Grid>
                           </Grid>
+                          {/* Delete Icon */}
+                          <Grid item xs={4} sx={{ display: 'flex' }} justifyContent="flex-end" alignItems="center">
+                            <IconButton>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
                         </Grid>
-                        {/* Delete Icon */}
-                        <Grid item xs={4} sx={{ display: 'flex' }} justifyContent="flex-end" alignItems="center">
-                          <IconButton>
-                            <DeleteIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </Paper>
-                </Box>
-              </Grid>
+                      </Box>
+                    </Paper>
+                  </Box>
+                </Grid>
+              ))}
+
             </Grid>
             {/* exam 2 */}
-            <Grid
-              container
-              spacing={2}
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item sx={{ width: "90%" }}>
-                <Box mt={3} >
-                  <Paper elevation={8}>
-                    <Box p={2}>
-                      <Grid
-                        container
-                        spacing={1}
-                      >
-                        {/* Check Box */}
-                        <Grid item xs={1} sx={{ display: 'flex' }} alignItems="center">
-                          {check === false ? (
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxOutlineBlankIcon />
-                            </IconButton>
-                          ) : (
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxIcon />
-                            </IconButton>
-                          )}
-                        </Grid>
-                        {/* Image */}
-                        <Grid item xs={2}>
-                          <img
-                            src="https://picsum.photos/200/200"
-                            alt="hehe"
-                            width="100%"
-                            height="250px"
-                          />
-                        </Grid>
-                        {/* Middle Content */}
-                        <Grid item xs={5}>
-                          <Grid container direction="column" justifyContent="space-between" sx={{ height: '100%' }}>
-                            <Grid item>
-                              <Typography variant="h3" textAlign="left" p={1}>Test</Typography>
-                            </Grid>
-                            <Grid item>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="body2" p={1}>Defaut Category </Typography>
-                                <Typography>|</Typography>
-                                <Typography variant="body2" p={1}>huhu </Typography>
-                              </Box>
-                            </Grid>
-                            <Grid item>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="body2" p={1}>System Admin</Typography>
-                                <Typography variant="body2" p={1}>Created Time: 28/02/2022</Typography>
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        {/* Delete Icon */}
-                        <Grid item xs={4} sx={{ display: 'flex' }} justifyContent="flex-end" alignItems="center">
-                          <IconButton>
-                            <DeleteIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </Paper>
-                </Box>
-              </Grid>
-            </Grid>
+
           </Box>
         </Grid >
       </Grid >
