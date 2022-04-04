@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 // Create a theme instance.
 const theme = createTheme({
@@ -20,15 +20,15 @@ const theme = createTheme({
       fontWeight: 700,
       color: "#000000",
       fontFamily: "Bitter",
-      textShadow: ' 0 1px 1px #fccc74',
+      textShadow: " 0 1px 1px #fccc74",
     },
     h2: {
       fontSize: "2.2rem",
       fontWeight: 700,
       color: "#000000",
       fontFamily: "'Raleway',sans-serif",
-      textAlign: "center", 
-      textTransform: 'uppercase',
+      textAlign: "center",
+      textTransform: "uppercase",
     },
     h3: {
       fontSize: "1.5rem",
@@ -75,7 +75,7 @@ const theme = createTheme({
           textTransform: "none",
           fontSize: "1.10rem",
           lineHeight: 1.4,
-          font:'bold',
+          font: "bold",
           fontWeight: 500,
         },
       },
