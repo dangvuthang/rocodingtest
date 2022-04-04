@@ -20,7 +20,11 @@ export const checkMicrosoftLogin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.body.token;
+  let token;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = req.headers.authorization!.split(" ")[1];
+  }
   // No token end request immediately
   if (!token) {
     return res.status(400).json({

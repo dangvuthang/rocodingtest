@@ -7,7 +7,11 @@ exports.register = exports.checkAccountInDb = exports.checkMicrosoftLogin = void
 const axios_1 = __importDefault(require("axios"));
 const User_1 = __importDefault(require("../models/User"));
 const checkMicrosoftLogin = async (req, res, next) => {
-    const token = req.body.token;
+    let token;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer")) {
+        token = req.headers.authorization.split(" ")[1];
+    }
     if (!token) {
         return res.status(400).json({
             status: "fail",
