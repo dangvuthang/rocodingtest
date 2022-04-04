@@ -18,6 +18,7 @@ const handleLogin = async (instance: IPublicClientApplication) => {
       const request = await postRequest({
         url: "/users/register",
         token: auth.accessToken,
+        // body: { photoUrl: "something" },
       });
       console.log(request);
     } catch (error) {
