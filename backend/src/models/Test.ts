@@ -1,8 +1,8 @@
-import mongoose, { Schema, Types } from 'mongoose';
+import mongoose, { Schema, Types, Document } from 'mongoose';
 
-export interface ITest {
+export interface ITest extends Document {
     name: string;
-    createdDate: Date;
+    startedDate: Date;
     endDate: Date;
     link: string;
     duration: number;
@@ -12,7 +12,7 @@ export interface ITest {
 
   const TestSchema: Schema = new Schema({
     name: {type: String, required: true},
-    createdDate: {type: Date, required: true},
+    startedDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
     link: {type: String, required: true},
     duration: {type: Number, required: true},

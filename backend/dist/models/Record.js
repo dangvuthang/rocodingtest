@@ -30,6 +30,7 @@ const RecordSchema = new mongoose_1.Schema({
     evidence: [{ type: String, required: true, default: [] }],
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
     testId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Test' },
+    submissionId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Submission' },
 });
 exports.default = mongoose_1.default.model('Record', RecordSchema);
 //# sourceMappingURL=Record.js.map

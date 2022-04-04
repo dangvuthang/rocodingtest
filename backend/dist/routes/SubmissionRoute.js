@@ -9,8 +9,7 @@ const SubmissionController_1 = require("../controllers/SubmissionController");
 const routes = express_1.default.Router();
 routes.use(AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountInDb);
 routes.post("/", SubmissionController_1.createSubmission);
-routes.get("/:id", SubmissionController_1.getSubmission);
-routes.get("/:testId", SubmissionController_1.getSubmissionByTestId);
-routes.get("/:testId/users/:userId", SubmissionController_1.getSubmissionByUserAndTestId);
+routes.get("/tests/:testId", SubmissionController_1.getSubmissionByTestId);
+routes.get("/tests/:testId/users/:userId", SubmissionController_1.getSubmissionByUserAndTestId);
 exports.default = routes;
 //# sourceMappingURL=SubmissionRoute.js.map

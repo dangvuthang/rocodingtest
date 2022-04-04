@@ -1,47 +1,9 @@
 import Test from '../models/Test';
-import { Request, Response } from 'express';
+import {Response} from 'express';
 import  mongoose from 'mongoose';
-import User from '../models/User';
 import {AuthRequest} from '../controllers/AuthController';
 
-
-export const checkIfTeacher = async (req: AuthRequest, res: Response) => {
-  const email = req.microsoftAccount!.mail;
-  let user;
-  try {
-    user = User.
-    findOne({ email: email}). // can also use find/findOne depending on your use-case
-    populate({
-      path: 'role',
-      match: { name: 'teacher' }
-    }).
-    exec();
-  } catch (err) {
-    return res.status(400).json({
-      status: "error",
-      errors: [
-        {
-          msg: err,
-        },
-      ],
-    })
-  }
-  if (!user) {
-    return res.status(400).json({
-      status: "error",
-      msg: "This user does not have the permission to take action",
-    });
-  };
-  return res.status(200).json({
-    status: "success",
-    data: {
-      user,
-    },
-  });
-}
-
-
-export const getTest = async (req: Request, res: Response) => {
+export const getTest = async (req: AuthRequest, res: Response) => {
   const id = req.params.id;
   let test;
   try {
@@ -71,7 +33,7 @@ export const getTest = async (req: Request, res: Response) => {
   });
 }
 
-export const getTestByUserAndId = async (req: Request, res: Response) => {
+export const getTestByUserAndId = async (req: AuthRequest, res: Response) => {
   let tests;
   try {
     tests = await Test.find({ _id: req.params.testId, teacherId: req.params.userId });
@@ -100,15 +62,17 @@ export const getTestByUserAndId = async (req: Request, res: Response) => {
   });
 }
 
-export const createTest = async (req: Request, res: Response) => {
+export const createTest = async (req: AuthRequest, res: Response) => {
   const _id = new mongoose.Types.ObjectId();
-  let { name, createdDate, endDate, link, duration, question, teacherId } = req.body;
+  let { name, startedDate, endDate, link, duration, question, teacherId } = req.body;
+  teacherId = req.user!._id;
   link = "http://localhost:3000/exams/" + _id;
   let test;
   try {
-    test = await Test.create({ name, createdDate, endDate, link, duration, question, teacherId })
+    test = await Test.create({ name, startedDate, endDate, link, duration, question, teacherId })
   } catch (err) {
     return res.status(400).json({
+      status: "error",
       errors: [
         {
           msg: err,
@@ -124,12 +88,13 @@ export const createTest = async (req: Request, res: Response) => {
   });
 }
 
-export const deleteTest = async (req: Request, res: Response) => {
+export const deleteTest = async (req: AuthRequest, res: Response) => {
   let test;
   try {
     test = await Test.findByIdAndDelete(req.params.id)
   } catch (err) {
     return res.status(400).json({
+      status: "error",
       errors: [
         {
           msg: err,
@@ -139,22 +104,20 @@ export const deleteTest = async (req: Request, res: Response) => {
   }
   if (!test) {
     return res.status(400).json({
-      errors: [
-        {
-          msg: "There is no test with that id",
-        },
-      ],
+      status: "error",
+      msg: "There is no test with that id",
     });
   };
   return res.status(204).end();
 };
 
-export const updateTest = async (req: Request, res: Response) => {
+export const updateTest = async (req: AuthRequest, res: Response) => {
   let test;
   try {
     test = await Test.findByIdAndUpdate(req.params.id, req.body, { new: true });
   } catch (err) {
     return res.status(400).json({
+      status: "error",
       errors: [
         {
           msg: err,
@@ -164,14 +127,11 @@ export const updateTest = async (req: Request, res: Response) => {
   }
   if (!test) {
     return res.status(400).json({
-      errors: [
-        {
-          msg: "There is no test with that id",
-        },
-      ],
+      status: "error",
+      msg: "There is no test with that id",
     });
   };
-  return res.status(200).json({ 
+  return res.status(200).json({
     status: "success",
     data: {
       test,

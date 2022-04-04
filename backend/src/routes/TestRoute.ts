@@ -2,8 +2,9 @@ import express, { Router } from 'express';
 import {
     checkAccountInDb,
     checkMicrosoftLogin,
+    checkIfTeacher,
   } from "../controllers/AuthController";
-import {checkIfTeacher, getTest, getTestByUserAndId, createTest, updateTest, deleteTest} from '../controllers/TestController';
+import {getTest, getTestByUserAndId, createTest, updateTest, deleteTest} from '../controllers/TestController';
 
 const routes: Router = express.Router();
 

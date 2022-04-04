@@ -1,0 +1,17 @@
+import express, { Router } from 'express';
+import {
+    checkAccountInDb,
+    checkMicrosoftLogin,
+    checkIfTeacher,
+  } from "../controllers/AuthController";
+import {getRecordByTestId, getRecordByTestIdAndSubmissionId, getRecordByTestIdAndStudentId, createRecord} from '../controllers/RecordController';
+
+const routes: Router = express.Router();
+
+routes.use(checkMicrosoftLogin, checkAccountInDb, checkIfTeacher);
+routes.post("/", createRecord);
+routes.get("/tests/:testId", getRecordByTestId)
+routes.get("/tests/:testId/submissions/:submissionId", getRecordByTestIdAndSubmissionId);
+routes.get("/tests/:testId/users/:userId", getRecordByTestIdAndStudentId);
+
+export default routes;

@@ -108,3 +108,20 @@ export const register = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export const checkIfTeacher = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  const user = req.user
+  if (!user){
+    return res.status(400).json({
+      status: "error",
+      msg: "This user does not have in database",
+    });
+  }
+  if (user!.roles != "teacher") {
+    return res.status(400).json({
+      status: "error",
+      msg: "This user does not have the permission to take action",
+    });
+  };
+  return next();
+}

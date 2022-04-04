@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = exports.checkAccountInDb = exports.checkMicrosoftLogin = void 0;
+exports.checkIfTeacher = exports.register = exports.checkAccountInDb = exports.checkMicrosoftLogin = void 0;
 const axios_1 = __importDefault(require("axios"));
 const User_1 = __importDefault(require("../models/User"));
 const checkMicrosoftLogin = async (req, res, next) => {
@@ -89,4 +89,22 @@ const register = async (req, res) => {
     }
 };
 exports.register = register;
+const checkIfTeacher = async (req, res, next) => {
+    const user = req.user;
+    if (!user) {
+        return res.status(400).json({
+            status: "error",
+            msg: "This user does not have in database",
+        });
+    }
+    if (user.roles != "teacher") {
+        return res.status(400).json({
+            status: "error",
+            msg: "This user does not have the permission to take action",
+        });
+    }
+    ;
+    return next();
+};
+exports.checkIfTeacher = checkIfTeacher;
 //# sourceMappingURL=AuthController.js.map

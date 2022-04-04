@@ -37,8 +37,8 @@ const getTestByUserAndId = async (req, res) => {
 };
 exports.getTestByUserAndId = getTestByUserAndId;
 const createTest = async (req, res) => {
-    const { name, createdDate, endDate, link, duration, question, teacherId } = req.body;
-    const test = Test_1.default.create({ name, createdDate, endDate, link, duration, question, teacherId });
+    const { name, startedDate, endDate, link, duration, question, teacherId } = req.body;
+    const test = Test_1.default.create({ name, startedDate, endDate, link, duration, question, teacherId });
     return res.status(200).send(test);
 };
 exports.createTest = createTest;
