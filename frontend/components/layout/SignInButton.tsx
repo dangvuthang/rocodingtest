@@ -3,7 +3,7 @@ import { IPublicClientApplication } from "@azure/msal-browser";
 import { Button } from "@mui/material";
 import { loginRequest } from "../../src/authConfig";
 import router from "next/router";
-import axiosInstance from "../../util/axiosInstance";
+import { postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
 
 const handleLogin = async (instance: IPublicClientApplication) => {
@@ -13,13 +13,11 @@ const handleLogin = async (instance: IPublicClientApplication) => {
   } catch (error) {
     console.log(error);
   }
-
   if (auth) {
     try {
-      const request = await axiosInstance.post("/users/register", {
+      const request = await postRequest({
+        url: "/users/register",
         token: auth.accessToken,
-        // Uncomment this to succeed registration
-        // photoUrl: "something"
       });
       console.log(request);
     } catch (error) {
