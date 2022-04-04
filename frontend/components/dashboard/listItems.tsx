@@ -13,13 +13,13 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton component="a" href="/" >
+    <ListItemButton component="a" href="/dashboard" >
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton  component="a" href="/about" >
       <ListItemIcon>
         <CheckCircleOutlineIcon />
       </ListItemIcon>
