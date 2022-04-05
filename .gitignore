@@ -30,9 +30,14 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+/backend/.env\
+
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
+
+# vs_code
+/.vscode

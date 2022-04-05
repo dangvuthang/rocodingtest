@@ -11,7 +11,7 @@ function server() {
     return mongoose_1.default
         .connect(dbUri)
         .then(() => console.log("CONNECT TO DATABASE"))
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
 }
 exports.default = server;
 //# sourceMappingURL=server.js.map
