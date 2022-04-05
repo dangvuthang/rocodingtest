@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Grid, Typography, Card } from "@mui/material";
-import Teammates from "./interfaces/Teammates";
+import Teammates from "../interfaces/Teammates";
 
 interface Props {
   teammate: Teammates;

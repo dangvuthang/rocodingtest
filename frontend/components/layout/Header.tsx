@@ -4,12 +4,10 @@ import {
   Grid,
   Box,
   Divider,
-  Button,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import {  AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const SignInButton = dynamic(() => import("./SignInButton"), {
   ssr: false,
@@ -28,12 +26,10 @@ const iconstyle = {
   fontSize:30,
   fontWeight:600,
   fontStyle: 'normal',
-  fontFamily: 'Caveat Brush',
 } as const;
 
 export default function Header(): JSX.Element {
-  const router = useRouter();
-  const isAuthenticated = useIsAuthenticated();
+  /*const isAuthenticated = useIsAuthenticated();*/
   const [account] = useMsal().accounts;
   return (
     <Box
@@ -45,9 +41,9 @@ export default function Header(): JSX.Element {
         <Grid container  alignItems="center" rowSpacing={4}>
           <Grid item xs={4}>
             <Link href="/" passHref>
-              <Typography 
-                variant="body1"  
+              <Typography   
                 align="center" 
+                fontFamily= 'Caveat Brush'
                 sx={iconstyle}
               >
                 HACKERMIT
@@ -64,7 +60,13 @@ export default function Header(): JSX.Element {
                 Sign In
               </Button>
             </Link>*/}
-            {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+            {/*{isAuthenticated ? <SignOutButton /> : <SignInButton />}*/}
+            <AuthenticatedTemplate>
+              <SignOutButton />
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+              <SignInButton />
+            </UnauthenticatedTemplate>
           </Grid>
         </Grid>
       </Container>

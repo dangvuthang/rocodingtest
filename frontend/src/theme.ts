@@ -7,7 +7,7 @@ const theme = createTheme({
       main: "#ffa500",
     },
     secondary: {
-      main: "#9575CD",
+      main: "#FFFFFF",
     },
   },
   typography: {
@@ -68,18 +68,6 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "14px",
-          textTransform: "none",
-          fontSize: "1.10rem",
-          lineHeight: 1.4,
-          font: "bold",
-          fontWeight: 500,
-        },
-      },
-    },
     MuiDialog: {
       styleOverrides: {
         paper: {
@@ -99,6 +87,13 @@ const theme = createTheme({
         rounded: {
           borderRadius: "12px",
           overflow: "hidden",
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: "#ffa500",
         },
       },
     },
