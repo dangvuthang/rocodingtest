@@ -71,7 +71,7 @@ const createTest = async (req, res) => {
     const _id = new mongoose_1.default.Types.ObjectId();
     let { name, startedDate, endDate, link, duration, question, teacherId } = req.body;
     teacherId = req.user._id;
-    link = "http://localhost:3000/exams/" + _id;
+    link = "http://localhost:3000/exam/" + _id;
     let test;
     try {
         test = await Test_1.default.create({ _id, name, startedDate, endDate, link, duration, question, teacherId });
