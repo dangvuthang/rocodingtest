@@ -24,11 +24,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const SubmissionSchema = new mongoose_1.Schema({
-    submissionTime: { type: Date, required: true, default: Date.now() },
-    content: { type: String, required: true },
-    testId: { type: mongoose_1.Types.ObjectId, required: true, ref: "Test" },
-    studentId: { type: mongoose_1.Types.ObjectId, required: true, ref: "User" }
+const TestSchema = new mongoose_1.Schema({
+    name: { type: String, required: true },
+    startedDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    link: { type: String, required: true },
+    duration: { type: Number, required: true },
+    question: { type: String, required: true },
+    teacherId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
 });
-exports.default = mongoose_1.default.model('Submission', SubmissionSchema);
-//# sourceMappingURL=Submission.js.map
+exports.default = mongoose_1.default.model("Test", TestSchema);
+//# sourceMappingURL=Test.js.map

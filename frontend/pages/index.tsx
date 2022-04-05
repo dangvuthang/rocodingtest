@@ -14,75 +14,77 @@ import { teammates } from "../components/data/teammate";
 import Layout from "../components/layout/Layout";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../src/theme";
+import useAccessToken from "../hooks/useAccessToken";
 
 export default function HomePage() {
+  const token = useAccessToken();
+  console.log(token);
   return (
     <ThemeProvider theme={theme}>
-    <Layout>
-      <Page maxWidth={false}>
-            <HeroSection
+      <Layout>
+        <Page maxWidth={false}>
+          <HeroSection
             title="HACKERMIT"
             subtitle="Easy to organize online exams. Stability and Anti-cheating."
             image="https://assets3.lottiefiles.com/packages/lf20_fGseie.json"
-            >
+          >
             {/* <Link href="/react" passHref> */}
             <Button variant="contained" disableElevation sx={{ mr: 2, mt: 2 }}>
-                Get started
+              Get started
             </Button>
             {/* </Link> */}
             {/* <Link href="/ios" passHref> */}
             {/* </Link> */}
-            </HeroSection>
-            <FeatureContainer title="Our Web's Princibles">
+          </HeroSection>
+          <FeatureContainer title="Our Web's Princibles">
             <FeatureBlocksContainer>
-                <FeatureBlock
+              <FeatureBlock
                 title="Intuitive"
                 icon={<StarIcon />}
                 content={
-                    <>
+                  <>
                     Embedded code editor supports multiple languages Real time
                     coding Exam notification system
-                    </>
+                  </>
                 }
-                />
-                <FeatureBlock
+              />
+              <FeatureBlock
                 title="Manageble"
                 icon={<SettingsIcon />}
                 content={
-                    <>
+                  <>
                     Allow managing separate examination Can host room and invite
                     students easily Secure identification system
-                    </>
+                  </>
                 }
-                />
-                <FeatureBlock
+              />
+              <FeatureBlock
                 title="Secure"
                 icon={<ShieldIcon />}
                 content={
-                    <>
+                  <>
                     Screen tracking system can detect unusual behaviour Camera
                     tracking can record facial expressions Be able to notify the
                     teacher in real-time Provide evidence.
-                    </>
+                  </>
                 }
-                />
+              />
             </FeatureBlocksContainer>
-            </FeatureContainer>
-            <BigSection
+          </FeatureContainer>
+          <BigSection
             title="Our Goal!"
             subtitle="To simplify the process of making online examinations and to lighten the workload of teachers from making online examinations.Thus,
             preventing the online cheating at the minimum rate."
             animation="https://assets4.lottiefiles.com/private_files/lf30_obidsi0t.json"
-            />
-            <Box sx={{ mb: 8 }}>
+          />
+          <Box sx={{ mb: 8 }}>
             <TeammateSection title="About Us" teammates={teammates} />
-            </Box>
-            <Box sx={{ mb: 4 }}>
+          </Box>
+          <Box sx={{ mb: 4 }}>
             <ContactSection />
-            </Box>
+          </Box>
         </Page>
-    </Layout>
+      </Layout>
     </ThemeProvider>
-
   );
 }
