@@ -79,11 +79,7 @@ const createTest = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     return res.status(201).json({
@@ -102,17 +98,13 @@ const deleteTest = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!test) {
         return res.status(400).json({
             status: "error",
-            msg: "There is no test with that id",
+            message: "There is no test with that id",
         });
     }
     ;
@@ -127,17 +119,13 @@ const updateTest = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!test) {
         return res.status(400).json({
             status: "error",
-            msg: "There is no test with that id",
+            message: "There is no test with that id",
         });
     }
     ;

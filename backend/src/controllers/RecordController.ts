@@ -11,11 +11,7 @@ export const createRecord = async (req: AuthRequest, res: Response) => {
     } catch (err) {
       return res.status(400).json({
         status: "error",
-        errors: [
-          {
-            msg: err,
-          },
-        ],
+        message: err.message,
       })
     }
     return res.status(201).json({
@@ -32,51 +28,19 @@ export const getRecordByTestId = async (req : AuthRequest, res : Response) => {
   } catch (err) {
     return res.status(400).json({
       status: "error",
-      errors: [
-        {
-          msg: err,
-        },
-      ],
+      message: err.message,
     })
   }
   if (!records) {
     return res.status(400).json({
       status: "error",
-      msg: "There is no record found",
+      message: "There is no record found",
     });
   }
   return res.status(201).json({
     status: "success",
     data: {
       records,
-    },
-  });
-}
-
-export const getRecordByTestIdAndSubmissionId = async (req : AuthRequest, res : Response) => {
-  let record;
-  try {
-    record =  await Record.find({testId: req.params.testId, submissionId: req.params.submissionId})
-  } catch (err) {
-    return res.status(400).json({
-      status: "error",
-      errors: [
-        {
-          msg: err,
-        },
-      ],
-    })
-  }
-  if (!record) {
-    return res.status(400).json({
-      status: "error",
-      msg: "There is no record found",
-    });
-  }
-  return res.status(201).json({
-    status: "success",
-    data: {
-      record,
     },
   });
 }
@@ -98,7 +62,7 @@ export const getRecordByTestIdAndStudentId = async (req : AuthRequest, res : Res
   if (!record) {
     return res.status(400).json({
       status: "error",
-      msg: "There is no record found",
+      message: "There is no record found",
     });
   }
   return res.status(201).json({

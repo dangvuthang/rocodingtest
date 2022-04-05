@@ -28,7 +28,8 @@ const SubmissionSchema = new mongoose_1.Schema({
     submissionTime: { type: Date, required: true, default: Date.now() },
     content: { type: String, required: true },
     testId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Test" },
-    studentId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" }
+    studentId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
+    recordId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Record" }
 });
 exports.default = mongoose_1.default.model('Submission', SubmissionSchema);
 //# sourceMappingURL=Submission.js.map

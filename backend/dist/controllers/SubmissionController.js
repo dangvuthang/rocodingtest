@@ -13,11 +13,7 @@ const getSubmissionByUserAndTestId = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!submissions) {
@@ -43,17 +39,13 @@ const getSubmissionByTestId = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!submissions) {
         return res.status(400).json({
             status: "error",
-            msg: "There is no submission found",
+            message: "There is no submission found",
         });
     }
     ;
@@ -75,11 +67,7 @@ const createSubmission = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     return res.status(201).json({

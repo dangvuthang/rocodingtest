@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecordByTestIdAndStudentId = exports.getRecordByTestIdAndSubmissionId = exports.getRecordByTestId = exports.createRecord = void 0;
+exports.getRecordByTestIdAndStudentId = exports.getRecordByTestId = exports.createRecord = void 0;
 const Record_1 = __importDefault(require("../models/Record"));
 const createRecord = async (req, res) => {
     let record;
@@ -15,11 +15,7 @@ const createRecord = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     return res.status(201).json({
@@ -38,17 +34,13 @@ const getRecordByTestId = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!records) {
         return res.status(400).json({
             status: "error",
-            msg: "There is no record found",
+            message: "There is no record found",
         });
     }
     return res.status(201).json({
@@ -59,35 +51,6 @@ const getRecordByTestId = async (req, res) => {
     });
 };
 exports.getRecordByTestId = getRecordByTestId;
-const getRecordByTestIdAndSubmissionId = async (req, res) => {
-    let record;
-    try {
-        record = await Record_1.default.find({ testId: req.params.testId, submissionId: req.params.submissionId });
-    }
-    catch (err) {
-        return res.status(400).json({
-            status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
-        });
-    }
-    if (!record) {
-        return res.status(400).json({
-            status: "error",
-            msg: "There is no record found",
-        });
-    }
-    return res.status(201).json({
-        status: "success",
-        data: {
-            record,
-        },
-    });
-};
-exports.getRecordByTestIdAndSubmissionId = getRecordByTestIdAndSubmissionId;
 const getRecordByTestIdAndStudentId = async (req, res) => {
     let record;
     try {
@@ -106,7 +69,7 @@ const getRecordByTestIdAndStudentId = async (req, res) => {
     if (!record) {
         return res.status(400).json({
             status: "error",
-            msg: "There is no record found",
+            message: "There is no record found",
         });
     }
     return res.status(201).json({

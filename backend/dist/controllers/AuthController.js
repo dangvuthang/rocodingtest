@@ -94,13 +94,13 @@ const checkIfTeacher = async (req, res, next) => {
     if (!user) {
         return res.status(400).json({
             status: "error",
-            msg: "This user does not have in database",
+            message: "This user does not have in database",
         });
     }
     if (user.role != "teacher") {
         return res.status(400).json({
             status: "error",
-            msg: "This user does not have the permission to take action",
+            message: "This user does not have the permission to take action",
         });
     }
     ;

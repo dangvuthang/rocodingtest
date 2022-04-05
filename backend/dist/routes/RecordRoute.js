@@ -11,7 +11,6 @@ routes.use(AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountIn
 routes.post("/", RecordController_1.createRecord);
 routes.use(AuthController_1.checkIfTeacher);
 routes.get("/tests/:testId", RecordController_1.getRecordByTestId);
-routes.get("/tests/:testId/submissions/:submissionId", RecordController_1.getRecordByTestIdAndSubmissionId);
 routes.get("/tests/:testId/users/:userId", RecordController_1.getRecordByTestIdAndStudentId);
 exports.default = routes;
 //# sourceMappingURL=RecordRoute.js.map
