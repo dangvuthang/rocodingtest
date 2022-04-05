@@ -117,7 +117,7 @@ export const checkIfTeacher = async (req: AuthRequest, res: Response, next: Next
       msg: "This user does not have in database",
     });
   }
-  if (user!.roles != "teacher") {
+  if (user!.role != "teacher") {
     return res.status(400).json({
       status: "error",
       msg: "This user does not have the permission to take action",

@@ -5,7 +5,7 @@ export interface IUser extends Document {
     fullName: string;
     email: string;
     photoUrl: string;
-    roles: string;
+    role: string;
   }
 
   const UserSchema: Schema = new Schema({
