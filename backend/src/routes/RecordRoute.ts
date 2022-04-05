@@ -8,8 +8,9 @@ import {getRecordByTestId, getRecordByTestIdAndSubmissionId, getRecordByTestIdAn
 
 const routes: Router = express.Router();
 
-routes.use(checkMicrosoftLogin, checkAccountInDb, checkIfTeacher);
+routes.use(checkMicrosoftLogin, checkAccountInDb);
 routes.post("/", createRecord);
+routes.use(checkIfTeacher)
 routes.get("/tests/:testId", getRecordByTestId)
 routes.get("/tests/:testId/submissions/:submissionId", getRecordByTestIdAndSubmissionId);
 routes.get("/tests/:testId/users/:userId", getRecordByTestIdAndStudentId);

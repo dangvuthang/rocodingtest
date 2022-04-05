@@ -8,9 +8,10 @@ import {getTest, getTestByUserAndId, createTest, updateTest, deleteTest} from '.
 
 const routes: Router = express.Router();
 
-routes.use(checkMicrosoftLogin, checkAccountInDb, checkIfTeacher);
-routes.post("/", createTest);
+routes.use(checkMicrosoftLogin, checkAccountInDb);
 routes.get("/:id", getTest);
+routes.use(checkIfTeacher)
+routes.post("/", createTest);
 routes.get("/:testId/users/:userId", getTestByUserAndId);
 routes.patch("/:id", updateTest);
 routes.delete("/delete/:id", deleteTest);
