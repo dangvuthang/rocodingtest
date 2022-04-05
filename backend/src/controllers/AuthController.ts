@@ -20,7 +20,11 @@ export const checkMicrosoftLogin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.body.token;
+  let token;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = req.headers.authorization!.split(" ")[1];
+  }
   // No token end request immediately
   if (!token) {
     return res.status(400).json({
@@ -109,19 +113,23 @@ export const register = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const checkIfTeacher = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const user = req.user
-  if (!user){
+export const checkIfTeacher = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user;
+  if (!user) {
     return res.status(400).json({
       status: "error",
       message: "This user does not have in database",
     });
   }
-  if (user!.role != "teacher") {
-    return res.status(400).json({
+  if (user.role !== "teacher") {
+    return res.status(403).json({
       status: "error",
       message: "This user does not have the permission to take action",
     });
-  };
+  }
   return next();
-}
+};

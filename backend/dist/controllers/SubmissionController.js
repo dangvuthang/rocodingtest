@@ -8,7 +8,10 @@ const Submission_1 = __importDefault(require("../models/Submission"));
 const getSubmissionByUserAndTestId = async (req, res) => {
     let submissions;
     try {
-        submissions = await Submission_1.default.find({ studentId: req.params.id, testId: req.params.testId });
+        submissions = await Submission_1.default.find({
+            studentId: req.params.id,
+            testId: req.params.testId,
+        });
     }
     catch (err) {
         return res.status(400).json({
@@ -22,7 +25,6 @@ const getSubmissionByUserAndTestId = async (req, res) => {
             msg: "There is no submission found",
         });
     }
-    ;
     return res.status(200).json({
         status: "success",
         data: {
@@ -48,7 +50,6 @@ const getSubmissionByTestId = async (req, res) => {
             message: "There is no submission found",
         });
     }
-    ;
     return res.status(200).json({
         status: "success",
         data: {
@@ -62,7 +63,12 @@ const createSubmission = async (req, res) => {
     let { submissionTime, content, testId, studentId } = req.body;
     studentId = req.user._id;
     try {
-        submission = await Submission_1.default.create({ submissionTime, content, testId, studentId });
+        submission = await Submission_1.default.create({
+            submissionTime,
+            content,
+            testId,
+            studentId,
+        });
     }
     catch (err) {
         return res.status(400).json({

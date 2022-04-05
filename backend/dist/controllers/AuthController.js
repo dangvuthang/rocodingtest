@@ -7,7 +7,11 @@ exports.checkIfTeacher = exports.register = exports.checkAccountInDb = exports.c
 const axios_1 = __importDefault(require("axios"));
 const User_1 = __importDefault(require("../models/User"));
 const checkMicrosoftLogin = async (req, res, next) => {
-    const token = req.body.token;
+    let token;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer")) {
+        token = req.headers.authorization.split(" ")[1];
+    }
     if (!token) {
         return res.status(400).json({
             status: "fail",
@@ -97,13 +101,12 @@ const checkIfTeacher = async (req, res, next) => {
             message: "This user does not have in database",
         });
     }
-    if (user.role != "teacher") {
-        return res.status(400).json({
+    if (user.role !== "teacher") {
+        return res.status(403).json({
             status: "error",
             message: "This user does not have the permission to take action",
         });
     }
-    ;
     return next();
 };
 exports.checkIfTeacher = checkIfTeacher;

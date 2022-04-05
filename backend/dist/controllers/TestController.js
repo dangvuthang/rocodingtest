@@ -28,7 +28,6 @@ const getTest = async (req, res) => {
             msg: "There is no test found in the database",
         });
     }
-    ;
     return res.status(200).json({
         status: "success",
         data: {
@@ -40,7 +39,10 @@ exports.getTest = getTest;
 const getTestByUserAndId = async (req, res) => {
     let tests;
     try {
-        tests = await Test_1.default.find({ _id: req.params.testId, teacherId: req.params.userId });
+        tests = await Test_1.default.find({
+            _id: req.params.testId,
+            teacherId: req.params.userId,
+        });
     }
     catch (err) {
         return res.status(400).json({
@@ -58,7 +60,6 @@ const getTestByUserAndId = async (req, res) => {
             msg: "There is no test by this user",
         });
     }
-    ;
     return res.status(200).json({
         status: "success",
         data: {
@@ -74,7 +75,16 @@ const createTest = async (req, res) => {
     link = "http://localhost:3000/exam/" + _id;
     let test;
     try {
-        test = await Test_1.default.create({ _id, name, startedDate, endDate, link, duration, question, teacherId });
+        test = await Test_1.default.create({
+            _id,
+            name,
+            startedDate,
+            endDate,
+            link,
+            duration,
+            question,
+            teacherId,
+        });
     }
     catch (err) {
         return res.status(400).json({
@@ -107,7 +117,6 @@ const deleteTest = async (req, res) => {
             message: "There is no test with that id",
         });
     }
-    ;
     return res.status(204).end();
 };
 exports.deleteTest = deleteTest;
@@ -128,7 +137,6 @@ const updateTest = async (req, res) => {
             message: "There is no test with that id",
         });
     }
-    ;
     return res.status(200).json({
         status: "success",
         data: {

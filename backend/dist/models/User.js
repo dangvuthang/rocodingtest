@@ -35,7 +35,7 @@ const UserSchema = new mongoose_1.Schema({
             message: "Role must be student, or teacher",
         },
         default: "student",
-    }
+    },
 });
-exports.default = mongoose_1.default.model('User', UserSchema);
+exports.default = mongoose_1.default.model("User", UserSchema);
 //# sourceMappingURL=User.js.map

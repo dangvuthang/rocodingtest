@@ -7,10 +7,17 @@ exports.getRecordByTestIdAndStudentId = exports.getRecordByTestId = exports.crea
 const Record_1 = __importDefault(require("../models/Record"));
 const createRecord = async (req, res) => {
     let record;
-    let { attendanceDate, numberOfCheats, evidence, userId, testId, submissionId } = req.body;
+    let { attendanceDate, numberOfCheats, evidence, userId, testId, submissionId, } = req.body;
     userId = req.user._id;
     try {
-        record = await Record_1.default.create({ attendanceDate, numberOfCheats, evidence, userId, testId, submissionId });
+        record = await Record_1.default.create({
+            attendanceDate,
+            numberOfCheats,
+            evidence,
+            userId,
+            testId,
+            submissionId,
+        });
     }
     catch (err) {
         return res.status(400).json({
@@ -54,7 +61,10 @@ exports.getRecordByTestId = getRecordByTestId;
 const getRecordByTestIdAndStudentId = async (req, res) => {
     let record;
     try {
-        record = await Record_1.default.find({ testId: req.params.testId, userId: req.params.userId });
+        record = await Record_1.default.find({
+            testId: req.params.testId,
+            userId: req.params.userId,
+        });
     }
     catch (err) {
         return res.status(400).json({
