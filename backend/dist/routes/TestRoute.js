@@ -13,6 +13,6 @@ routes.use(AuthController_1.checkIfTeacher);
 routes.post("/", TestController_1.createTest);
 routes.get("/:testId/users/:userId", TestController_1.getTestByUserAndId);
 routes.patch("/:id", TestController_1.updateTest);
-routes.delete("/delete/:id", TestController_1.deleteTest);
+routes.delete("/:id", TestController_1.deleteTest);
 exports.default = routes;
 //# sourceMappingURL=TestRoute.js.map
