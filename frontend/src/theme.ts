@@ -68,18 +68,6 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "10px",
-          textTransform: "none",
-          fontSize: "1.10rem",
-          lineHeight: 1.4,
-          font:'bold',
-          fontWeight: 500,
-        },
-      },
-    },
     MuiDialog: {
       styleOverrides: {
         paper: {

@@ -12,9 +12,12 @@ import BigSection from "../components/frontpage/BigSection";
 import TeammateSection from "../components/frontpage/TeammateSection";
 import { teammates } from "../components/data/teammate";
 import Layout from "../components/layout/Layout";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../src/theme";
 
 export default function HomePage() {
   return (
+    <ThemeProvider theme={theme}>
     <Layout>
       <Page maxWidth={false}>
             <HeroSection
@@ -79,5 +82,7 @@ export default function HomePage() {
             </Box>
         </Page>
     </Layout>
+    </ThemeProvider>
+
   );
 }

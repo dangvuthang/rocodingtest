@@ -6,12 +6,9 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AddIcon from '@mui/icons-material/Add';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-
-import { mainListItems, secondaryListItems } from './listItems';
-import { Button, Grid, Container, Badge, IconButton, Divider, Typography, List, Toolbar, Link, Card, CardContent, Checkbox, Paper } from '@mui/material';
+import { ReactNode } from "react";
+import { mainListItems } from '../listItems';
+import {  Badge, IconButton, Divider, Typography, List, Toolbar, Link} from '@mui/material';
 
 
 
@@ -92,17 +89,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Dashboard(): JSX.Element {
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function Dslayout({ children }: Props) {
   const [open, setOpen] = React.useState(true);
-  const [check, setCheck] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const handleCheckBox = () => {
-    setCheck(!check);
-    console.log(check);
-  }
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar sx={{ backgroundColor: "#FFFFFF" }} position="absolute" open={open}>
@@ -156,8 +152,6 @@ export default function Dashboard(): JSX.Element {
         <Divider />
         <List component="nav">
           {mainListItems}
-          <Divider sx={{ my: 1 }} />
-          {secondaryListItems}
         </List>
       </Drawer>
       <Box
@@ -170,65 +164,9 @@ export default function Dashboard(): JSX.Element {
         }}
       >
         <Toolbar />
-        <Grid >
-          <Grid item>
-            <Box width='98%' sx=
-              {{
-                py: 1.5,
-                mx: 2,
-                my: 2,
-                bgcolor: 'white',
-                borderRadius: 3.5,
-              }}>
-              <Button variant="contained" startIcon={<AddIcon />} sx={{ ml: 2 }}>Add exam</Button>
-              <Button variant="contained" sx={{ ml: 2 }}>Weekly Details</Button>
-              <Button variant="contained" sx={{ ml: 2 }}>Move to category</Button>
-              <Button variant="contained" sx={{ ml: 2 }}>Move to archiev</Button>
-            </Box>
-          </Grid>
-          <Grid item>
-            <Box width='98%' sx=
-              {{
-                py: 1,
-                mx: 2,
-                my: 2,
-                bgcolor: 'white',
-                borderRadius: 3.5,
-                height: '80vh',
-              }}>
-              {/* Page Content */}
-              <Grid container spacing={2} direction="column"
-                justifyContent="center"
-                alignItems="center">
-                <Grid item sx={{ width: '90%' }}>
-                  <Box mb={3}>
-                    <Paper>
-                      <Box p={2}>
-                        <Grid container alignItems="center" spacing={1}>
-                          {check === false ?
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxOutlineBlankIcon />
-                            </IconButton> :
-                            <IconButton onClick={handleCheckBox}>
-                              <CheckBoxIcon />
-                            </IconButton>}
-                          <Grid item>
-                            <img src="https://picsum.photos/200/300" alt="hehe" width="100%" />
-                          </Grid>
-                          <Grid item>
-                            <Typography>hehe</Typography>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </Paper>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Grid>
-        </Grid>
+          <main>{children}</main>
         <Copyright sx={{ pt: 4, bgcolor: 'white' }} />
       </Box>
     </Box>
   );
-}
+};

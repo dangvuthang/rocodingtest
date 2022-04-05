@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import * as React from 'react';
-import Dslayout from '../components/dashboard/Dslayout/Dslayout';
+import Dslayout from '../components/dashboard/Ds_layout/Dslayout';
 
 export default function About()  {
    

@@ -4,11 +4,9 @@ import {
   Grid,
   Box,
   Divider,
-  Button,
 } from "@mui/material";
 import {  AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import dynamic from "next/dynamic";
-import { useRouter } from 'next/router'
 import Link from "next/link";
 
 const SignInButton = dynamic(() => import("./SignInButton"), {
@@ -28,7 +26,6 @@ const iconstyle = {
   fontSize:30,
   fontWeight:600,
   fontStyle: 'normal',
-  fontFamily: 'Caveat Brush',
 } as const;
 
 export default function Header(): JSX.Element {
@@ -46,6 +43,7 @@ export default function Header(): JSX.Element {
             <Link href="/" passHref>
               <Typography   
                 align="center" 
+                fontFamily= 'Caveat Brush'
                 sx={iconstyle}
               >
                 HACKERMIT
