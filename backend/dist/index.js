@@ -15,8 +15,8 @@ app.use(express_1.default.json());
 app.get("/", (_, res) => res.send("Welcome to the Mongoose & TypeScript example"));
 app.use("/api/v1/users", UserRoute_1.default);
 app.use("/api/v1/tests", TestRoute_1.default);
-app.use("/api/v1/submission", SubmissionRoute_1.default);
-app.use("/api/v1/submission", RecordRoute_1.default);
+app.use("/api/v1/submissions", SubmissionRoute_1.default);
+app.use("/api/v1/submissions", RecordRoute_1.default);
 app.listen(port, () => {
     console.log(`Application started successfully on port ${port}.`);
     (0, server_1.default)();

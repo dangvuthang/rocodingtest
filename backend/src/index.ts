@@ -16,8 +16,8 @@ app.get("/", (_, res: Response) =>
 
 app.use("/api/v1/users", UserRoute);
 app.use("/api/v1/tests", TestRouter);
-app.use("/api/v1/submission", SubmissionRouter)
-app.use("/api/v1/submission", RecordRouter)
+app.use("/api/v1/submissions", SubmissionRouter)
+app.use("/api/v1/submissions", RecordRouter)
 
 app.listen(port, () => {
   console.log(`Application started successfully on port ${port}.`);

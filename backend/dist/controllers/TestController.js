@@ -74,7 +74,7 @@ const createTest = async (req, res) => {
     link = "http://localhost:3000/exams/" + _id;
     let test;
     try {
-        test = await Test_1.default.create({ name, startedDate, endDate, link, duration, question, teacherId });
+        test = await Test_1.default.create({ _id, name, startedDate, endDate, link, duration, question, teacherId });
     }
     catch (err) {
         return res.status(400).json({

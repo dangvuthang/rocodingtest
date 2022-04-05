@@ -69,7 +69,7 @@ export const createTest = async (req: AuthRequest, res: Response) => {
   link = "http://localhost:3000/exams/" + _id;
   let test;
   try {
-    test = await Test.create({ name, startedDate, endDate, link, duration, question, teacherId })
+    test = await Test.create({ _id, name, startedDate, endDate, link, duration, question, teacherId })
   } catch (err) {
     return res.status(400).json({
       status: "error",
