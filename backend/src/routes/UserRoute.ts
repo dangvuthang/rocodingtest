@@ -3,7 +3,7 @@ import {
   checkAccountInDb,
   checkMicrosoftLogin,
   register,
-} from "../controller/AuthController";
+} from "../controllers/AuthController";
 
 const route = express.Router();
 

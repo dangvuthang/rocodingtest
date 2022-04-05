@@ -12,8 +12,8 @@ export interface IRecord {
     attendanceDate: { type: Date, required: true, unique: true },
     numberOfCheats: { type: Number, required: true, default: 0},
     evidence: [{ type: String, required: true, default: []}],
-    userId: { type: Types.ObjectId, ref: 'User'},
-    testId: { type: Types.ObjectId, ref: 'Test' },
+    userId: { type: Schema.Types.ObjectId, ref: 'User'},
+    testId: { type: Schema.Types.ObjectId, ref: 'Test' }
   });
 
   // Export the model and return your IUser interface

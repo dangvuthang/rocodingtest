@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const TestSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
-    createdDate: { type: Date, required: true },
+    startedDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     link: { type: String, required: true },
     duration: { type: Number, required: true },
