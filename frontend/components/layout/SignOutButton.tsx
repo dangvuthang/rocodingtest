@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import router from "next/router";
 
 function handleLogout(instance: IPublicClientApplication) {
-  instance.logoutPopup().catch(e => {
+  instance.logoutPopup().catch((e) => {
     console.error(e);
   });
 }
