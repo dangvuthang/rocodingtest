@@ -21,6 +21,7 @@ export default function BigSection({ title, subtitle,animation }: Props): JSX.El
       </Typography>
       <Container sx={{ display: "flex", justifyContent: "center", mb: 16 }}>
           <lottie-player
+              ref={ref}
               hover
               autoplay
               loop

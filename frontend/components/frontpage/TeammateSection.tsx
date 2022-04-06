@@ -1,5 +1,5 @@
 import { Grid, Container, Typography } from "@mui/material";
-import Teammates from "./interfaces/Teammates";
+import Teammates from "../interfaces/Teammates";
 import TeammateBlock from "./TeammateBlock";
 
 interface Props {
