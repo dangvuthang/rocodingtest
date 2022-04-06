@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const UserSchema = new mongoose_1.Schema({
     fullName: { type: String, required: true },
-    email: { type: String, required: true, index: true },
+    email: { type: String, required: true },
     photoUrl: { type: String, required: true },
     role: {
         type: String,

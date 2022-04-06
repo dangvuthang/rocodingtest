@@ -26,12 +26,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const TestSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
-    createdDate: { type: Date, required: true },
+    startedDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     link: { type: String, required: true },
     duration: { type: Number, required: true },
     question: { type: String, required: true },
-    teacherId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    teacherId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
 });
-exports.default = mongoose_1.default.model('Test', TestSchema);
+exports.default = mongoose_1.default.model("Test", TestSchema);
 //# sourceMappingURL=Test.js.map
