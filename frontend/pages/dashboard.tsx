@@ -15,9 +15,9 @@ import * as React from "react";
 import Dslayout from "../components/dashboard/Ds_layout/Dslayout";
 import ExamCard from "../components/dashboard/ExamCard";
 import Link from "next/link";
-import AddExam from "./addexam";
+import AddExam from "../components/dashboard/AddExam";
 import Person from "../components/interfaces/Person";
-import EditExam from "./editexam";
+import EditExam from "../components/dashboard/EditExam";
 
 export default function Dashboard() {
   const usersData = [
@@ -55,7 +55,6 @@ export default function Dashboard() {
 		setCurrentUser({ id: user.id, name: user.name, username: user.username })
     console.log(currentUser)
 	}
-
 
   return (
     <Dslayout>

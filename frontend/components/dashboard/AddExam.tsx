@@ -1,6 +1,5 @@
 import * as React from 'react'
-import Dslayout from "../components/dashboard/Ds_layout/Dslayout";
-import Person from "../components/interfaces/Person";
+import Person from "../interfaces/Person";
 
 type Props = {
     saveExam: (e: React.FormEvent, formData: Person| any) => void
