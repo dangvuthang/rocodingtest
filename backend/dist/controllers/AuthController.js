@@ -45,7 +45,10 @@ const checkAccountInDb = async (req, res, next) => {
         });
     }
     try {
-        const userSavedInDb = await User_1.default.findOne({ email: microsoftAccount.mail });
+        const userSavedInDb = await User_1.default.findOne({
+            email: microsoftAccount.mail.toLowerCase(),
+        });
+        console.log(userSavedInDb);
         if (userSavedInDb) {
             req.user = userSavedInDb;
         }
@@ -74,7 +77,7 @@ const register = async (req, res) => {
     }
     try {
         const newUser = await User_1.default.create({
-            email: microsoftAccount.mail,
+            email: microsoftAccount.mail.toLowerCase(),
             fullName: microsoftAccount.displayName,
             photoUrl,
         });

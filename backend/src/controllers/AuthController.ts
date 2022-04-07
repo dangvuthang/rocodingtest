@@ -67,7 +67,10 @@ export const checkAccountInDb = async (
   }
   try {
     // Find user with the email
-    const userSavedInDb = await User.findOne({ email: microsoftAccount.mail });
+    const userSavedInDb = await User.findOne({
+      email: microsoftAccount.mail.toLowerCase(),
+    });
+    console.log(userSavedInDb);
     if (userSavedInDb) {
       req.user = userSavedInDb;
     }
@@ -95,7 +98,7 @@ export const register = async (req: AuthRequest, res: Response) => {
   }
   try {
     const newUser = await User.create({
-      email: microsoftAccount.mail,
+      email: microsoftAccount.mail.toLowerCase(),
       fullName: microsoftAccount.displayName,
       photoUrl,
     });
