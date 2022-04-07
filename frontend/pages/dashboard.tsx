@@ -13,19 +13,48 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import * as React from "react";
 import Dslayout from "../components/dashboard/Ds_layout/Dslayout";
+import ExamCard from "../components/dashboard/ExamCard";
+import Link from "next/link";
+import AddExam from "./addexam";
+import Person from "../components/interfaces/Person";
+import EditExam from "./editexam";
 
 export default function Dashboard() {
-  const [data, setData] = React.useState([1, 2, 3, 4, 5]);
-  const [check, setCheck]: any = React.useState([]);
-  const handleCheckBox = (index: any) => {
-    const foundExam = check.find((x: any) => x === index);
-    if (foundExam >= 0) {
-      setCheck(check.filter((x: any) => x !== foundExam));
-    } else {
-      setCheck([...check, index]);
+  const usersData = [
+		{ id: 1, name: 'Tania', username: 'floppydiskette' },
+		{ id: 2, name: 'Craig', username: 'siliconeidolon' },
+		{ id: 3, name: 'Ben', username: 'benisphere' },
+	]
+  const [ users, setUsers ] = React.useState(usersData)
+  const [currentUser, setCurrentUser] = React.useState<Person| {}>();
+  
+  const addExam = async (e: React.FormEvent, formData: Person) => {
+    e.preventDefault()
+    const user: Person = {
+      id: Math.random(),
+      name: formData.name,
+      username: formData.username,
     }
-  };
-  console.log(check);
+    setUsers([ ...users, user])
+  }
+
+  const deleteExam = async (deleteId: number) => {
+    const exams: Person[] = users.filter((exam: Person) => exam.id !== deleteId)
+    console.log(exams)
+    setUsers(exams)
+  }
+  const updateExam = (id: number, updatedUser: any) => {
+
+		setUsers(users.map(user => (user.id === id ? updatedUser : user)))
+	}
+
+	const editRow = async ( user:any ) => {
+
+		setCurrentUser({ id: user.id, name: user.name, username: user.username })
+    console.log(currentUser)
+	}
+
+
   return (
     <Dslayout>
       <Grid>
@@ -42,12 +71,14 @@ export default function Dashboard() {
           >
             <Grid container direction="row" justifyContent="space-around">
               <Grid item>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon sx={{ color: "white" }} />}
-                >
-                  Add exam
-                </Button>
+                <Link href='/addexam'>
+                  <Button
+                    variant="contained"
+                    startIcon={<AddIcon sx={{ color: "white" }} />}
+                  >
+                    Add exam
+                  </Button>
+                </Link>
               </Grid>
               <Grid item>
                 <Button variant="contained">Weekly Details</Button>
@@ -73,102 +104,24 @@ export default function Dashboard() {
             }}
           >
             {/* Page Content */}
+
+            <AddExam saveExam={addExam} />
+            <EditExam updateExam={updateExam} currentUser={currentUser}/>
             <Grid
               container
               direction="column"
               justifyContent="center"
               alignItems="center"
             >
-              {data.map((exam, index) => (
-                <Grid item sx={{ width: "90%" }} key={index} mb={2}>
-                  <Box mt={3}>
-                    <Paper elevation={8}>
-                      <Box p={2}>
-                        <Grid container spacing={1}>
-                          {/* Check Box */}
-                          <Grid
-                            item
-                            xs={1}
-                            sx={{ display: "flex" }}
-                            alignItems="center"
-                          >
-                            {!check.includes(index) ? (
-                              <IconButton onClick={() => handleCheckBox(index)}>
-                                <CheckBoxOutlineBlankIcon />
-                              </IconButton>
-                            ) : (
-                              <IconButton onClick={() => handleCheckBox(index)}>
-                                <CheckBoxIcon />
-                              </IconButton>
-                            )}
-                          </Grid>
-                          {/* Image */}
-                          <Grid item xs={2}>
-                            <img
-                              src="https://picsum.photos/200/200"
-                              alt="hehe"
-                              width="100%"
-                              height="250px"
-                            />
-                          </Grid>
-                          {/* Middle Content */}
-                          <Grid item xs={5}>
-                            <Grid
-                              container
-                              direction="column"
-                              justifyContent="space-between"
-                              sx={{ height: "100%" }}
-                            >
-                              <Grid item>
-                                <Typography variant="h3" textAlign="left" p={1}>
-                                  Test
-                                </Typography>
-                              </Grid>
-                              <Grid item>
-                                <Box
-                                  sx={{ display: "flex", alignItems: "center" }}
-                                >
-                                  <Typography variant="body2" p={1}>
-                                    Defaut Category{" "}
-                                  </Typography>
-                                  <Typography>|</Typography>
-                                  <Typography variant="body2" p={1}>
-                                    huhu{" "}
-                                  </Typography>
-                                </Box>
-                              </Grid>
-                              <Grid item>
-                                <Box
-                                  sx={{ display: "flex", alignItems: "center" }}
-                                >
-                                  <Typography variant="body2" p={1}>
-                                    System Admin
-                                  </Typography>
-                                  <Typography variant="body2" p={1}>
-                                    Created Time: 28/02/2022
-                                  </Typography>
-                                </Box>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          {/* Delete Icon */}
-                          <Grid
-                            item
-                            xs={4}
-                            sx={{ display: "flex" }}
-                            justifyContent="flex-end"
-                            alignItems="center"
-                          >
-                            <IconButton>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </Paper>
-                  </Box>
-                </Grid>
-              ))}
+              {users.length > 0 ? (
+                users.map(user => (
+                  <ExamCard editRow={editRow} prop={user} deleteExam={deleteExam}/>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3}>No users</td>
+                </tr>
+              )}
             </Grid>
             {/* exam 2 */}
           </Box>

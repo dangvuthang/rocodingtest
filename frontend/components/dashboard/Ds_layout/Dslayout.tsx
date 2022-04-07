@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { ReactNode } from "react";
-import { mainListItems } from '../listItems';
+import  MainListItems  from '../listItems';
 import {  Badge, IconButton, Divider, Typography, List, Toolbar, Link} from '@mui/material';
 
 
@@ -120,10 +120,6 @@ export default function Dslayout({ children }: Props) {
             <MenuIcon />
           </IconButton>
           <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
             sx={lgStyle}
           >
             HACKERMIT
@@ -150,9 +146,7 @@ export default function Dslayout({ children }: Props) {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List component="nav">
-          {mainListItems}
-        </List>
+        <MainListItems/>
       </Drawer>
       <Box
         component="main"
