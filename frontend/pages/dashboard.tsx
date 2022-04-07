@@ -27,7 +27,9 @@ export default function Dashboard() {
 	]
   const [ users, setUsers ] = React.useState(usersData)
   const [currentUser, setCurrentUser] = React.useState<Person| {}>();
-  
+  const [ editing, setEditing ] = React.useState(false)
+	const [ adding, setAdding ] = React.useState(false)
+
   const addExam = async (e: React.FormEvent, formData: Person) => {
     e.preventDefault()
     const user: Person = {
@@ -49,7 +51,7 @@ export default function Dashboard() {
 	}
 
 	const editRow = async ( user:any ) => {
-
+    setEditing(true)
 		setCurrentUser({ id: user.id, name: user.name, username: user.username })
     console.log(currentUser)
 	}
@@ -71,14 +73,13 @@ export default function Dashboard() {
           >
             <Grid container direction="row" justifyContent="space-around">
               <Grid item>
-                <Link href='/addexam'>
                   <Button
                     variant="contained"
                     startIcon={<AddIcon sx={{ color: "white" }} />}
+                    onClick={()=>{setAdding(true)}}
                   >
                     Add exam
                   </Button>
-                </Link>
               </Grid>
               <Grid item>
                 <Button variant="contained">Weekly Details</Button>
@@ -104,25 +105,39 @@ export default function Dashboard() {
             }}
           >
             {/* Page Content */}
+            {
 
-            <AddExam saveExam={addExam} />
-            <EditExam updateExam={updateExam} currentUser={currentUser}/>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              {users.length > 0 ? (
-                users.map(user => (
-                  <ExamCard editRow={editRow} prop={user} deleteExam={deleteExam}/>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={3}>No users</td>
-                </tr>
-              )}
-            </Grid>
+            }
+            {/*Toggle between Add Page, Edit Page and Test Created List*/ }
+            {
+                editing ? 
+              (      
+                <EditExam editing={editing} setEditing={setEditing} updateExam={updateExam} currentUser={currentUser}/>
+              ) 
+                : adding ? 
+              (      
+                <AddExam adding={adding} setAdding={setAdding} saveExam={addExam} />
+              ) 
+                : 
+              (
+                <Grid
+                container
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+              >
+                  {users.length > 0 ? (
+                    users.map(user => (
+                      <ExamCard editRow={editRow} prop={user} deleteExam={deleteExam}/>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3}>No users</td>
+                    </tr>
+                  )}
+                </Grid>
+              )
+            }
             {/* exam 2 */}
           </Box>
         </Grid>

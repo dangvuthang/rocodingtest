@@ -4,9 +4,11 @@ import Person from "../components/interfaces/Person";
 
 type Props = {
     saveExam: (e: React.FormEvent, formData: Person| any) => void
+    setAdding: (editing:boolean) => any
+    adding:boolean
   }
   
-  const AddExam: React.FC<Props> = ({ saveExam }) => {
+  const AddExam: React.FC<Props> = ({ saveExam, setAdding, adding}) => {
     const [formData, setFormData] = React.useState<Person| {}>()
   
     const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -33,6 +35,9 @@ type Props = {
                 disabled={formData === undefined ? true : false}
             >
                 Add Exam
+            </button>
+            <button onClick={() => setAdding(false)} className="button muted-button">
+              Cancel
             </button>
         </form>
   )

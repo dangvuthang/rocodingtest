@@ -5,9 +5,11 @@ import Person from "../components/interfaces/Person";
 type Props = {
     updateExam: (id:number, exam: Person| any) =>void
     currentUser: any
+    setEditing: (editing:boolean) => any
+    editing: boolean
   }
   
-  const EditExam: React.FC<Props> = ({ updateExam, currentUser }) => {
+  const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing, editing}) => {
     const [exam, setExam] = React.useState<Person| any>()
   
     React.useEffect(
@@ -41,6 +43,9 @@ type Props = {
                 disabled={exam === undefined ? true : false}
             >
                 Update Exam
+            </button>
+            <button onClick={() => setEditing(false)} className="button muted-button">
+              Cancel
             </button>
         </form>
   )
