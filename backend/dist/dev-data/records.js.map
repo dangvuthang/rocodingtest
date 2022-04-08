@@ -1,0 +1,1 @@
+{"version":3,"file":"records.js","sourceRoot":"","sources":["../../src/dev-data/records.ts"],"names":[],"mappings":";;AAAA,MAAM,OAAO,GAAG;IACd;QACE,GAAG,EAAE,0BAA0B;QAC/B,cAAc,EAAE,aAAa;QAC7B,cAAc,EAAE,CAAC;QACjB,QAAQ,EAAE,EAAE;QACZ,MAAM,EAAE,0BAA0B;QAClC,MAAM,EAAE,0BAA0B;KACnC;CACF,CAAC;AAEF,kBAAe,OAAO,CAAC"}

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTest = exports.deleteTest = exports.createTest = exports.getTestByUserAndId = exports.getTest = void 0;
+exports.getTestsByTeacherId = exports.updateTest = exports.deleteTest = exports.createTest = exports.getTestByUserAndId = exports.getTest = void 0;
 const Test_1 = __importDefault(require("../models/Test"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const getTest = async (req, res) => {
@@ -145,4 +145,29 @@ const updateTest = async (req, res) => {
     });
 };
 exports.updateTest = updateTest;
+const getTestsByTeacherId = async (req, res) => {
+    let teacherId = req.params.userId;
+    if (!teacherId) {
+        return res.status(400).json({
+            status: "fail",
+            message: "Required id to process",
+        });
+    }
+    try {
+        const tests = await Test_1.default.find({ teacherId });
+        return res.status(200).json({
+            status: "success",
+            data: {
+                tests,
+            },
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            status: "error",
+            message: error.message,
+        });
+    }
+};
+exports.getTestsByTeacherId = getTestsByTeacherId;
 //# sourceMappingURL=TestController.js.map
