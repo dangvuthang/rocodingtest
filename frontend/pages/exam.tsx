@@ -1,82 +1,82 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-} from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Timer from "../components/Timer";
 import dynamic from "next/dynamic";
-import { useEffect, useState, MouseEvent } from "react";
+import { useEffect, useState, MouseEvent, useRef } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExamButton from "../components/ExamButton";
 import useFullScreen from "../hooks/useFullScreen";
 import Editor from "../components/Editor";
+import InstructionBox from "../components/InstructionBox";
+import useWindowFocus from "../hooks/useWindowFocus";
+import Warning from "../components/layout/Warning";
+import Router from "next/router";
 const QuestionArea = dynamic(() => import("../components/QuestionArea"), {
   ssr: false,
 });
 
 const Exam = () => {
   const [runCode, setRunCode] = useState(false);
-  const isFullscreen = useFullScreen();
-  const [open, setOpen] = useState(false);
+  const [showAlertMessage, setShowAlertMessage] = useState(false);
   const [remainingTime, setRemainingTime] = useState(3);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [open, setOpen] = useState(true);
 
-  useEffect(() => {
-    if (!isFullscreen && remainingTime === 3) {
-      setOpen(true);
-    }
-  }, [isFullscreen, remainingTime]);
-
-  const handleClose = (_: {}, reason: string) => {
-    if (reason && reason == "backdropClick") return;
+  const isFullscreen = useFullScreen();
+  const isFocused = useWindowFocus();
+  const count = useRef(0);
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const handleClickOpen = () => setOpen(true);
-  const handleOnClick = (e: MouseEvent) => {
-    document.documentElement
-      .requestFullscreen()
-      .then((value) => setOpen(false))
-      .catch((err) => console.log("error"));
+  const handleCloseWarning = async () => {
+    if (!isFullscreen) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setShowAlertMessage(false);
   };
+
+  useEffect(() => {
+    if (open) return;
+    if (!isFocused) {
+      setAlertMessage("you are trying to navigate outside of the web page");
+      setShowAlertMessage(true);
+      setRemainingTime((time) => time - 1);
+    }
+  }, [isFocused, open]);
+
+  useEffect(() => {
+    if (open) return;
+    if (!isFullscreen) {
+      count.current++;
+      if (count.current === 1) return;
+      setAlertMessage("you are trying to minimize the web page");
+      setShowAlertMessage(true);
+      setRemainingTime((time) => time - 1);
+    }
+  }, [isFullscreen, open]);
+
+  useEffect(() => {
+    if (remainingTime === 0) {
+      Router.push("/")
+        .then(() => document.exitFullscreen())
+        .then(() => console.log("DONE"))
+        .catch((err) => console.log(err));
+    }
+  }, [remainingTime]);
 
   return (
     <>
-      <Button
-        variant="outlined"
-        onClick={handleClickOpen}
-        sx={{ position: "absolute", top: 0, left: 0 }}
-      >
-        Open alert dialog
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        disableEscapeKeyDown={true}
-      >
-        <DialogTitle id="alert-dialog-title">
-          Exam requirement: Fullscreen
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            To ensure the quality of the test, you are required to enter
-            fullscreen mode. Please ensure that you do not exit or change tab
-            during exam time as it will be recorded and sent to your teacher.
-            You can only recover 3 times before
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleOnClick} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {open && <InstructionBox open={open} onClose={handleClose} />}
+      <Warning
+        open={showAlertMessage}
+        message={alertMessage}
+        onClose={handleCloseWarning}
+        remainingTime={remainingTime}
+      />
       <Grid container>
         <Grid item container direction="column" sx={{ height: "100vh" }} xs={3}>
           <Grid
