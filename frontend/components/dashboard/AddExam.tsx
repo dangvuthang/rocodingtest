@@ -1,14 +1,14 @@
 import * as React from 'react'
-import Person from "../interfaces/Person";
+import CreatedTests from "../interfaces/CreatedTests";
 
 type Props = {
-    saveExam: (e: React.FormEvent, formData: Person| any) => void
+    saveExam: (e: React.FormEvent, formData: CreatedTests| any) => void
     setAdding: (editing:boolean) => any
     adding:boolean
   }
   
-  const AddExam: React.FC<Props> = ({ saveExam, setAdding, adding}) => {
-    const [formData, setFormData] = React.useState<Person| {}>()
+  const AddExam: React.FC<Props> = ({ saveExam, setAdding}) => {
+    const [formData, setFormData] = React.useState<CreatedTests| {}>()
   
     const handleForm = (e: React.FormEvent<HTMLInputElement>): void => {
       setFormData({
@@ -25,8 +25,8 @@ type Props = {
                 <input onChange={handleForm} type='text' id='name' />
                 </div>
                 <div className='Form--field'>
-                <label htmlFor='body'>User Name</label>
-                <input onChange={handleForm} type='text' id='username' />
+                <label htmlFor='body'>Question</label>
+                <input onChange={handleForm} type='text' id='question' />
                 </div>
             </div>
             <button

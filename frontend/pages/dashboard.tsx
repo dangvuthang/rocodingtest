@@ -16,43 +16,52 @@ import Dslayout from "../components/dashboard/Ds_layout/Dslayout";
 import ExamCard from "../components/dashboard/ExamCard";
 import Link from "next/link";
 import AddExam from "../components/dashboard/AddExam";
-import Person from "../components/interfaces/Person";
+import CreatedTests from "../components/interfaces/CreatedTests";
 import EditExam from "../components/dashboard/EditExam";
+import { getRequest } from "../util/axiosInstance";
+import { useEffect } from "react";
 
 export default function Dashboard() {
-  const usersData = [
-		{ id: 1, name: 'Tania', username: 'floppydiskette' },
-		{ id: 2, name: 'Craig', username: 'siliconeidolon' },
-		{ id: 3, name: 'Ben', username: 'benisphere' },
-	]
-  const [ users, setUsers ] = React.useState(usersData)
-  const [currentUser, setCurrentUser] = React.useState<Person| {}>();
+  
+  const [ tests, setTests] = React.useState<CreatedTests[]>([])
+
+  const [currentUser, setCurrentUser] = React.useState<CreatedTests| {}>()
   const [ editing, setEditing ] = React.useState(false)
 	const [ adding, setAdding ] = React.useState(false)
 
-  const addExam = async (e: React.FormEvent, formData: Person) => {
+  useEffect (() => {
+    const testData = getRequest({url: "/users/60f6ce0e02f5102cea240400/tests"})
+    testData.then(result => {
+      setTests(result.data.data.tests)
+    }).catch(err => {
+      console.log(err)
+    })
+  },[])
+  console.log(tests);
+
+  const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
     e.preventDefault()
-    const user: Person = {
-      id: Math.random(),
+    const test: CreatedTests = {
+      _id: formData._id,
       name: formData.name,
-      username: formData.username,
+      question: formData.question,
     }
-    setUsers([ ...users, user])
+    setTests([ ...tests, test])
   }
 
-  const deleteExam = async (deleteId: number) => {
-    const exams: Person[] = users.filter((exam: Person) => exam.id !== deleteId)
+  const deleteExam = async (deleteId: string) => {
+    const exams: CreatedTests[] = tests.filter((exam: CreatedTests) => exam._id !== deleteId)
     console.log(exams)
-    setUsers(exams)
+    setTests(exams)
   }
-  const updateExam = (id: number, updatedUser: any) => {
+  const updateExam = (_id: string, updatedTest: any) => {
 
-		setUsers(users.map(user => (user.id === id ? updatedUser : user)))
+		setTests(tests.map(test => (test._id === "_id" ? updatedTest : test)))
 	}
 
-	const editRow = async ( user:any ) => {
+	const editRow = async ( test:any ) => {
     setEditing(true)
-		setCurrentUser({ id: user.id, name: user.name, username: user.username })
+		setCurrentUser({ id: test._id, name: test.name, })
     console.log(currentUser)
 	}
 
@@ -125,9 +134,9 @@ export default function Dashboard() {
                 justifyContent="center"
                 alignItems="center"
               >
-                  {users.length > 0 ? (
-                    users.map(user => (
-                      <ExamCard editRow={editRow} prop={user} deleteExam={deleteExam}/>
+                  {tests.length > 0 ? (
+                    tests.map(test => (
+                      <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam}/>
                     ))
                   ) : (
                     <tr>

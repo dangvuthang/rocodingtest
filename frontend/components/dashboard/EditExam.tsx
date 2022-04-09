@@ -1,15 +1,16 @@
 import * as React from 'react'
-import Person from "../interfaces/Person";
+import CreatedTests from "../interfaces/CreatedTests";
+import {TextField,InputLabel, FormControl, Input, Button } from '@mui/material';
 
 type Props = {
-    updateExam: (id:number, exam: Person| any) =>void
+    updateExam: (_id:string, exam: CreatedTests| any) =>void
     currentUser: any
     setEditing: (editing:boolean) => any
     editing: boolean
   }
   
-  const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing, editing}) => {
-    const [exam, setExam] = React.useState<Person| any>()
+  const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing}) => {
+    const [exam, setExam] = React.useState<CreatedTests| any>()
   
     React.useEffect(
         () => {
@@ -26,26 +27,26 @@ type Props = {
     }
     
   return (
-        <form className='Form' onSubmit={(e) => { e.preventDefault(); updateExam( exam.id , exam); }}>
-            <div>
-                <div className='Form--field'>
-                <label htmlFor='name'>Name</label>
+        <form className='Form' onSubmit={(e) => {e.preventDefault(); updateExam( exam._id , exam); }}>
+            <FormControl>
+                <FormControl className='Form--field'>
+                <InputLabel htmlFor='name'>Name</InputLabel>
                 <input onChange={handleForm} type='text' id='name' />
-                </div>
-                <div className='Form--field'>
-                <label htmlFor='body'>User Name</label>
+                </FormControl>
+                <FormControl className='Form--field'>
+                <InputLabel htmlFor='body'>User Name</InputLabel>
                 <input onChange={handleForm} type='text' id='username' />
-                </div>
-            </div>
+                </FormControl>
+            </FormControl>
             <button
                 className='Form__button'
                 disabled={exam === undefined ? true : false}
             >
                 Update Exam
             </button>
-            <button onClick={() => setEditing(false)} className="button muted-button">
+            <Button onClick={() => setEditing(false)} className="button muted-button">
               Cancel
-            </button>
+            </Button>
         </form>
   )
 }

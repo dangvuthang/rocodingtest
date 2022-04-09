@@ -2,14 +2,14 @@ import { Grid,Box,Paper,IconButton,Typography } from '@mui/material'
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Person from "../interfaces/Person";
+import CreatedTests from "../interfaces/CreatedTests";
 import * as React from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 
 type Property = {
-  prop: Person;
-  deleteExam: (deleteId: number) => void
-  editRow: ( prop: Person| any) =>void
+  prop: CreatedTests;
+  deleteExam: (deleteId: string) => void
+  editRow: ( prop: CreatedTests| any) =>void
 }
 
 const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
@@ -23,7 +23,7 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
         }
     };
   return (
-    <Grid item sx={{ width: "90%" }} key={prop.id} mb={2}>
+    <Grid item sx={{ width: "90%" }} key={prop._id} mb={2}>
                   <Box mt={3}>
                     <Paper elevation={8}>
                       <Box p={2}>
@@ -35,12 +35,12 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                             sx={{ display: "flex" }}
                             alignItems="center"
                           >
-                            {!check.includes(prop.id) ? (
-                              <IconButton onClick={() => handleCheckBox(prop.id)}>
+                            {!check.includes(prop._id) ? (
+                              <IconButton onClick={() => handleCheckBox(prop._id)}>
                                 <CheckBoxOutlineBlankIcon />
                               </IconButton>
                             ) : (
-                              <IconButton onClick={() => handleCheckBox(prop.id)}>
+                              <IconButton onClick={() => handleCheckBox(prop._id)}>
                                 <CheckBoxIcon />
                               </IconButton>
                             )}
@@ -85,7 +85,7 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                                   sx={{ display: "flex", alignItems: "center" }}
                                 >
                                   <Typography variant="body2" p={1}>
-                                    {prop.username}
+                                    {prop.question}
                                   </Typography>
                                   <Typography variant="body2" p={1}>
                                     Created Time: 28/02/2022
@@ -105,7 +105,7 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                             <IconButton>
                               <DeleteIcon 
                               onClick={ () =>{
-                                deleteExam(prop.id)
+                                deleteExam(prop._id)
                               }
                               }/>
                             </IconButton>
