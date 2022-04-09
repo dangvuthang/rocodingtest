@@ -30,8 +30,13 @@
   "devDependencies": {
     "@types/node": "17.0.21",
     "@types/react": "^17.0.41",
+    "autoprefixer": "^10.4.4",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
+<<<<<<< HEAD
+    "postcss": "^8.4.12",
+=======
+>>>>>>> main
     "tailwindcss": "^3.0.23",
     "typescript": "4.6.2"
   },
