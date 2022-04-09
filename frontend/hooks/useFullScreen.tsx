@@ -4,7 +4,6 @@ const useFullScreen = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   useEffect(() => {
     const handleFullScreenChange = (e: Event) => {
-      console.log("ENTER FULLSCREEN CHANGED");
       if (document.fullscreenElement) setIsFullScreen(true);
       else setIsFullScreen(false);
     };
