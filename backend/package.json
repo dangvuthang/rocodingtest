@@ -8,6 +8,8 @@
     "start2": "ts-node src/index.ts",
     "dev": "nodemon dist/index.js",
     "dev2": "nodemon --exec ts-node src/index.ts",
+    "import": "node dist/dev-data/import.js --import",
+    "delete": "node dist/dev-data/import.js --delete",
     "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

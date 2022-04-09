@@ -1,0 +1,1 @@
+{"version":3,"file":"submissions.js","sourceRoot":"","sources":["../../src/dev-data/submissions.ts"],"names":[],"mappings":";;AAAA,MAAM,WAAW,GAAG;IAClB;QACE,GAAG,EAAE,0BAA0B;QAC/B,cAAc,EAAE,aAAa;QAC7B,OAAO,EAAE,sBAAsB;QAC/B,MAAM,EAAE,0BAA0B;QAClC,SAAS,EAAE,0BAA0B;QACrC,QAAQ,EAAE,0BAA0B;KACrC;CACF,CAAC;AAEF,kBAAe,WAAW,CAAC"}
