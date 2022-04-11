@@ -28,25 +28,25 @@ type Props = {
     
   return (
         <form className='Form' onSubmit={(e) => {e.preventDefault(); updateExam( exam._id , exam); }}>
-            <FormControl>
-                <FormControl className='Form--field'>
-                <InputLabel htmlFor='name'>Name</InputLabel>
+            <div>
+                <div className='Form--field'>
+                <label htmlFor='name'>Name</label>
                 <input onChange={handleForm} type='text' id='name' />
-                </FormControl>
-                <FormControl className='Form--field'>
-                <InputLabel htmlFor='body'>User Name</InputLabel>
+                </div>
+                <div className='Form--field'>
+                <label htmlFor='body'>User Name</label>
                 <input onChange={handleForm} type='text' id='username' />
-                </FormControl>
-            </FormControl>
+                </div>
+            </div>
             <button
                 className='Form__button'
                 disabled={exam === undefined ? true : false}
             >
                 Update Exam
             </button>
-            <Button onClick={() => setEditing(false)} className="button muted-button">
+            <button onClick={() => setEditing(false)} className="button muted-button">
               Cancel
-            </Button>
+            </button>
         </form>
   )
 }
