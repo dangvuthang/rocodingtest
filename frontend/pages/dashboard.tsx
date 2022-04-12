@@ -22,21 +22,21 @@ import { getRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 
 export default function Dashboard() {
-  
-  const [ tests, setTests] = React.useState<CreatedTests[]>([])
 
-  const [currentUser, setCurrentUser] = React.useState<CreatedTests| {}>()
-  const [ editing, setEditing ] = React.useState(false)
-	const [ adding, setAdding ] = React.useState(false)
+  const [tests, setTests] = React.useState<CreatedTests[]>([])
 
-  useEffect (() => {
-    const testData = getRequest({url: "/users/60f6ce0e02f5102cea240400/tests"})
+  const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>()
+  const [editing, setEditing] = React.useState(false)
+  const [adding, setAdding] = React.useState(false)
+
+  useEffect(() => {
+    const testData = getRequest({ url: "/users/60f6ce0e02f5102cea240400/tests" })
     testData.then(result => {
       setTests(result.data.data.tests)
     }).catch(err => {
       console.log(err)
     })
-  },[])
+  }, [])
   console.log(tests);
 
   const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
@@ -47,7 +47,7 @@ export default function Dashboard() {
       name: formData.name,
       question: formData.question,
     }
-    setTests([ ...tests, test])
+    setTests([...tests, test])
   }
 
   const deleteExam = async (deleteId: number) => {
@@ -60,11 +60,11 @@ export default function Dashboard() {
 		setTests(tests.map(test => (test.exam_id === exam_id ? updatedTest : test)))
 	}
 
-	const editRow = async ( test:any ) => {
+  const editRow = async (test: any) => {
     setEditing(true)
 		setCurrentUser({ exam_id: test.exam_id, name: test.name, question: test.question, })
     console.log(currentUser)
-	}
+  }
 
   return (
     <Dslayout>
@@ -83,7 +83,7 @@ export default function Dashboard() {
             {
 
             }
-            {/*Toggle between Add Page, Edit Page and Test Created List*/ }
+            {/*Toggle between Add Page, Edit Page and Test Created List*/}
             {
                 editing ? 
               (      
@@ -120,6 +120,7 @@ export default function Dashboard() {
                         </Grid>
                       </Box>
                     </Grid>
+
                     <Grid
                       container
                       direction="column"
