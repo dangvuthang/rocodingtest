@@ -42,6 +42,7 @@ export default function Dashboard() {
   const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
     e.preventDefault()
     const test: CreatedTests = {
+      exam_id: Math.random(),
       _id: formData._id,
       name: formData.name,
       question: formData.question,
@@ -49,65 +50,31 @@ export default function Dashboard() {
     setTests([ ...tests, test])
   }
 
-  const deleteExam = async (deleteId: string) => {
-    const exams: CreatedTests[] = tests.filter((exam: CreatedTests) => exam._id !== deleteId)
+  const deleteExam = async (deleteId: number) => {
+    const exams: CreatedTests[] = tests.filter((exam: CreatedTests) => exam.exam_id !== deleteId)
     console.log(exams)
     setTests(exams)
   }
-  const updateExam = (_id: string, updatedTest: any) => {
+  const updateExam = (exam_id: number, updatedTest: any) => {
 
-		setTests(tests.map(test => (test._id === "_id" ? updatedTest : test)))
+		setTests(tests.map(test => (test.exam_id === exam_id ? updatedTest : test)))
 	}
 
 	const editRow = async ( test:any ) => {
     setEditing(true)
-		setCurrentUser({ id: test._id, name: test.name, })
+		setCurrentUser({ exam_id: test.exam_id, name: test.name, question: test.question, })
     console.log(currentUser)
 	}
 
   return (
     <Dslayout>
-      <Grid>
-        <Grid item>
-          <Box
-            width="98%"
-            sx={{
-              py: 1.5,
-              mx: 2,
-              my: 2,
-              bgcolor: "white",
-              borderRadius: 3.5,
-            }}
-          >
-            <Grid container direction="row" justifyContent="space-around">
-              <Grid item>
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon sx={{ color: "white" }} />}
-                    onClick={()=>{setAdding(true)}}
-                  >
-                    Add exam
-                  </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained">Weekly Details</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained">Move to category</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained">Move to archiev</Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid item>
+        <Grid>
           <Box
             width="98%"
             sx={{
               py: 1,
-              mx: 2,
-              my: 2,
+              mx: 1,
+              my: 1,
               bgcolor: "white",
               borderRadius: 3.5,
             }}
@@ -120,36 +87,61 @@ export default function Dashboard() {
             {
                 editing ? 
               (      
-                <EditExam editing={editing} setEditing={setEditing} updateExam={updateExam} currentUser={currentUser}/>
+                <EditExam setEditing={setEditing} updateExam={updateExam} currentUser={currentUser}/>
               ) 
                 : adding ? 
               (      
-                <AddExam adding={adding} setAdding={setAdding} saveExam={addExam} />
+                <AddExam setAdding={setAdding} saveExam={addExam} />
               ) 
                 : 
               (
-                <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-              >
-                  {tests.length > 0 ? (
-                    tests.map(test => (
-                      <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam}/>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={3}>No users</td>
-                    </tr>
-                  )}
+                <Grid>
+                    <Grid item>
+                      <Box
+                        width="98%"
+                        sx={{
+                          py: 1.5,
+                          mx: 2,
+                          my: 2,
+                          bgcolor: "white",
+                          borderRadius: 3.5,
+                        }}
+                      >
+                        <Grid container direction="row" justifyContent="space-around">
+                          <Grid item>
+                            <Button
+                              variant="contained"
+                              startIcon={<AddIcon sx={{ color: "white" }} />}
+                              onClick={() => { setAdding(true); } }
+                            >
+                              Add exam
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Grid>
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                        {tests.length > 0 ? (
+                          tests.map(test => (
+                            <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam} />
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={3}>No users</td>
+                          </tr>
+                        )}
+                      </Grid>
                 </Grid>
               )
             }
             {/* exam 2 */}
           </Box>
         </Grid>
-      </Grid>
     </Dslayout>
   );
 }

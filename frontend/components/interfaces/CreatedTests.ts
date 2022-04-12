@@ -7,4 +7,5 @@ export default interface CreatedTests {
     link?: string;
     "_id":string;
     teacherId?:string;
+    exam_id:number;
 };

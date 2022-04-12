@@ -159,7 +159,7 @@ export default function Dslayout({ children }: Props) {
       >
         <Toolbar />
           <main>{children}</main>
-        <Copyright sx={{ pt: 4, bgcolor: 'white' }} />
+        <Copyright sx={{ pb:0.5, pt: 4, bgcolor: 'white' }} />
       </Box>
     </Box>
   );

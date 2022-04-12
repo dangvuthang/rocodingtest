@@ -3,10 +3,9 @@ import CreatedTests from "../interfaces/CreatedTests";
 import {TextField,InputLabel, FormControl, Input, Button } from '@mui/material';
 
 type Props = {
-    updateExam: (_id:string, exam: CreatedTests| any) =>void
+    updateExam: (exam_id:number, exam: CreatedTests| any) =>void
     currentUser: any
     setEditing: (editing:boolean) => any
-    editing: boolean
   }
   
   const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing}) => {
@@ -27,15 +26,15 @@ type Props = {
     }
     
   return (
-        <form className='Form' onSubmit={(e) => {e.preventDefault(); updateExam( exam._id , exam); }}>
+        <form className='Form' onSubmit={(e) => {updateExam( exam.exam_id , exam); e.preventDefault(); }}>
             <div>
                 <div className='Form--field'>
                 <label htmlFor='name'>Name</label>
                 <input onChange={handleForm} type='text' id='name' />
                 </div>
                 <div className='Form--field'>
-                <label htmlFor='body'>User Name</label>
-                <input onChange={handleForm} type='text' id='username' />
+                <label htmlFor='body'>Question</label>
+                <input onChange={handleForm} type='text' id='question' />
                 </div>
             </div>
             <button

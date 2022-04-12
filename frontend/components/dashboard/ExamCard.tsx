@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 type Property = {
   prop: CreatedTests;
-  deleteExam: (deleteId: string) => void
+  deleteExam: (deleteId: number) => void
   editRow: ( prop: CreatedTests| any) =>void
 }
 
@@ -23,7 +23,7 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
         }
     };
   return (
-    <Grid item sx={{ width: "90%" }} key={prop._id} mb={2}>
+    <Grid item sx={{ width: "90%" }} key={prop.exam_id} mb={2}>
                   <Box mt={3}>
                     <Paper elevation={8}>
                       <Box p={2}>
@@ -35,12 +35,12 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                             sx={{ display: "flex" }}
                             alignItems="center"
                           >
-                            {!check.includes(prop._id) ? (
-                              <IconButton onClick={() => handleCheckBox(prop._id)}>
+                            {!check.includes(prop.exam_id) ? (
+                              <IconButton onClick={() => handleCheckBox(prop.exam_id)}>
                                 <CheckBoxOutlineBlankIcon />
                               </IconButton>
                             ) : (
-                              <IconButton onClick={() => handleCheckBox(prop._id)}>
+                              <IconButton onClick={() => handleCheckBox(prop.exam_id)}>
                                 <CheckBoxIcon />
                               </IconButton>
                             )}
@@ -105,7 +105,7 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                             <IconButton>
                               <DeleteIcon 
                               onClick={ () =>{
-                                deleteExam(prop._id)
+                                deleteExam(prop.exam_id)
                               }
                               }/>
                             </IconButton>
