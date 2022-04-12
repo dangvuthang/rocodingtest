@@ -22,21 +22,21 @@ import { getRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 
 export default function Dashboard() {
-  
-  const [ tests, setTests] = React.useState<CreatedTests[]>([])
 
-  const [currentUser, setCurrentUser] = React.useState<CreatedTests| {}>()
-  const [ editing, setEditing ] = React.useState(false)
-	const [ adding, setAdding ] = React.useState(false)
+  const [tests, setTests] = React.useState<CreatedTests[]>([])
 
-  useEffect (() => {
-    const testData = getRequest({url: "/users/60f6ce0e02f5102cea240400/tests"})
+  const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>()
+  const [editing, setEditing] = React.useState(false)
+  const [adding, setAdding] = React.useState(false)
+
+  useEffect(() => {
+    const testData = getRequest({ url: "/users/60f6ce0e02f5102cea240400/tests" })
     testData.then(result => {
       setTests(result.data.data.tests)
     }).catch(err => {
       console.log(err)
     })
-  },[])
+  }, [])
   console.log(tests);
 
   const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
@@ -46,7 +46,7 @@ export default function Dashboard() {
       name: formData.name,
       question: formData.question,
     }
-    setTests([ ...tests, test])
+    setTests([...tests, test])
   }
 
   const deleteExam = async (deleteId: string) => {
@@ -56,14 +56,14 @@ export default function Dashboard() {
   }
   const updateExam = (_id: string, updatedTest: any) => {
 
-		setTests(tests.map(test => (test._id === "_id" ? updatedTest : test)))
-	}
+    setTests(tests.map(test => (test._id === "_id" ? updatedTest : test)))
+  }
 
-	const editRow = async ( test:any ) => {
+  const editRow = async (test: any) => {
     setEditing(true)
-		setCurrentUser({ id: test._id, name: test.name, })
+    setCurrentUser({ id: test._id, name: test.name, })
     console.log(currentUser)
-	}
+  }
 
   return (
     <Dslayout>
@@ -81,13 +81,13 @@ export default function Dashboard() {
           >
             <Grid container direction="row" justifyContent="space-around">
               <Grid item>
-                  <Button
-                    variant="contained"
-                    startIcon={<AddIcon sx={{ color: "white" }} />}
-                    onClick={()=>{setAdding(true)}}
-                  >
-                    Add exam
-                  </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon sx={{ color: "white" }} />}
+                  onClick={() => { setAdding(true) }}
+                >
+                  Add exam
+                </Button>
               </Grid>
               <Grid item>
                 <Button variant="contained">Weekly Details</Button>
@@ -116,35 +116,35 @@ export default function Dashboard() {
             {
 
             }
-            {/*Toggle between Add Page, Edit Page and Test Created List*/ }
+            {/*Toggle between Add Page, Edit Page and Test Created List*/}
             {
-                editing ? 
-              (      
-                <EditExam editing={editing} setEditing={setEditing} updateExam={updateExam} currentUser={currentUser}/>
-              ) 
-                : adding ? 
-              (      
-                <AddExam adding={adding} setAdding={setAdding} saveExam={addExam} />
-              ) 
-                : 
-              (
-                <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-              >
-                  {tests.length > 0 ? (
-                    tests.map(test => (
-                      <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam}/>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={3}>No users</td>
-                    </tr>
-                  )}
-                </Grid>
-              )
+              editing ?
+                (
+                  <EditExam editing={editing} setEditing={setEditing} updateExam={updateExam} currentUser={currentUser} />
+                )
+                : adding ?
+                  (
+                    <AddExam adding={adding} setAdding={setAdding} saveExam={addExam} />
+                  )
+                  :
+                  (
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      {tests.length > 0 ? (
+                        tests.map(test => (
+                          <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam} />
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3}>No users</td>
+                        </tr>
+                      )}
+                    </Grid>
+                  )
             }
             {/* exam 2 */}
           </Box>
