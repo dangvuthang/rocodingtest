@@ -8,6 +8,7 @@ import AlertModal from "../components/AlertModal";
 import useFullScreen from "../hooks/useFullScreen";
 import useWindowFocus from "../hooks/useWindowFocus";
 import Router from "next/router";
+import GlanceTracker from "../components/GlanceTracker";
 
 const Exam2 = () => {
   const [run, setRun] = useState(false);
@@ -15,6 +16,7 @@ const Exam2 = () => {
   const [showAlertMessage, setShowAlertMessage] = useState(false);
   const [remainingTime, setRemainingTime] = useState(3);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isWatching, setIsWatching] = useState(true);
   const isFullscreen = useFullScreen();
   const isFocused = useWindowFocus();
   const count = useRef(0);
@@ -30,7 +32,8 @@ const Exam2 = () => {
     setShowAlertMessage(false);
   };
 
-  useEffect(() => {
+  // Detect navigate outside webste
+  /*   useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
       setAlertMessage("you are trying to navigate outside of the web page");
@@ -39,6 +42,7 @@ const Exam2 = () => {
     }
   }, [isFocused, showInstruction]);
 
+  // Detect minimize fullscreen
   useEffect(() => {
     if (showInstruction) return;
     if (!isFullscreen) {
@@ -49,6 +53,16 @@ const Exam2 = () => {
       setRemainingTime((time) => time - 1);
     }
   }, [isFullscreen, showInstruction]);
+
+  // Detect glance tracking
+  useEffect(() => {
+    if (showInstruction) return;
+    if (!isWatching) {
+      setAlertMessage("you are not looking at the screen");
+      setShowAlertMessage(true);
+      setRemainingTime((time) => time - 1);
+    }
+  }, [isWatching, showInstruction]); */
 
   useEffect(() => {
     console.log(remainingTime);
@@ -62,6 +76,7 @@ const Exam2 = () => {
 
   return (
     <>
+      <GlanceTracker onChange={setIsWatching} />
       <InstructionModal
         open={showInstruction}
         onClose={() => setShowInstruction(false)}
