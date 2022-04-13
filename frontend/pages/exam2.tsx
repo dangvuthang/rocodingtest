@@ -33,7 +33,7 @@ const Exam2 = () => {
   };
 
   // Detect navigate outside webste
-  /*   useEffect(() => {
+  useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
       setAlertMessage("you are trying to navigate outside of the web page");
@@ -62,7 +62,7 @@ const Exam2 = () => {
       setShowAlertMessage(true);
       setRemainingTime((time) => time - 1);
     }
-  }, [isWatching, showInstruction]); */
+  }, [isWatching, showInstruction]);
 
   useEffect(() => {
     console.log(remainingTime);
