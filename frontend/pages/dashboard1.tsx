@@ -9,15 +9,59 @@ import { getRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 import Header from "../components/layout/Header";
 import { Typography } from "@mui/material";
+import NavDrawer from "../components/dashboard/Ds_layout/NavDrawer";
 
 export default function Dashboard() {
+
+    const [tests, setTests] = React.useState<CreatedTests[]>([])
+
+    const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>()
+    const [editing, setEditing] = React.useState(false)
+    const [adding, setAdding] = React.useState(false)
+  
+    useEffect(() => {
+      const testData = getRequest({ url: "/users/60f6ce0e02f5102cea240400/tests" })
+      testData.then(result => {
+        setTests(result.data.data.tests)
+      }).catch(err => {
+        console.log(err)
+      })
+    }, [])
+    console.log(tests);
+  
+    const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
+      e.preventDefault()
+      const test: CreatedTests = {
+        exam_id: Math.random(),
+        _id: formData._id,
+        name: formData.name,
+        question: formData.question,
+      }
+      setTests([...tests, test])
+    }
+  
+    const deleteExam = async (deleteId: number) => {
+      const exams: CreatedTests[] = tests.filter((exam: CreatedTests) => exam.exam_id !== deleteId)
+      console.log(exams)
+      setTests(exams)
+    }
+    const updateExam = (exam_id: number, updatedTest: any) => {
+  
+          setTests(tests.map(test => (test.exam_id === exam_id ? updatedTest : test)))
+      }
+  
+    const editRow = async (test: any) => {
+      setEditing(true)
+          setCurrentUser({ exam_id: test.exam_id, name: test.name, question: test.question, })
+      console.log(currentUser)
+    }
 
     function Copyright(props: any) {
         return (
             <footer className="w-full h-20 static bottom-0 mt-4 flex justify-center items-center">
                 <Typography variant="body2" color="text.secondary" align="center" {...props}>
                     {'Copyright © '}
-                    <Link color="inherit" href="https://mui.com/">
+                    <Link href="https://mui.com/">
                         Your Website
                     </Link>{' '}
                     {new Date().getFullYear()}
@@ -29,11 +73,48 @@ export default function Dashboard() {
 
 
     return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="h-full flex">
-                {/* SideBar */}
-                <aside className="w-64" aria-label="Sidebar">
+        <NavDrawer>
+            {   
+                    editing ? 
+                (      
+                    <EditExam setEditing={setEditing} updateExam={updateExam} currentUser={currentUser}/>
+                ) 
+                    : adding ? 
+                (      
+                    <AddExam setAdding={setAdding} saveExam={addExam} />
+                ) 
+                    : 
+                (
+                    <div className="w-full">
+                        <div className="h-20 grid grid-cols-4 content-center justify-items-center border-l border-b border-black">
+                            <div>
+                                <button onClick={ () => setAdding(true) }className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400">
+                                    Add Exam
+                                </button>
+                            </div>
+                        </div>
+                        {/* Exam area */}
+                        <div className="h-full">
+                                {tests.length > 0 ? (
+                                    tests.map(test => (
+                                        <ExamCard editRow={editRow} prop={test} deleteExam={deleteExam} />
+                                    ))
+                                ) : (
+                                <tr>
+                                    <td colSpan={3}>No users</td>
+                                </tr>
+                                )}
+                        </div>
+                    </div>
+                )
+            }
+            <Copyright />
+        </NavDrawer>
+    );
+}
+
+{/* SideBar */}
+                {/*<aside className="w-64" aria-label="Sidebar">
                     <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-full">
                         <ul className="space-y-2">
                             <li>
@@ -46,7 +127,7 @@ export default function Dashboard() {
                                 <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                                     <span className="flex-1 ml-3 whitespace-nowrap">Student</span>
-                                    {/* <span className="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span> */}
+                                    <span className="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span> 
                                 </a>
                             </li>
                             <li>
@@ -82,222 +163,8 @@ export default function Dashboard() {
                             </li>
                         </ul>
                     </div>
-                </aside>
-
+                </aside> 
+            */}
                 {/* Content */}
-                <div className="w-full">
-                    <div className="h-20 grid grid-cols-4 content-center justify-items-center border-l border-b border-black">
-                        <div>
-                            <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400">
-                                Add Exam
-                            </button>
-                        </div>
-                        <div>
-                            <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400">
-                                Delete Button
-                            </button>
-                        </div>
-                        <div>
-                            <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400">
-                                Add Exam
-                            </button>
-                        </div>
-                        <div>
-                            <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400">
-                                Add Exam
-                            </button>
-                        </div>
-                    </div>
-                    {/* Exam area */}
-                    <div className="h-full">
+               
                         {/* Exam box */}
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        {/* Example */}
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
-                            <div className="w-10">
-                                <input className="ml-2" type="checkbox" />
-                            </div>
-                            <div className="">
-                                <img src="https://picsum.photos/200/120" />
-                            </div>
-                            {/* Exam details */}
-                            <div className="grid justify-between items-center h-full w-4/6">
-                                <div>
-                                    <h2 className="text-3xl">Test</h2>
-                                </div>
-                                <div>
-                                    Default
-                                </div>
-                                <div>
-                                    System Admin
-                                </div>
-                            </div>
-                            {/* Button Edit and Delete */}
-                            <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
-                                </div>
-                                <div>
-                                    <button className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        {/* end example */}
-
-                    </div>
-                </div>
-            </main>
-            <Copyright />
-        </div>
-    );
-}

@@ -4,7 +4,6 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from 'react'
-import EditIcon from '@mui/icons-material/Edit';
 
 type Property = {
   prop: CreatedTests;
@@ -23,12 +22,46 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
         }
     };
   return (
-    <Grid item sx={{ width: "90%" }} key={prop.exam_id} mb={2}>
+      <div key={prop.exam_id} className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
+        <div className="w-10">
+            <input className="ml-2" type="checkbox" />
+        </div>
+        <div className="">
+            <img src="https://picsum.photos/200/120" />
+        </div>
+        {/* Exam details */}
+        <div className="grid justify-between items-center h-full w-4/6">
+            <div>
+                <h2 className="text-3xl">{prop.name}</h2>
+            </div>
+            <div>
+                {prop.question}
+            </div>
+            <div>
+                System Admin
+            </div>
+        </div>
+        {/* Button Edit and Delete */}
+        <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
+            <div>
+                <button onClick={ () =>{ editRow(prop)} } className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Edit</button>
+            </div>
+            <div>
+                <button onClick={ () =>{ deleteExam(prop.exam_id)} } className="px-4 py-2 text-white rounded-md border-solid border bg-blue-400 ml-5">Delete</button>
+            </div>
+        </div>
+      </div>
+  )
+}
+
+export default ExamCard
+
+{/*
+  <Grid item sx={{ width: "90%" }} key={prop.exam_id} mb={2}>
                   <Box mt={3}>
                     <Paper elevation={8}>
                       <Box p={2}>
                         <Grid container spacing={1}>
-                          {/* Check Box */}
                           <Grid
                             item
                             xs={1}
@@ -45,7 +78,6 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                               </IconButton>
                             )}
                           </Grid>
-                          {/* Image */}
                           <Grid item xs={2}>
                             <img
                               src="https://picsum.photos/200/200"
@@ -54,7 +86,6 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                               height="250px"
                             />
                           </Grid>
-                          {/* Middle Content */}
                           <Grid item xs={5}>
                             <Grid
                               container
@@ -94,7 +125,6 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                               </Grid>
                             </Grid>
                           </Grid>
-                          {/* Delete Icon */}
                           <Grid
                             item
                             xs={4}
@@ -122,7 +152,4 @@ const ExamCard: React.FC<Property> =  ({ prop , deleteExam, editRow }) => {
                     </Paper>
                   </Box>
                 </Grid>
-  )
-}
-
-export default ExamCard
+  */}
