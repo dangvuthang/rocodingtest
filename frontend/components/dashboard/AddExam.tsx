@@ -40,20 +40,6 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     <textarea id="about" name="about" className="height shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
                   </div>
                 </div>
-
-                <div className="col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">
-                    About
-                  </label>
-                  <div className="mt-1">
-                    <textarea id="about" name="about" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="you@example.com"></textarea>
-                  </div>
-                </div>
-
-                <div className="col-span-6">
-                  <label className="block text-sm font-medium text-gray-700">Street address</label>
-                  <input type="text" name="street_address" id="street_address" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
-                </div>
               </div>
             </div>
             <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
