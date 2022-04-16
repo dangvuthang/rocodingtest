@@ -1,5 +1,5 @@
 import Test from "../models/Test";
-import { Response, Request } from "express";
+import { Response } from "express";
 import mongoose from "mongoose";
 import { AuthRequest } from "../controllers/AuthController";
 
@@ -140,7 +140,7 @@ export const updateTest = async (req: AuthRequest, res: Response) => {
   });
 };
 
-export const getTestsByTeacherId = async (req: Request, res: Response) => {
+export const getTestsByTeacherId = async (req: AuthRequest, res: Response) => {
   let teacherId = req.params.userId;
   if (!teacherId) {
     return res.status(400).json({
