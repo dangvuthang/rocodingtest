@@ -10,6 +10,7 @@ const UserRoute_1 = __importDefault(require("./routes/UserRoute"));
 const SubmissionRoute_1 = __importDefault(require("./routes/SubmissionRoute"));
 const TestRoute_1 = __importDefault(require("./routes/TestRoute"));
 const RecordRoute_1 = __importDefault(require("./routes/RecordRoute"));
+const TerminalRoute_1 = __importDefault(require("./routes/TerminalRoute"));
 const app = (0, express_1.default)();
 const port = 8080;
 app.use((0, cors_1.default)({ origin: "http://localhost:3000" }));
@@ -19,6 +20,7 @@ app.use("/api/v1/users", UserRoute_1.default);
 app.use("/api/v1/tests", TestRoute_1.default);
 app.use("/api/v1/submissions", SubmissionRoute_1.default);
 app.use("/api/v1/records", RecordRoute_1.default);
+app.use("/api/v1/compile", TerminalRoute_1.default);
 app.listen(port, () => {
     console.log(`Application started successfully on port ${port}.`);
     (0, server_1.default)();
