@@ -30,13 +30,16 @@ export default function Dashboard() {
   }, [])
   console.log(tests);
 
-  const addExam = async (e: React.FormEvent, formData: CreatedTests) => {
+  const saveExam = async (e: React.FormEvent, formData: CreatedTests) => {
     e.preventDefault()
     const test: CreatedTests = {
       exam_id: Math.random(),
       _id: formData._id,
       name: formData.name,
       question: formData.question,
+      startedDate: formData.startedDate,
+      endDate: formData.endDate,
+      duration: formData.duration
     }
     setTests([...tests, test])
   }
@@ -53,7 +56,7 @@ export default function Dashboard() {
 
   const editRow = async (test: any) => {
     setEditing(true)
-    setCurrentUser({ exam_id: test.exam_id, name: test.name, question: test.question, })
+    setCurrentUser({ exam_id: test.exam_id, name: test.name, duration: test.duration, question: test.question,startedDate: test.startedDate,endDate: test.endDate })
     console.log(currentUser)
   }
 
@@ -68,7 +71,7 @@ export default function Dashboard() {
           )
           : adding ?
             (
-              <AddExam setAdding={setAdding} saveExam={addExam} />
+              <AddExam setAdding={setAdding} saveExam={saveExam} />
             )
             :
             (
