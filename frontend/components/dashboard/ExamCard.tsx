@@ -5,9 +5,10 @@ type Property = {
     prop: CreatedTests;
     deleteExam: (deleteId: number) => void
     editRow: (prop: CreatedTests | any) => void
+    showExam: (prop: CreatedTests | any) => void
 }
 
-const ExamCard: React.FC<Property> = ({ prop, deleteExam, editRow }) => {
+const ExamCard: React.FC<Property> = ({ prop, deleteExam, editRow, showExam }) => {
     return (
         <div key={prop.exam_id} className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center">
             <div className="w-10">
@@ -19,10 +20,10 @@ const ExamCard: React.FC<Property> = ({ prop, deleteExam, editRow }) => {
             {/* Exam details */}
             <div className="grid justify-between items-center h-full w-4/6">
                 <div>
-                    <h2 className="text-3xl">{prop.name}</h2>
+                    <h2 onClick={() => { showExam(prop) }} className="hover:cursor-pointer hover:text-sky-500 active:text-opacity-50 text-3xl">{prop.name}</h2>
                 </div>
                 <div>
-                    {prop.question} mins
+                    {prop.duration} mins
                 </div>
                 <div>
                     {prop.startedDate}
