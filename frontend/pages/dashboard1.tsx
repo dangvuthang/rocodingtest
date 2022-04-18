@@ -117,19 +117,24 @@ export default function Dashboard() {
                             <img src="https://picsum.photos/200/120" />
                         </div>
                         {/* Exam details */}
-                        <div className="grid justify-between items-center h-full w-4/6">
+                        <div className="grid justify-between items-center gap-3 h-full w-4/6">
                             <div>
-                                <h2 className="text-3xl">Test</h2>
+                                <h2 className="text-2xl font-bold">Coding</h2>
                             </div>
                             <div>
-                                45 mins
+                                <h3 className="text-lg">45 mins</h3>
                             </div>
-                            <div>
-                                System Admin
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="text-[#ACB3C8]">
+                                    Started date 04/12/2022
+                                </div>
+                                <div className="text-[#ACB3C8]">
+                                    End date 04/18/2022
+                                </div>
                             </div>
                         </div>
                         {/* Button Edit and Delete */}
-                        <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
+                        <div className="flex grow mr-4 content-center justify-end gap-2 w-2 /6">
                             <div>
                                 <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400 hover:bg-blue-500 active:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Edit</button>
                             </div>
