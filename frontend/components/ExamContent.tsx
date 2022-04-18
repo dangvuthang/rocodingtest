@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { FC, useEffect, useReducer, useRef, useState } from "react";
 import { GetStaticPaths } from "next";
 import Router from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
@@ -10,8 +10,13 @@ import AlertModal from "./AlertModal";
 import useFullScreen from "../hooks/useFullScreen";
 import useWindowFocus from "../hooks/useWindowFocus";
 import GlanceTracker from "./GlanceTracker";
+import { Test } from "../pages/exam/[id]";
 
-const ExamContent = () => {
+interface ExamContentProps {
+  test: Test;
+}
+
+const ExamContent: FC<ExamContentProps> = ({ test }) => {
   const [run, setRun] = useState(false);
   const [showInstruction, setShowInstruction] = useState(true);
   const [showAlertMessage, setShowAlertMessage] = useState(false);
@@ -90,10 +95,10 @@ const ExamContent = () => {
       />
       <div className="grid grid-cols-[1fr_3fr] h-screen grid-rows-[4%_4fr_auto]">
         <div className="col-span-2 justify-self-end self-end px-2">
-          <Timer2 />
+          <Timer2 endDate={test.endDate} />
         </div>
         <div className="row-span-2 overflow-x-auto">
-          <QuestionArea2 />
+          <QuestionArea2 question={test.question} />
         </div>
         <div className="relative">
           <div className="h-full">
