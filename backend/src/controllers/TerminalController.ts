@@ -1,9 +1,6 @@
 import axios, { AxiosResponse, Method } from "axios";
 import { Response } from "express";
 import { AuthRequest } from "../controllers/AuthController";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export const getSubmission = async (req: AuthRequest, res: Response) => {
 
@@ -13,12 +10,14 @@ export const getSubmission = async (req: AuthRequest, res: Response) => {
     const judgeKey = process.env.JUDGE_SECRET as string;
     let language_id;
 
-    if(language == 'Python'){
-        language_id = 72
-    } else if (language == 'C++') {
-        language_id = 52
-    } else if (language == 'Java') {
-        language_id = 62
+    if(language == 'python'){
+        language_id = 70;
+    } else if (language == 'c++') {
+        language_id = 52;
+    } else if (language == 'java') {
+        language_id = 62;
+    } else if (language == 'javascript') {
+        language_id = 63;
     }
 
     let options = {

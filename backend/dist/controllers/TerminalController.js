@@ -5,22 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSubmission = void 0;
 const axios_1 = __importDefault(require("axios"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const getSubmission = async (req, res) => {
     const { language, source, stdin } = req.body;
     const methodPost = 'POST';
     const methodGet = 'GET';
     const judgeKey = process.env.JUDGE_SECRET;
     let language_id;
-    if (language == 'Python') {
-        language_id = 72;
+    if (language == 'python') {
+        language_id = 70;
     }
-    else if (language == 'C++') {
+    else if (language == 'c++') {
         language_id = 52;
     }
-    else if (language == 'Java') {
+    else if (language == 'java') {
         language_id = 62;
+    }
+    else if (language == 'javascript') {
+        language_id = 63;
     }
     let options = {
         method: methodPost,
