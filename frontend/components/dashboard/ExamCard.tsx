@@ -22,7 +22,7 @@ const ExamCard: React.FC<Property> = ({ prop, deleteExam, editRow }) => {
                     <h2 className="text-3xl">{prop.name}</h2>
                 </div>
                 <div>
-                    {prop.question}
+                    {prop.question} mins
                 </div>
                 <div>
                     {prop.startedDate}
