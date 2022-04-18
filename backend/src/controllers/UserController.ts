@@ -1,10 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../controllers/AuthController";
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-
-dotenv.config();
 export const sendEmail = async (req: AuthRequest, res: Response) =>  {
 
   const email =  process.env.EMAIL as string;
