@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction, useEffect } from "react";
-import Script from "next/script";
 
 interface GlanceTrackerProps {
   onChange: Dispatch<SetStateAction<boolean>>;
@@ -76,19 +75,11 @@ const GlanceTracker: FC<GlanceTrackerProps> = ({ onChange }) => {
   }, [onChange]);
 
   return (
-    <>
-      <Script
-        src="/jeelizGlanceTracker.js"
-        strategy="beforeInteractive"
-      ></Script>
-      <canvas
-        id="glanceTrackerCanvas"
-        className="absolute top-[45px] right-0 w-10 h-10 z-10"
-      ></canvas>
-    </>
+    <canvas
+      id="glanceTrackerCanvas"
+      className="absolute top-[45px] right-0 w-10 h-10 z-10"
+    ></canvas>
   );
 };
 
 export default GlanceTracker;
-
-// https://appstatic.jeeliz.com/glanceTracker/jeelizGlanceTracker.js
