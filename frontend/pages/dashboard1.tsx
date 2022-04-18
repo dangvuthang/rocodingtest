@@ -60,7 +60,6 @@ export default function Dashboard() {
 
     return (
         <div className="h-screen">
-            <DashboardNav />
             <div className="h-full flex">
                 {/* Sidebar */}
                 <Sidebar />
@@ -68,10 +67,10 @@ export default function Dashboard() {
                 {/* Content */}
                 <div className="w-full h-screen">
                     {/* Button Area */}
-                    <div className="h-20 grid grid-cols-3 content-center justify-items-center border-l border-b border-black">
+                    <div className="h-20 grid grid-cols-3 content-center justify-items-center  border-l border-b border-black">
                         <div>
                             <button className="flex items-center btn" onClick={() => setAdding(true)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 object-cover object-center" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
                                 </svg>
                                 Add Exam
@@ -79,9 +78,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <button className="btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                </svg>
+
                                 Delete Button
                             </button>
                         </div>
@@ -129,17 +126,22 @@ export default function Dashboard() {
                                     Started date 04/12/2022
                                 </div>
                                 <div className="text-[#ACB3C8]">
-                                    End date 04/18/2022
+                                    Ended date 04/18/2022
                                 </div>
                             </div>
                         </div>
                         {/* Button Edit and Delete */}
                         <div className="flex grow mr-4 content-center justify-end gap-2 w-2 /6">
                             <div>
-                                <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400 hover:bg-blue-500 active:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Edit</button>
+                                <button className="btn">
+
+                                    Edit
+                                </button>
                             </div>
                             <div>
-                                <button className="ml-5 px-4 py-2 text-white rounded-md border-solid border bg-blue-400 hover:bg-blue-500 active:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Delete</button>
+                                <button className="btn">
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     </div>
