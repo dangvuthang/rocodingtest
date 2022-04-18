@@ -25,6 +25,9 @@ const ExamCard: React.FC<Property> = ({ prop, deleteExam, editRow }) => {
                     {prop.question} mins
                 </div>
                 <div>
+                    {prop.startedDate}
+                </div>
+                <div>
                     System Admin
                 </div>
             </div>
