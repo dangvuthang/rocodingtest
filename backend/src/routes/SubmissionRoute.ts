@@ -5,17 +5,17 @@ import {
   checkMicrosoftLogin,
 } from "../controllers/AuthController";
 import {
-  getSubmissionByTestId,
-  getSubmissionByUserAndTestId,
   createSubmission,
+  getAllTestSubmission,
+  getTestSubmissionDetail,
 } from "../controllers/SubmissionController";
 
-const routes: Router = express.Router();
+const routes: Router = express.Router({ mergeParams: true });
 
 routes.use(checkMicrosoftLogin, checkAccountInDb);
+routes.get("/", getAllTestSubmission);
+routes.get("/:submissionId", getTestSubmissionDetail);
 routes.post("/", createSubmission);
 routes.use(checkIfTeacher);
-routes.get("/tests/:testId", getSubmissionByTestId);
-routes.get("/tests/:testId/users/:userId", getSubmissionByUserAndTestId);
 
 export default routes;
