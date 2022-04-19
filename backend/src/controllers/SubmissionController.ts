@@ -61,14 +61,12 @@ export const getSubmissionByTestId = async (
 
 export const createSubmission = async (req: AuthRequest, res: Response) => {
   let submission;
-  let { submissionTime, content, testId, studentId } = req.body;
-  studentId = req.user!._id;
   try {
     submission = await Submission.create({
-      submissionTime,
-      content,
-      testId,
-      studentId,
+      content: req.body.content,
+      testId: req.params.testId,
+      studentId: req.user?._id,
+      recordId: req.body.recordId,
     });
   } catch (err) {
     return res.status(400).json({
@@ -82,4 +80,45 @@ export const createSubmission = async (req: AuthRequest, res: Response) => {
       submission,
     },
   });
+};
+
+export const getAllTestSubmission = async (req: AuthRequest, res: Response) => {
+  try {
+    const submissions = await Submission.find({
+      testId: req.params.testId,
+    }).populate("studentId");
+    res.status(200).json({
+      status: "success",
+      data: {
+        submissions,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+export const getTestSubmissionDetail = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const submissions = await Submission.findById(
+      req.params.submissionId
+    ).populate(["studentId", "recordId"]);
+    res.status(200).json({
+      status: "success",
+      data: {
+        submissions,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
 };
