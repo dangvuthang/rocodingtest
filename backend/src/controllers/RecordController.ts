@@ -3,92 +3,67 @@ import { Response } from "express";
 import { AuthRequest } from "../controllers/AuthController";
 
 export const createRecord = async (req: AuthRequest, res: Response) => {
-  let record;
-  let {
-    attendanceDate,
-    numberOfCheats,
-    evidence,
-    userId,
-    testId,
-    submissionId,
-  } = req.body;
-  userId = req.user!._id;
   try {
-    record = await Record.create({
-      attendanceDate,
-      numberOfCheats,
-      evidence,
-      userId,
-      testId,
-      submissionId,
+    const record = await Record.create({
+      userId: req.user!._id,
+      testId: req.body.testId,
     });
-  } catch (err) {
-    return res.status(400).json({
-      status: "error",
-      message: err.message,
+    res.status(201).json({
+      status: "success",
+      data: {
+        record,
+      },
     });
-  }
-  return res.status(201).json({
-    status: "success",
-    data: {
-      record,
-    },
-  });
-};
-export const getRecordByTestId = async (req: AuthRequest, res: Response) => {
-  let records;
-  try {
-    records = await Record.find({ testId: req.params.testId });
-  } catch (err) {
-    return res.status(400).json({
-      status: "error",
-      message: err.message,
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
     });
   }
-  if (!records) {
-    return res.status(400).json({
-      status: "error",
-      message: "There is no record found",
-    });
-  }
-  return res.status(201).json({
-    status: "success",
-    data: {
-      records,
-    },
-  });
 };
 
-export const getRecordByTestIdAndStudentId = async (
-  req: AuthRequest,
-  res: Response
-) => {
-  let record;
+export const checkExistenceRecord = async (req: AuthRequest, res: Response) => {
   try {
-    record = await Record.find({
-      testId: req.params.testId,
-      userId: req.params.userId,
+    const record = await Record.findOne({
+      userId: req.user!._id,
+      testId: req.body.testId,
     });
-  } catch (err) {
-    return res.status(400).json({
-      status: "error",
-      errors: [
-        {
-          msg: err,
-        },
-      ],
+    console.log(record);
+    if (!record) {
+      res.status(200).json({
+        status: "allowed",
+      });
+    } else {
+      res.status(400).json({
+        status: "diallowed",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
     });
   }
-  if (!record) {
-    return res.status(400).json({
-      status: "error",
-      message: "There is no record found",
+};
+
+export const updateRecord = async (req: AuthRequest, res: Response) => {
+  try {
+    const record = await Record.findById(req.params.id);
+    if (record) {
+      record.numberOfCheats++;
+      record.evidence.push(req.body.evidence);
+      await record.save();
+      res.status(204).end();
+    } else {
+      res.status(404).json({
+        status: "fail",
+        message: "Not found current record",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
     });
   }
-  return res.status(201).json({
-    status: "success",
-    data: {
-      record,
-    },
-  });
 };
