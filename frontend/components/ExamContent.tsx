@@ -1,16 +1,22 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import CodeArea from "../components/CodeArea";
-import QuestionArea2 from "../components/QuestionArea2";
-import Timer2 from "../components/Timer2";
+import { FC, useEffect, useReducer, useRef, useState } from "react";
+import { GetStaticPaths } from "next";
+import Router from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import InstructionModal from "../components/InstructionModal";
-import AlertModal from "../components/AlertModal";
+import CodeArea from "./CodeArea";
+import QuestionArea2 from "./QuestionArea2";
+import Timer2 from "./Timer2";
+import InstructionModal from "./InstructionModal";
+import AlertModal from "./AlertModal";
 import useFullScreen from "../hooks/useFullScreen";
 import useWindowFocus from "../hooks/useWindowFocus";
-import Router from "next/router";
-import GlanceTracker from "../components/GlanceTracker";
+import GlanceTracker from "./GlanceTracker";
+import { Test } from "../pages/exam/[id]";
 
-const Exam2 = () => {
+interface ExamContentProps {
+  test: Test;
+}
+
+const ExamContent: FC<ExamContentProps> = ({ test }) => {
   const [run, setRun] = useState(false);
   const [showInstruction, setShowInstruction] = useState(true);
   const [showAlertMessage, setShowAlertMessage] = useState(false);
@@ -33,7 +39,7 @@ const Exam2 = () => {
   };
 
   // Detect navigate outside webste
-  /*   useEffect(() => {
+  useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
       setAlertMessage("you are trying to navigate outside of the web page");
@@ -62,7 +68,7 @@ const Exam2 = () => {
       setShowAlertMessage(true);
       setRemainingTime((time) => time - 1);
     }
-  }, [isWatching, showInstruction]); */
+  }, [isWatching, showInstruction]);
 
   useEffect(() => {
     console.log(remainingTime);
@@ -89,10 +95,10 @@ const Exam2 = () => {
       />
       <div className="grid grid-cols-[1fr_3fr] h-screen grid-rows-[4%_4fr_auto]">
         <div className="col-span-2 justify-self-end self-end px-2">
-          <Timer2 />
+          <Timer2 endDate={test.endDate} />
         </div>
         <div className="row-span-2 overflow-x-auto">
-          <QuestionArea2 />
+          <QuestionArea2 question={test.question} />
         </div>
         <div className="relative">
           <div className="h-full">
@@ -137,4 +143,4 @@ const Exam2 = () => {
   );
 };
 
-export default Exam2;
+export default ExamContent;

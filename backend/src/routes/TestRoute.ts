@@ -11,15 +11,17 @@ import {
   updateTest,
   deleteTest,
 } from "../controllers/TestController";
-
+import SubmissionRouter from "./SubmissionRoute";
 const routes: Router = express.Router();
+
+routes.use("/:testId/submissions", SubmissionRouter);
 
 routes.use(checkMicrosoftLogin, checkAccountInDb);
 routes.get("/:id", getTest);
 routes.use(checkIfTeacher);
 routes.post("/", createTest);
-routes.get("/:testId/users/:userId", getTestByUserAndId);
 routes.patch("/:id", updateTest);
 routes.delete("/:id", deleteTest);
+routes.get("/:testId/users/:userId", getTestByUserAndId);
 
 export default routes;
