@@ -9,6 +9,8 @@ import DashboardNav from "../components/dashboard/Ds_layout/DashboardNav";
 import Sidebar from "../components/dashboard/Ds_layout/Sidebar";
 import Pagination from "../components/dashboard/Ds_layout/Pagination";
 import ExamDetail from "../components/dashboard/ExamDetail";
+import useAccessToken from "../hooks/useAccessToken";
+
 
 export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[]>([]);
@@ -18,9 +20,7 @@ export default function Dashboard() {
   const [adding, setAdding] = React.useState(false);
   const [viewing, setViewing] = React.useState(false);
   const [inputSearch, setInputSearch] = React.useState("");
-  const [isCheckAll, setIsCheckAll] = React.useState(false);
-  const [isCheck, setIsCheck] = React.useState([]);
-  const [mulDelete, setMulDelete] = React.useState([]);
+
 
   useEffect(() => {
     const testData = getRequest({
@@ -34,6 +34,7 @@ export default function Dashboard() {
         console.log(err);
       });
   }, []);
+
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -149,13 +150,6 @@ export default function Dashboard() {
                     className="px-4 py-2 w-80"
                     placeholder="Search..."
                   />
-                  {/* <button className="flex items-center justify-center px-4 border-l">
-                            <svg className="w-6 h-6 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24">
-                              <path
-                                d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-                            </svg>
-                          </button> */}
                 </div>
               </div>
             </div>
