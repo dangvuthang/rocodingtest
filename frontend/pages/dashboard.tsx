@@ -29,6 +29,7 @@ export default function Dashboard() {
     testData
       .then((result) => {
         setTests(result.data.data.tests);
+        console.log(tests)
       })
       .catch((err) => {
         console.log(err);
