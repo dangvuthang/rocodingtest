@@ -21,7 +21,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
   return (
     <div className="mt-10 sm:mt-0">
       <div className="mt-5 md:mt-0 md:col-span-2">
-        <form onSubmit={(e) => saveExam(e, formData)} className='Form' >
+        <form onSubmit={(e) => saveExam(e, formData)} method="post" className='Form' >
           <div className="shadow overflow-hidden sm:rounded-md">
             <div className="mx-4 px-4 py-5 bg-white sm:p-6">
               <div className="flex flex-col gap-6 divide-y">
@@ -64,7 +64,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     StartedDate:
                   </label>
                   <div className="">
-                    <input onChange={handleForm} type="datetime-local" id="startedDate" name="startedDate"/>                  
+                    <input onChange={handleForm} type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z" id="startedDate" name="startedDate"/>                  
                   </div>
                 </div>
 
@@ -73,7 +73,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     EndDate:
                   </label>
                   <div className="">
-                    <input onChange={handleForm} type="datetime-local" id="endDate" name="endDate"/>                  
+                    <input onChange={handleForm} type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z" id="endDate" name="endDate"/>                  
                   </div>
                 </div>
               </div>

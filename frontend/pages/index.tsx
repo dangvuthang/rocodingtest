@@ -18,8 +18,8 @@ import theme from "../src/theme";
 import { ThemeProvider } from "@mui/material";
 
 export default function HomePage(): JSX.Element {
-  const token = useAccessToken();
-  console.log(token);
+  const token = useAccessToken()
+  console.log(token)
   return (
     <ThemeProvider theme={theme}>
     <Layout>

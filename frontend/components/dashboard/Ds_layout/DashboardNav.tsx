@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
-import SignOutButton from "../../layout/SignOutButton";
-import SignInButton from "../../layout/SignOutButton";
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 
+const SignInButton = dynamic(() => import("../../layout/SignOutButton"), {
+    ssr: false,
+  });
+  const SignOutButton = dynamic(() => import("../../layout/SignOutButton"), {
+    ssr: false,
+  });
+  
 export default function DashboardNav() {
     const lgStyle = {
         flexGrow: 1,

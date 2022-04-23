@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 type Property = {
   prop: CreatedTests;
-  deleteExam: (deleteId: number) => void;
+  deleteExam: (deleteId: string) => void;
   editRow: (prop: CreatedTests | any) => void;
   showExam: (prop: CreatedTests | any) => void;
 };
@@ -17,7 +17,7 @@ const ExamCard: React.FC<Property> = ({
 }) => {
   return (
     <div
-      key={prop.exam_id}
+      key={prop._id}
       className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"
     >
       <div className="">
@@ -39,7 +39,7 @@ const ExamCard: React.FC<Property> = ({
           <h3 className="text-lg">{prop.duration} mins</h3>
         </div>
         <div className="text-[#ACB3C8]">
-          {dayjs(prop.startedDate).format("MMMM DD, YYYY hh:mm a")}
+          {dayjs(prop.startedDate).format("YYYY-MM-DDTHH:mm:ssZ[Z]")}
         </div>
       </div>
       {/* Button Edit and Delete */}
@@ -57,7 +57,7 @@ const ExamCard: React.FC<Property> = ({
         <div>
           <button
             onClick={() => {
-              deleteExam(prop.exam_id);
+              deleteExam(prop._id);
             }}
             className="btn"
           >

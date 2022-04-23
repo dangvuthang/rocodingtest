@@ -3,43 +3,33 @@ import ExamCard from "../components/dashboard/ExamCard";
 import AddExam from "../components/dashboard/AddExam";
 import CreatedTests from "../components/interfaces/CreatedTests";
 import EditExam from "../components/dashboard/EditExam";
-import { getRequest } from "../util/axiosInstance";
+import { deleteRequest,getRequest, postRequest,patchRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 import DashboardNav from "../components/dashboard/Ds_layout/DashboardNav";
 import Sidebar from "../components/dashboard/Ds_layout/Sidebar";
 import Pagination from "../components/dashboard/Ds_layout/Pagination";
 import ExamDetail from "../components/dashboard/ExamDetail";
+import useAccessToken from "../hooks/useAccessToken";
+import Router from "next/router";
+import Layout from "../components/layout/Layout";
 
 export default function Dashboard() {
-  const [tests, setTests] = React.useState<CreatedTests[]>([]);
-
-  const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>();
-  const [editing, setEditing] = React.useState(false);
-  const [adding, setAdding] = React.useState(false);
-  const [viewing, setViewing] = React.useState(false);
+  const [tests, setTests] = React.useState<CreatedTests[] >([])
+  const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>()
+  const [editing, setEditing] = React.useState(false)
+  const [adding, setAdding] = React.useState(false)
+  const [viewing, setViewing] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
   const [isCheckAll, setIsCheckAll] = React.useState(false);
   const [isCheck, setIsCheck] = React.useState([]);
   const [mulDelete, setMulDelete] = React.useState([]);
-
-  useEffect(() => {
-    const testData = getRequest({
-      url: "/users/60f6ce0e02f5102cea240400/tests",
-    });
-    testData
-      .then((result) => {
-        setTests(result.data.data.tests);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setInputSearch(e.target.value.toLowerCase());
   };
+
   const filteredData = tests.filter((el) => {
     //if no input the return the original
     if (inputSearch === "") {
@@ -51,10 +41,29 @@ export default function Dashboard() {
     }
   });
 
-  const saveExam = async (e: React.FormEvent, formData: CreatedTests) => {
+  const accessToken = useAccessToken();
+
+  useEffect(() => {
+    const getTest = async () =>{
+      try {
+        const request = await getRequest(
+          { 
+            url: `/tests/625d4e2ca9d3d42737bd46b4` , 
+            token: accessToken
+          });
+          console.log(request)
+          const atest = request.data.data.test ;
+          setTests([...tests , atest]);
+        } catch (error){
+          console.log("No test was found here")
+        }
+      };
+    getTest();
+}, [accessToken]);
+
+  const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
     e.preventDefault();
     const test: CreatedTests = {
-      exam_id: Math.random(),
       _id: formData._id,
       name: formData.name,
       question: formData.question,
@@ -62,25 +71,67 @@ export default function Dashboard() {
       endDate: formData.endDate,
       duration: formData.duration,
     };
-    setTests([...tests, test]);
+    {/*setTests([...tests, test]);*/}
+    console.log(test)
+    postRequest( { 
+      url: `/tests` ,
+      body: test,
+      token: accessToken
+    })
+    .then( (response) => {
+      console.log(response);
+    })
+    .catch( (error) => {
+      console.log(error);
+    });;
   };
 
-  const deleteExam = async (deleteId: number) => {
+  const deleteExam = async (deleteId: string ) => {
+    deleteRequest( { 
+      url: `/tests/625d4e2ca9d3d42737bd46b4` ,
+      token: accessToken
+    })
+    .then( (response) => {
+      console.log(response);
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
     const exams: CreatedTests[] = tests.filter(
-      (exam: CreatedTests) => exam.exam_id !== deleteId
+      (exam: CreatedTests) => exam._id !== deleteId
     );
     setTests(exams);
   };
-  const updateExam = (exam_id: number, updatedTest: any) => {
-    setTests(
-      tests.map((test) => (test.exam_id === exam_id ? updatedTest : test))
-    );
+  const updateExam = (_id: string, updatedTest: CreatedTests) => {
+    for (let test of tests) {
+      if (test._id === _id){
+        patchRequest( { 
+          url: `/tests/625d4e2ca9d3d42737bd46b4` ,
+          body: updatedTest,
+          token: accessToken
+        })
+        .then( (response) => {
+          console.log(response);
+        })
+        .catch( (error) => {
+          console.log(error);
+        });
+        setTests(
+          tests.map(() => updatedTest)
+        );
+      } 
+      else {
+        setTests(
+          tests.map((test) => test)
+        );
+      }
+    }
   };
 
   const editRow = async (test: any) => {
     setEditing(true);
     setCurrentUser({
-      exam_id: test.exam_id,
+      _id: test._id,
       name: test.name,
       duration: test.duration,
       question: test.question,
@@ -91,7 +142,7 @@ export default function Dashboard() {
   const showExam = async (test: any) => {
     setViewing(true);
     setCurrentUser({
-      exam_id: test.exam_id,
+      _id: test._id,
       name: test.name,
       duration: test.duration,
       question: test.question,
@@ -101,6 +152,7 @@ export default function Dashboard() {
   };
 
   return (
+    <Layout>
     <div className="h-screen bg-white">
       {editing ? (
         <EditExam
@@ -171,7 +223,7 @@ export default function Dashboard() {
 
             {/* Exam Area */}
             {tests.length > 0 ? (
-              filteredData.map((test) => (
+              tests.map((test) => (
                 <ExamCard
                   showExam={showExam}
                   editRow={editRow}
@@ -209,5 +261,6 @@ export default function Dashboard() {
         </div>
       )}
     </div>
+    </Layout>
   );
 }

@@ -2,21 +2,22 @@ import * as React from 'react'
 import CreatedTests from "../interfaces/CreatedTests";
 
 type Props = {
-    updateExam: (exam_id:number, exam: CreatedTests| any) => void
+    updateExam: (_id: string, exam: CreatedTests| any) => void
     currentUser: any
     setEditing: (editing:boolean) => any
   }
   
+
   const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing}) => {
     const [exam, setExam] = React.useState<CreatedTests| any>({})
-  
+    
     React.useEffect(
-        () => {
-            setExam(currentUser)
-        },
-        [ currentUser ]
-      )
-
+      () => {
+          setExam(currentUser)
+      },
+      [ currentUser ]
+    )
+    
     const handleForm = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setExam({
         ...exam,
@@ -27,7 +28,7 @@ type Props = {
   return (
     <div className="mt-10 sm:mt-0">
     <div className="mt-5 md:mt-0 md:col-span-2">
-      <form onSubmit={(e) => {updateExam( exam.exam_id , exam); e.preventDefault(); }} className='Form' >
+      <form onSubmit={(e) => {updateExam( exam._id , exam); e.preventDefault(); }} method="post" className='Form' >
         <div className="shadow overflow-hidden sm:rounded-md">
           <div className="mx-4 px-4 py-5 bg-white sm:p-6">
             <div className="flex flex-col gap-6 divide-y">
