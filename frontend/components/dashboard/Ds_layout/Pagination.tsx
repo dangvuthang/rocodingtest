@@ -20,10 +20,6 @@ export default function Pagination() {
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
-                    <input className="ml-2" id="checkAll" type="checkbox" />
-                    <label htmlFor="checkAll" className=" ml-2 text-l">Select All</label>
-                </div>
-                <div>
                     <div>
                         <p className="text-sm text-gray-700">
                             Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{' '}
