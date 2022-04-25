@@ -14,7 +14,7 @@ const Timer2: FC<Timer2Props> = ({ endDate }) => {
   useEffect(() => {
     const id = setInterval(() => {
       const currentTime = dayjs();
-      const deadline = dayjs(endDate);
+      const deadline = dayjs(new Date(endDate));
       const timeLeft = dayjs.duration(deadline.diff(currentTime));
       setRemainingTime(timeLeft.format("HH:mm:ss"));
     }, 1000);
