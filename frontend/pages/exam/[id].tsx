@@ -7,6 +7,9 @@ import SignInButton from "../../components/layout/SignInButton";
 import useAccessToken from "../../hooks/useAccessToken";
 import { getRequest, postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 const LoadScript = dynamic(() => import("../../components/LoadScript"), {
   loading: () => <p>Loading Model...</p>,
 });
@@ -30,6 +33,7 @@ const Exam = () => {
   const [message, setMessage] = useState("");
   const [permission, setPermission] = useState(false);
   const [done, setDone] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     count.current++;
@@ -65,6 +69,17 @@ const Exam = () => {
         });
         const test = request.data.data.test as Test;
         setTest(test);
+        const isAvailable = dayjs().isBetween(
+          dayjs(new Date(test.startedDate)),
+          dayjs(new Date(test.endDate))
+        );
+        console.log({
+          now: dayjs(),
+          start: dayjs(new Date(test.startedDate)),
+          end: dayjs(new Date(test.endDate)),
+        });
+        console.log(isAvailable);
+        setIsRunning(isAvailable);
       } catch (error) {
         setTest(null);
         setMessage("No test found with this given link.");
@@ -92,7 +107,7 @@ const Exam = () => {
       </div>
     );
   }
-  if (stream && user && test && permission && !done) {
+  if (stream && user && test && permission && !done && isRunning) {
     return <ExamContent test={test} onDone={() => setDone(true)} />;
   } else if (done) {
     return (
@@ -110,6 +125,12 @@ const Exam = () => {
     return (
       <div className="h-screen flex justify-center items-center text-lg">
         You have already joined or finished the exam...
+      </div>
+    );
+  } else if (!isRunning && test) {
+    return (
+      <div className="h-screen flex justify-center items-center text-lg">
+        The exam is not available at the moment or has already finished...
       </div>
     );
   } else {
