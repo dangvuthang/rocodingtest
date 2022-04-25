@@ -21,6 +21,7 @@ const CodeArea: FC<CodeAreaProps> = ({
 }) => {
   const handleContentChanged = (value: string | undefined) => {
     if (value) setContent(value);
+    else setContent("");
   };
 
   const handleLanguageChanged = (e: ChangeEvent<HTMLSelectElement>) => {
