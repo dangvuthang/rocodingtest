@@ -1,7 +1,6 @@
 import { useMsal } from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { loginRequest } from "../../src/authConfig";
-import router from "next/router";
 import { postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
 import { LoginIcon } from "@heroicons/react/outline";

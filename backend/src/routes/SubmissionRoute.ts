@@ -14,8 +14,8 @@ const routes: Router = express.Router({ mergeParams: true });
 
 routes.use(checkMicrosoftLogin, checkAccountInDb);
 routes.get("/", getAllTestSubmission);
-routes.get("/:submissionId", getTestSubmissionDetail);
 routes.post("/", createSubmission);
+routes.get("/:submissionId", getTestSubmissionDetail);
 routes.use(checkIfTeacher);
 
 export default routes;

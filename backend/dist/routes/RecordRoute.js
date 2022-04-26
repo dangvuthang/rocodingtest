@@ -9,8 +9,7 @@ const RecordController_1 = require("../controllers/RecordController");
 const routes = express_1.default.Router();
 routes.use(AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountInDb);
 routes.post("/", RecordController_1.createRecord);
-routes.use(AuthController_1.checkIfTeacher);
-routes.get("/tests/:testId", RecordController_1.getRecordByTestId);
-routes.get("/tests/:testId/users/:userId", RecordController_1.getRecordByTestIdAndStudentId);
+routes.post("/check", RecordController_1.checkExistenceRecord);
+routes.patch("/:id", RecordController_1.updateRecord);
 exports.default = routes;
 //# sourceMappingURL=RecordRoute.js.map

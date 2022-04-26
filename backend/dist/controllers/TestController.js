@@ -15,11 +15,7 @@ const getTest = async (req, res) => {
     catch (err) {
         return res.status(400).json({
             status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
+            message: err.message,
         });
     }
     if (!test) {

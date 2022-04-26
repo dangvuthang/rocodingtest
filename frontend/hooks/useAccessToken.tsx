@@ -1,4 +1,3 @@
-import { AuthenticationResult } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
 import { loginRequest } from "../src/authConfig";
@@ -12,12 +11,12 @@ const useAccessToken = () => {
     if (instance && account) {
       instance
         .acquireTokenSilent({ ...loginRequest, account })
-        .then(response => {
+        .then((response) => {
           setAccessToken(response.accessToken);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
-          instance.acquireTokenPopup(loginRequest).then(response => {
+          instance.acquireTokenPopup(loginRequest).then((response) => {
             setAccessToken(response.accessToken);
           });
         });

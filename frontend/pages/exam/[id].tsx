@@ -5,8 +5,11 @@ import ExamContent from "../../components/ExamContent";
 import useWebcam from "../../hooks/useWebcam";
 import SignInButton from "../../components/layout/SignInButton";
 import useAccessToken from "../../hooks/useAccessToken";
-import { getRequest } from "../../util/axiosInstance";
+import { getRequest, postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 const LoadScript = dynamic(() => import("../../components/LoadScript"), {
   loading: () => <p>Loading Model...</p>,
 });
@@ -28,10 +31,33 @@ const Exam = () => {
   const count = useRef(0);
   const [test, setTest] = useState<Test | null>(null);
   const [message, setMessage] = useState("");
+  const [permission, setPermission] = useState(false);
+  const [done, setDone] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     count.current++;
   }, []);
+
+  useEffect(() => {
+    const enterExamBefore = async () => {
+      const path = Router.query.id;
+      try {
+        const request = await postRequest({
+          url: `/records/check`,
+          token: accessToken,
+          body: { testId: path },
+        });
+        if (request.data.status === "allowed") setPermission(true);
+      } catch (error) {
+        const response = (error as any)?.response;
+        if (response.data.status === "disallowed") setPermission(false);
+      }
+    };
+    if (accessToken) {
+      enterExamBefore();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     const getTest = async () => {
@@ -43,7 +69,17 @@ const Exam = () => {
         });
         const test = request.data.data.test as Test;
         setTest(test);
-        console.log(test);
+        const isAvailable = dayjs().isBetween(
+          dayjs(new Date(test.startedDate)),
+          dayjs(new Date(test.endDate))
+        );
+        console.log({
+          now: dayjs(),
+          start: dayjs(new Date(test.startedDate)),
+          end: dayjs(new Date(test.endDate)),
+        });
+        console.log(isAvailable);
+        setIsRunning(isAvailable);
       } catch (error) {
         setTest(null);
         setMessage("No test found with this given link.");
@@ -71,12 +107,30 @@ const Exam = () => {
       </div>
     );
   }
-  if (stream && user && test) {
-    return <ExamContent test={test} />;
+  if (stream && user && test && permission && !done && isRunning) {
+    return <ExamContent test={test} onDone={() => setDone(true)} />;
+  } else if (done) {
+    return (
+      <div className="h-screen flex justify-center items-center text-lg">
+        You have successfully submitted your code.
+      </div>
+    );
   } else if (message) {
     return (
       <div className="h-screen flex justify-center items-center text-lg">
         {message}
+      </div>
+    );
+  } else if (!permission && test) {
+    return (
+      <div className="h-screen flex justify-center items-center text-lg">
+        You have already joined or finished the exam...
+      </div>
+    );
+  } else if (!isRunning && test) {
+    return (
+      <div className="h-screen flex justify-center items-center text-lg">
+        The exam is not available at the moment or has already finished...
       </div>
     );
   } else {

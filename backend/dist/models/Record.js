@@ -25,11 +25,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const RecordSchema = new mongoose_1.Schema({
-    attendanceDate: { type: Date, required: true, unique: true },
+    attendanceDate: { type: Date, required: true, default: Date.now() },
     numberOfCheats: { type: Number, required: true, default: 0 },
     evidence: [{ type: String, required: true, default: [] }],
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
     testId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Test" },
 });
+RecordSchema.index({ userId: 1, testId: 1 }, { unique: true });
 exports.default = mongoose_1.default.model("Record", RecordSchema);
 //# sourceMappingURL=Record.js.map

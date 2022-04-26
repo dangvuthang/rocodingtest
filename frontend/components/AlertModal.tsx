@@ -1,5 +1,5 @@
-import { FC, Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { FC, useEffect } from "react";
+import { Dialog } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 
@@ -16,6 +16,20 @@ const AlertModal: FC<AlertModalProps> = ({
   remainingTime,
   onClose,
 }) => {
+  useEffect(() => {
+    let id: NodeJS.Timeout;
+    if (remainingTime === 0 && open) {
+      id = setTimeout(() => {
+        if (open) {
+          onClose();
+        }
+      }, 3000);
+    }
+    return () => {
+      if (id) clearInterval(id);
+    };
+  }, [remainingTime, onClose, open]);
+
   return (
     <Dialog
       as="div"
