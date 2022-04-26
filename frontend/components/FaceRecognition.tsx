@@ -1,9 +1,10 @@
 import * as faceapi from 'face-api.js';
-
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { canvas, faceDetectionNet, faceDetectionOptions } from './models';
 
-const REFERENCE_IMAGE = '../images/bbt1.jpg'
-const QUERY_IMAGE = '../images/bbt4.jpg'
+interface FaceRecognitionTrackerProps {
+  onChange: Dispatch<SetStateAction<boolean>>;
+}
 
 async function run() {
 

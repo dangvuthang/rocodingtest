@@ -10,6 +10,7 @@ import AlertModal from "./AlertModal";
 import useFullScreen from "../hooks/useFullScreen";
 import useWindowFocus from "../hooks/useWindowFocus";
 import GlanceTracker from "./GlanceTracker";
+import FaceIdentity from "./FaceIdentity";
 import { Test } from "../pages/exam/[id]";
 
 interface ExamContentProps {
@@ -83,6 +84,7 @@ const ExamContent: FC<ExamContentProps> = ({ test }) => {
   return (
     <>
       <GlanceTracker onChange={setIsWatching} />
+      <FaceIdentity/>
       <InstructionModal
         open={showInstruction}
         onClose={() => setShowInstruction(false)}
