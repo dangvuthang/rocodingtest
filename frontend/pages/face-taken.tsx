@@ -1,10 +1,17 @@
 import { FC } from "react";
+import ImageTaken from "../components/ImageTaken";
+import LoadFaceAPI from "../components/LoadFaceAPI";
 
 const FaceTaken: FC = () => {
   return (
-    <div className="container mx-auto bg-blue-400">
-      <h1 className="text-white text-center">Hello World</h1>
-    </div>
+    <>
+      <LoadFaceAPI />
+      <div className="container mx-auto">
+        <div className="flex justify-center">
+          <ImageTaken />
+        </div>
+      </div>
+    </>
   );
 };
 
