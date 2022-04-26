@@ -1,16 +1,16 @@
 import * as faceapi from 'face-api.js';
 import { Dispatch, FC, SetStateAction, useEffect } from "react";
-import { canvas, faceDetectionNet, faceDetectionOptions } from './models';
+import { canvas, faceDetectionNet, faceDetectionOptions, saveFile } from './models';
 
-interface FaceRecognitionTrackerProps {
-  onChange: Dispatch<SetStateAction<boolean>>;
-}
 
-async function run() {
+const FaceRecognition = async () => {
 
-  await faceDetectionNet.loadFromDisk('../../weights')
-  await faceapi.nets.faceLandmark68Net.loadFromDisk('../../weights')
-  await faceapi.nets.faceRecognitionNet.loadFromDisk('../../weights')
+  const REFERENCE_IMAGE = '../images/.jpg'
+  const QUERY_IMAGE = '../images/.jpg'
+
+  await faceapi.nets.tinyFaceDetector.loadFromUri('/models')
+  await faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+  await faceapi.nets.faceRecognitionNet.loadFromUri('/models')
 
   const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
   const queryImage = await canvas.loadImage(QUERY_IMAGE)
@@ -33,13 +33,22 @@ async function run() {
   const outRef = faceapi.createCanvasFromMedia(referenceImage)
   refDrawBoxes.forEach(drawBox => drawBox.draw(outRef))
 
+  let similarityScore = 1;
+
   const queryDrawBoxes = resultsQuery.map(res => {
     const bestMatch = faceMatcher.findBestMatch(res.descriptor)
+    if (bestMatch.distance < 0.5){
+      similarityScore = bestMatch.distance
+    }
     return new faceapi.draw.DrawBox(res.detection.box, { label: bestMatch.toString() })
   })
   const outQuery = faceapi.createCanvasFromMedia(queryImage)
   queryDrawBoxes.forEach(drawBox => drawBox.draw(outQuery))
-  console.log('done, saved results to out/queryImage.jpg')
+  if (similarityScore < 0.5){
+    saveFile('queryImage.jpg', (outQuery as any).toBuffer('image/jpeg'));
+    console.log('not similarityScore');
+  }
+
 }
 
-run()
+export default FaceRecognition;
