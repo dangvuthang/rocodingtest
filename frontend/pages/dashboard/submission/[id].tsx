@@ -46,24 +46,18 @@ const Submission = () => {
                         </Link>
                     </div>
                 </div>
-                <div className=" border-gray-200">
+                <div className="border-2 rounded-md mx-auto mb-2 w-5/6">
                     <dl>
                         <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">Student ID</dt>
+                            <dt className="text-sm font-medium text-gray-500">Student Email</dt>
                             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {submission?.studentId._id}
+                                {submission?.studentId.email}
                             </dd>
                         </div>
                         <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt className="text-sm font-medium text-gray-500">Student Name</dt>
                             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                 {submission?.studentId.fullName}
-                            </dd>
-                        </div>
-                        <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">Title of Exam</dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {submission?.testId}
                             </dd>
                         </div>
                         <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

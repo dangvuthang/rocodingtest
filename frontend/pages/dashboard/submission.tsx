@@ -102,7 +102,6 @@ const Submissions = (props: Props) => {
                                 <th className="text-black px-18 ">Student Email</th>
                                 <th className="text-black px-18 ">Student Name</th>
                                 <th className="text-black px-18 ">Avatar</th>
-                                <th className="text-black px-18 ">Exam</th>
                                 <th className="text-black px-18 ">Content</th>
                                 <th className="text-black px-18 ">Submission Time</th>
                                 <th className="">
@@ -117,7 +116,6 @@ const Submissions = (props: Props) => {
                                     <td className="pt-6 px-4">{sub.studentId.email}</td>
                                     <td className="pt-6 px-4">{sub.studentId.fullName}</td>
                                     <td className="pt-6 px-4"><img className="inline-block h-12 w-12 rounded-full ring-2 ring-white object-center object-cover" src={sub.studentId.photoUrl} /></td>
-                                    <td className="pt-6 px-4">{sub.testId}</td>
                                     <td className="pt-6 px-4 truncate">{sub.content}</td>
                                     <td className="pt-6 px-4">{dayjs(sub.submissionTime).format("MMMM DD, YYYY hh:mm a")}</td>
                                     <td className="px-6 px-4 pt-5 text-right">
