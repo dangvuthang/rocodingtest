@@ -11,6 +11,7 @@ import Editor from "@monaco-editor/react";
 const Submission = () => {
     const accessToken = useAccessToken();
     const [submission, setSubmission] = useState<SubmissionDetail>();
+    const [evidences, setEvidences]: any = useState<string[]>([]);
 
     useEffect(() => {
         console.log("hehe")
@@ -18,15 +19,18 @@ const Submission = () => {
         console.log(path)
         if (accessToken) {
             const getSubmission = getRequest({
-                url: `/tests/60f552932152bb2281277f01/submissions/${path}`,
+                url: `/tests/62676133fdc0cb13de8d176e/submissions/${path}`,
                 token: accessToken,
             });
             getSubmission.then((data) => {
                 setSubmission(data.data.data.submissions);
+                setEvidences(submission?.recordId.evidence);
             }).catch((err) => console.log(err));
         }
     }, [accessToken])
     console.log(submission);
+
+
     return (
         <div>
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -66,6 +70,24 @@ const Submission = () => {
                                 {dayjs(submission?.submissionTime).format("MMMM DD, YYYY hh:mm a")}
                             </dd>
                         </div>
+                        <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">Number of Cheats</dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {submission?.recordId?.numberOfCheats}
+                            </dd>
+                        </div>
+                        <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">Evidence</dt>
+                            <div className="col-span-2 grid grid-cols-2 gap-3">
+                                {evidences.map((evidence, index) => (
+                                    <div key={index} className="rounded overflow-hidden shadow-lg">
+                                        <a href={evidence}><img className="w-full" src={evidence} alt="evidence" /></a>
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+
                         <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt className="text-sm font-medium text-gray-500">Student Submission</dt>
                             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">

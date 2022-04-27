@@ -3,7 +3,7 @@ import Sidebar from '../../components/dashboard/Ds_layout/Sidebar'
 import useAccessToken from '../../hooks/useAccessToken'
 import { getRequest } from '../../util/axiosInstance'
 import dayjs from 'dayjs'
-import CreatedTests from '../../components/interfaces/CreatedTests'
+import { useRouter } from 'next/router'
 
 
 type Props = {}
@@ -15,13 +15,22 @@ export interface studentId {
     photoUrl: string;
     role: string;
 }
+
+export interface recordId {
+    attendanceDate: string;
+    evidence: string[];
+    numberOfCheats: number;
+    testId: string;
+    userId: string;
+    _id: string;
+}
 export interface SubmissionDetail {
     _id: string;
     submissionTime: Date;
     content: string;
     testId: string;
     studentId: studentId;
-    recordId: string;
+    recordId: recordId;
 }
 
 const Submissions = (props: Props) => {
@@ -39,29 +48,20 @@ const Submissions = (props: Props) => {
     } as const;
 
     const [submissions, setSubmissions] = useState<SubmissionDetail[]>([]);
-    const [tests, setTests] = useState<CreatedTests>()
     const [inputSearch, setInputSearch] = React.useState("");
     const accessToken = useAccessToken();
+    const router = useRouter();
 
     useEffect(() => {
         console.log("hehe");
         if (accessToken) {
-            const data = getRequest({ url: 'tests/60f552932152bb2281277f01/submissions', token: accessToken })
+            const data = getRequest({ url: 'tests/62676133fdc0cb13de8d176e/submissions', token: accessToken })
             data.then((result) => {
                 setSubmissions(result.data.data.submissions);
 
             }).catch((err) => console.log(err))
         }
-    }, [accessToken])
 
-    useEffect(() => {
-        if (accessToken) {
-            const test = getRequest({ url: '/users/60f6ce0e02f5102cea240400/tests', token: accessToken })
-            test.then((result) => {
-                setTests(result.data.data.tests);
-                console.log(tests);
-            }).catch((err) => console.log(err))
-        }
     }, [accessToken])
 
     const handleSearch = (
