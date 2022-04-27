@@ -27,51 +27,11 @@ export default function HomePage(): JSX.Element {
         <HeroSection
           title="HACKERMIT"
           subtitle="Easy to organize online exams. Stability and Anti-cheating."
-          image="https://assets3.lottiefiles.com/packages/lf20_fGseie.json"
-        >
-          {/* <Link href="/react" passHref> */}
-          <Button variant="contained" disableElevation sx={{ mr: 2, mt: 2 }}>
-            Get started
-          </Button>
-          {/* </Link> */}
-          {/* <Link href="/ios" passHref> */}
-          {/* </Link> */}
-        </HeroSection>
-        <FeatureContainer title="Our Web's Princibles">
-          <FeatureBlocksContainer>
-            <FeatureBlock
-              title="Intuitive"
-              icon={<StarIcon />}
-              content={
-                <>
-                  Embedded code editor supports multiple languages Real time
-                  coding Exam notification system
-                </>
-              }
-            />
-            <FeatureBlock
-              title="Manageble"
-              icon={<SettingsIcon />}
-              content={
-                <>
-                  Allow managing separate examination Can host room and invite
-                  students easily Secure identification system
-                </>
-              }
-            />
-            <FeatureBlock
-              title="Secure"
-              icon={<ShieldIcon />}
-              content={
-                <>
-                  Screen tracking system can detect unusual behaviour Camera
-                  tracking can record facial expressions Be able to notify the
-                  teacher in real-time Provide evidence.
-                </>
-              }
-            />
-          </FeatureBlocksContainer>
-        </FeatureContainer>
+          image="https://dummyimage.com/720x600"
+        />
+        <FeatureContainer 
+          title="Our Web's Princibles"
+        />
         <BigSection
           title="Our Goal!"
           subtitle="To simplify the process of making online examinations and to lighten the workload of teachers from making online examinations.Thus,

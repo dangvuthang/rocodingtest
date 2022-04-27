@@ -1,23 +1,62 @@
 import * as React from 'react'
 import CreatedTests from "../interfaces/CreatedTests";
-
-
+import dayjs from 'dayjs'
 type Props = {
   saveExam: (e: React.FormEvent, formData: CreatedTests | any) => void
   setAdding: (adding: boolean) => any,
-  
 }
 const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
-  const [formData, setFormData] = React.useState<CreatedTests | {}>()
+  const [formData, setFormData] = React.useState<CreatedTests | {}>({})
+  let [startedDate, setstartedDate] = React.useState("")
+  let [endDate, setendDate] = React.useState("")
+  let [duration_value, setduration_value] = React.useState<number>(0)
 
-  const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
     setFormData({
       ...formData,
       [e.currentTarget.id]: e.currentTarget.value,
     })
     console.log(formData)
   }
+  const handleStartedDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
+    setFormData({
+      ...formData,
+      ["startedDate"]: e.currentTarget.value.substring(0, 16),
+    })
+    setstartedDate(e.currentTarget.value.substring(0, 16))
+    console.log(formData)
+  }
+  const handleEndDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
+    setFormData({
+      ...formData,
+      ["endDate"]: e.currentTarget.value.substring(0, 16),
+    })
+    setendDate(e.currentTarget.value.substring(0, 16))
+    console.log(formData)
+  }
+  const handleDuration = ( ): void => {
+    setFormData({
+      ...formData,
+      ["duration"]: duration_value,
+    })
+    console.log(formData)
+  }
+  React.useEffect(() => {
+    let date1 = dayjs(startedDate)
+    let date2 = dayjs(endDate)
+    let durationValid= date2.diff(date1, 'minute', true)
+    setduration_value(durationValid)
+    handleDuration()
+  },[duration_value,startedDate,endDate]);
 
+  const handleDuraionValue = ( duraionNum: number) => {
+    if(duraionNum <= 60 ){
+      return `${duraionNum} mins `;
+    }
+    else {
+      return `${Math.floor(duraionNum/60)} hour `;
+    }
+  }
   return (
     <div className="mt-10 sm:mt-0">
       <div className="mt-5 md:mt-0 md:col-span-2">
@@ -41,7 +80,9 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                   <label className="block text-sm font-medium text-gray-700">
                     Duration
                   </label>
-                  <input onChange={handleForm} type="number" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/5 sm:text-sm border border-gray-300 rounded-md" />
+                  <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
+                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="string" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/6 sm:text-sm border border-gray-300 rounded-md" />
+                  </div>                
                 </div>
                 <div className=" pt-6 flex flex-row space-x-80 gap-6">
                   <label className="block text-sm font-medium text-gray-700">
@@ -64,7 +105,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     StartedDate:
                   </label>
                   <div className="">
-                    <input onChange={handleForm} type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z" id="startedDate" name="startedDate"/>                  
+                    <input onChange={handleStartedDate} type="datetime-local" step="1"  id="startedDate" name="startedDate"/>                  
                   </div>
                 </div>
 
@@ -73,7 +114,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     EndDate:
                   </label>
                   <div className="">
-                    <input onChange={handleForm} type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z" id="endDate" name="endDate"/>                  
+                    <input onChange={handleEndDate} type="datetime-local" step="1"  id="endDate" name="endDate"/>                  
                   </div>
                 </div>
               </div>

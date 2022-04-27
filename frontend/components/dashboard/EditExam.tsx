@@ -1,34 +1,62 @@
 import * as React from 'react'
 import CreatedTests from "../interfaces/CreatedTests";
+import dayjs from 'dayjs'
 
 type Props = {
-    updateExam: (_id: string, exam: CreatedTests| any) => void
-    currentUser: any
+    updateExam: (e: React.FormEvent, _id: string, exam: CreatedTests) => void
+    currentUser: CreatedTests | any
     setEditing: (editing:boolean) => any
   }
   
 
   const EditExam: React.FC<Props> = ({ updateExam, currentUser ,setEditing}) => {
     const [exam, setExam] = React.useState<CreatedTests| any>({})
-    
-    React.useEffect(
-      () => {
-          setExam(currentUser)
-      },
-      [ currentUser ]
-    )
-    
-    const handleForm = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let [startedDate, setstartedDate] = React.useState("")
+    let [endDate, setendDate] = React.useState("")
+    let [duration_value, setduration_value] = React.useState<number>()
+    const dayStarted = dayjs(currentUser.startedDate).format('YYYY-MM-DDTHH:mm:ss') 
+    const dayEnded = dayjs(currentUser.endDate).format('YYYY-MM-DDTHH:mm:ss')
+
+    const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setExam({
         ...exam,
         [e.currentTarget.id]: e.currentTarget.value,
       })
+      console.log(exam)
     }
-    
+    const handleStartedDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
+      setExam({
+        ...exam,
+        ["startedDate"]: e.currentTarget.value.substring(0, 16),
+      })
+      setstartedDate(e.currentTarget.value.substring(0, 16))
+      console.log(exam)
+    }
+    const handleEndDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
+      setExam({
+        ...exam,
+        ["endDate"]: e.currentTarget.value.substring(0, 16),
+      })
+      setendDate(e.currentTarget.value.substring(0, 16))
+      console.log(exam)
+    }
+    const handleDuration = ( ): void => {
+      setExam({
+        ...exam,
+        ["duration"]: duration_value,
+      })
+      console.log(exam)
+    }
+    React.useEffect(() => {
+      let date1 = dayjs(startedDate)
+      let date2 = dayjs(endDate)
+      setduration_value(date2.diff(date1, 'minute', true))
+      handleDuration()
+    },[duration_value,startedDate,endDate]);
   return (
     <div className="mt-10 sm:mt-0">
     <div className="mt-5 md:mt-0 md:col-span-2">
-      <form onSubmit={(e) => {updateExam( exam._id , exam); e.preventDefault(); }} method="post" className='Form' >
+      <form onSubmit={(e) => updateExam( e, currentUser._id , exam)} method="post" className='Form' >
         <div className="shadow overflow-hidden sm:rounded-md">
           <div className="mx-4 px-4 py-5 bg-white sm:p-6">
             <div className="flex flex-col gap-6 divide-y">
@@ -48,8 +76,11 @@ type Props = {
                 <label className="block text-sm font-medium text-gray-700">
                   Duration
                 </label>
-                <input defaultValue={currentUser.duration} onChange={handleForm} type="number" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/5 sm:text-sm border border-gray-300 rounded-md" />
-              </div>
+                <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
+                    <input value={duration_value} onChange={handleDuration} type="string" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/6 sm:text-sm border border-gray-300 rounded-md" />
+                    <p className=" text-sm text-gray-500">mins - {currentUser.duration} mins</p>    
+                  </div>              
+               </div>
               <div className=" pt-6 flex flex-row space-x-80 gap-6">
                 <label className="block text-sm font-medium text-gray-700">
                   Question
@@ -71,22 +102,21 @@ type Props = {
                   StartedDate:
                 </label>
                 <div className="">
-                  <input defaultValue={currentUser.startedDate} onChange={handleForm} type="datetime-local" id="startedDate" name="startedDate"/>                  
+                  <input defaultValue={dayStarted} onChange={handleStartedDate} step ="1" type="datetime-local" id="startedDate" name="startedDate"/>                  
                 </div>
               </div>
-
               <div className="pt-6 flex flex-row space-x-80 gap-6">
                 <label className="block text-sm font-medium text-gray-700">
                   EndDate:
                 </label>
                 <div className="">
-                  <input defaultValue={currentUser.endDate} onChange={handleForm} type="datetime-local" id="endDate" name="endDate"/>                  
+                  <input defaultValue={dayEnded} onChange={handleEndDate} step ="1" type="datetime-local" id="endDate" name="endDate"/>                  
                 </div>
               </div>
             </div>
           </div>
           <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
-            <button  disabled={exam === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button disabled={exam === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Update Exam
             </button>
             <button onClick={() => setEditing(false)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

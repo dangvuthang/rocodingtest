@@ -48,7 +48,7 @@ export default function Dashboard() {
       try {
         const request = await getRequest(
           { 
-            url: `/tests/625d4e2ca9d3d42737bd46b4` , 
+            url: `/tests/60f552932152bb2281277f02` , 
             token: accessToken
           });
           console.log(request)
@@ -88,7 +88,7 @@ export default function Dashboard() {
 
   const deleteExam = async (deleteId: string ) => {
     deleteRequest( { 
-      url: `/tests/625d4e2ca9d3d42737bd46b4` ,
+      url: `/tests/6256cd40f249cc47d2af8340` ,
       token: accessToken
     })
     .then( (response) => {
@@ -102,11 +102,12 @@ export default function Dashboard() {
     );
     setTests(exams);
   };
-  const updateExam = (_id: string, updatedTest: CreatedTests) => {
+  const updateExam = async (e: React.FormEvent, _id: string, updatedTest: CreatedTests) => {
+    e.preventDefault();
     for (let test of tests) {
       if (test._id === _id){
         patchRequest( { 
-          url: `/tests/625d4e2ca9d3d42737bd46b4` ,
+          url: `/tests/60f552932152bb2281277f02` ,
           body: updatedTest,
           token: accessToken
         })
