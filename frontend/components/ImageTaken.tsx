@@ -1,29 +1,26 @@
+import Router from "next/router";
 import { FC, useRef, useState } from "react";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import useAccessToken from "../hooks/useAccessToken";
+import useWebcam from "../hooks/useWebcam";
+import { postRequest } from "../util/axiosInstance";
 import { savedToCloudinary } from "../util/captureScreen";
+
 interface ImageTakenProps {
   className?: string;
 }
 
 const width = 320;
 let height = 0;
-const ImageTaken: FC<ImageTakenProps> = ({ className }) => {
+
+const ImageTaken: FC<ImageTakenProps> = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [imageUrl, setImageUrl] = useState("");
-
-  useEffect(() => {
-    const faceapi = (window as any).faceapi;
-
-    const loadModel = async () => {
-      await faceapi.loadTinyFaceDetectorModel();
-      await faceapi.loadFaceLandmarkTinyModel();
-      await faceapi.loadFaceRecognitionModel();
-    };
-    if (faceapi) {
-      loadModel();
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
+  const stream = useWebcam();
+  const token = useAccessToken();
 
   useEffect(() => {
     const video = videoRef.current!;
@@ -32,7 +29,6 @@ const ImageTaken: FC<ImageTakenProps> = ({ className }) => {
       "playing",
       function (ev) {
         height = video.videoHeight / (video.videoWidth / width);
-
         video.setAttribute("width", width.toString());
         video.setAttribute("height", height.toString());
         canvas.setAttribute("width", width.toString());
@@ -43,82 +39,98 @@ const ImageTaken: FC<ImageTakenProps> = ({ className }) => {
   }, []);
 
   useEffect(() => {
-    const requestWebcamAccess = async () => {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then(function (stream) {
-          videoRef.current!.srcObject = stream;
-          videoRef.current!.play();
-        })
-        .catch(function (err) {
-          console.log("An error occurred: " + err);
-        });
-    };
-    requestWebcamAccess().catch((err) => console.log(err));
-  }, []);
+    if (stream) {
+      const video = videoRef.current!;
+      video.srcObject = stream;
+      video.play();
+    }
+  }, [stream]);
 
   const handleImageTaken = async () => {
     const video = videoRef.current!;
     const canvas = canvasRef.current!;
     const context = canvas.getContext("2d");
-    // if (width && height) {
-    //   canvas.width = width;
-    //   canvas.height = height;
-    //   // context!.drawImage(video, 0, 0, width, height);
-
-    //   // const data = canvas.toDataURL("image/png");
-    //   // setImageUrl(data);
-    //   // console.log(data);
-    // }
-    const faceapi = (window as any).faceapi;
-    try {
-      const detection = await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks(true)
-        .withFaceDescriptor();
-      console.log(detection);
-      const resizedDetections = faceapi.resizeResults(detection, {
-        width: canvas.width,
-        height: canvas.height,
-      });
+    if (width && height) {
+      canvas.width = width;
+      canvas.height = height;
       context!.drawImage(video, 0, 0, width, height);
-      faceapi.draw.drawDetections(canvas, resizedDetections);
-      const region = [new faceapi.Rect(0, 0, 100, 100)];
-      // let region = new faceapi.Rect(
-      //   detection.alignedRect._box._x,
-      //   detection.alignedRect._box._y,
-      //   detection.alignedRect._box._width,
-      //   detection.alignedRect._box._height
-      // );
-      let face = await faceapi.extractFaces(canvas, [region]);
-
-      const data = face[0].toDataURL("image/png");
+      const data = canvas.toDataURL("image/png");
       setImageUrl(data);
-    } catch (error) {
-      console.log(error);
     }
   };
 
-  const handleTest = async () => {
+  const handleSendImage = async () => {
     if (imageUrl) {
-      savedToCloudinary(imageUrl).catch((err) => console.log(err));
+      setIsLoading(true);
+      let link;
+      try {
+        link = await savedToCloudinary(imageUrl);
+      } catch (error) {
+        console.log(link);
+      }
+      if (link && token) {
+        let request;
+        try {
+          request = await postRequest({
+            url: "/users/register",
+            token,
+            body: { photoUrl: link },
+          });
+          console.log(request);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          if (request) {
+            setIsLoading(false);
+            toast.success("Successfully registered");
+            setTimeout(() => {
+              Router.push("/");
+            }, 0);
+          }
+        }
+      }
     }
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="camera">
-        <video id="video" ref={videoRef}>
-          Video stream not available.
-        </video>
-        <button onClick={handleImageTaken}>Take photo</button>
-        <button onClick={handleTest}>Send</button>
-      </div>
-      <canvas ref={canvasRef}>
-        <div className="output">
-          <img src={imageUrl} alt="Image Taken" />
+    <div className="container mx-auto">
+      <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col max-w-xs">
+          <h3 className="text-xl font-bold text-center">Face photo taken</h3>
+          <p className="text-xs text-gray-500 mt-2">
+            Please allow webcam to continue and take the image of your face to
+            finish the registration process
+          </p>
         </div>
-      </canvas>
+        <div className="relative">
+          <video id="video" ref={videoRef} className="shadow-md mt-2">
+            Video stream not available.
+          </video>
+          <div className="absolute flex items-center justify-center bottom-1 w-full">
+            <button
+              onClick={handleImageTaken}
+              className="text-white bg-blue-500 text-sm px-2 py-0.5 hover:bg-blue-600"
+            >
+              Take photo
+            </button>
+          </div>
+        </div>
+        <div className="relative shadow-lg mt-5">
+          <canvas ref={canvasRef}>
+            <img src={imageUrl} alt="Image Taken" />
+          </canvas>
+          <div className="absolute top-0 left-0 text-sm text-white bg-indigo-500 px-2">
+            Preview
+          </div>
+        </div>
+        <button
+          className="px-7 py-1 mt-5 bg-indigo-500 text-sm text-white rounded-md hover:bg-indigo-600 disabled:bg-gray-400"
+          onClick={handleSendImage}
+          disabled={!!!imageUrl || isLoading}
+        >
+          {isLoading ? "Saving..." : "Send"}
+        </button>
+      </div>
     </div>
   );
 };
