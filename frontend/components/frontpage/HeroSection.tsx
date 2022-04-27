@@ -56,12 +56,13 @@ const HeroSection = () => {
                   </div>
                 </div>
                 <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                  {navigation.map((item) => (
+                  {/* {navigation.map((item) => (
                     <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
                       {item.name}
                     </a>
-                  ))}
-                  {isAuthenticated ? <SignOutButton/> : <SignInButton/>}
+                  ))} */}
+                  {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+                  {isAuthenticated && <button className="btn hover:bg-white hover:text-blue-400 py-1 px-2">Dashboard</button>}
                 </div>
               </nav>
             </div>
@@ -105,7 +106,7 @@ const HeroSection = () => {
                       </a>
                     ))}
                   </div>
-                  {isAuthenticated ? <SignOutButton /> : <SignInButton/>}
+                  {isAuthenticated ? <SignOutButton /> : <SignInButton />}
                 </div>
               </Popover.Panel>
             </Transition>
@@ -115,13 +116,12 @@ const HeroSection = () => {
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                 <span className="block xl:inline">HACKERMIT</span>{' '}
-                <span className="block text-indigo-600 xl:inline">online business</span>
+                <span className="block text-indigo-600 xl:inline">Online Exam Maker</span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                fugiat veniam occaecat fugiat aliqua.
+                Easy to organize online exams. Stability and Anti-cheating.
               </p>
-              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+              {/* <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
                   <a
                     href="#"
@@ -138,7 +138,7 @@ const HeroSection = () => {
                     Live demo
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
