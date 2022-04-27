@@ -5,13 +5,13 @@ import CreatedTests from "../components/interfaces/CreatedTests";
 import EditExam from "../components/dashboard/EditExam";
 import { deleteRequest,getRequest, postRequest,patchRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
-import DashboardNav from "../components/dashboard/Ds_layout/DashboardNav";
 import Sidebar from "../components/dashboard/Ds_layout/Sidebar";
 import Pagination from "../components/dashboard/Ds_layout/Pagination";
 import ExamDetail from "../components/dashboard/ExamDetail";
 import useAccessToken from "../hooks/useAccessToken";
-import Router from "next/router";
 import Layout from "../components/layout/Layout";
+import { useIsAuthenticated } from "@azure/msal-react";
+import Router from "next/router";
 
 export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[] >([])
@@ -41,7 +41,17 @@ export default function Dashboard() {
     }
   });
 
+  const isAuthenticated = useIsAuthenticated();
   const accessToken = useAccessToken();
+  console.log(accessToken)
+
+  React.useEffect(() => {
+    if (isAuthenticated === false) {
+      Router.push("/")
+        .then(() => console.log("DONE"))
+        .catch((err) => console.log(err));
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const getTest = async () =>{

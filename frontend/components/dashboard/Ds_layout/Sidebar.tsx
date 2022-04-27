@@ -1,6 +1,17 @@
 import * as React from "react";
+import dynamic from "next/dynamic";
+import { useIsAuthenticated } from "@azure/msal-react";
+
+const SignInButton = dynamic(() => import("../../../components/layout/SignInButton"), {
+  ssr: false,
+});
+const SignOutButton = dynamic(() => import("../../../components/layout/SignOutButton"), {
+  ssr: false,
+});
+
 
 export default function Sidebar() {
+  const isAuthenticated = useIsAuthenticated();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -107,7 +118,7 @@ export default function Sidebar() {
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <span className="flex-1 ml-3 whitespace-nowrap">Sign Up</span>
+                  <span className="flex-1 ml-3 whitespace-nowrap">{isAuthenticated ? <SignOutButton/> : <SignInButton/>}</span>
                 </a>
               </li>
             </ul>

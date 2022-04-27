@@ -1,7 +1,4 @@
-import { Box } from "@mui/material";
 //import Footer from "components/layout/Footer";
-import Header from './Header';
-import Footer from './Footer';
 
 type Props = {
   children: React.ReactNode;
@@ -9,14 +6,8 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <Box
-      sx={{
-        bgcolor: (theme) => theme.palette.background.default,
-      }}
-    >
-      <Header />
+    <div>
       <main>{children}</main>
-      <Footer />
-    </Box>
+    </div>
   );
 }

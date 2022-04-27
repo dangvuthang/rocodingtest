@@ -37,10 +37,9 @@ const SignInButton = () => {
 
   return (
     <button
-      className="text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-md inline-flex justify-center items-center gap-x-0.5 transition-colors"
+      className="font-medium text-indigo-600 hover:text-indigo-500"
       onClick={() => handleLogin(instance)}
     >
-      <LoginIcon className="w-5 h-5" />
       <span>Sign in</span>
     </button>
   );
