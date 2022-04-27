@@ -8,6 +8,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "../src/authConfig";
 import { StyledEngineProvider } from "@mui/material/styles";
 import "../styles/globals.css";
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
