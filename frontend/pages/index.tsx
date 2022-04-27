@@ -10,13 +10,13 @@ import Router from "next/router";
 import { useIsAuthenticated } from "@azure/msal-react";
 export default function HomePage() {
   const isAuthenticated = useIsAuthenticated();
-  // React.useEffect(() => {
-  //   if (isAuthenticated === true) {
-  //     Router.push("/dashboard")
-  //       .then(() => console.log("DONE"))
-  //       .catch((err) => console.log(err));
-  //   }
-  // }, [isAuthenticated]);
+  React.useEffect(() => {
+    if (isAuthenticated === true) {
+      Router.push("/dashboard")
+        .then(() => console.log("DONE"))
+        .catch((err) => console.log(err));
+    }
+  }, [isAuthenticated]);
   return (
     <Layout>
       <Page maxWidth={false}>

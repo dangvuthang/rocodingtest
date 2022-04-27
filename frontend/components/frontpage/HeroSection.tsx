@@ -56,13 +56,12 @@ const HeroSection = () => {
                   </div>
                 </div>
                 <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                  {/* {navigation.map((item) => (
+                  {navigation.map((item) => (
                     <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
                       {item.name}
                     </a>
-                  ))} */}
+                  ))}
                   {isAuthenticated ? <SignOutButton /> : <SignInButton />}
-                  {isAuthenticated && <button className="btn hover:bg-white hover:text-blue-400 py-1 px-2">Dashboard</button>}
                 </div>
               </nav>
             </div>
