@@ -10,6 +10,7 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import UserProvider from "../context/UserProvider";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -36,8 +37,10 @@ export default function MyApp(props: MyAppProps) {
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <StyledEngineProvider injectFirst>
         <MsalProvider instance={msalInstance}>
-          <Component {...pageProps} />
-          <ToastContainer />
+          <UserProvider>
+            <Component {...pageProps} />
+            <ToastContainer />
+          </UserProvider>
         </MsalProvider>
       </StyledEngineProvider>
     </CacheProvider>

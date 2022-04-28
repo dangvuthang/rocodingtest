@@ -1,15 +1,19 @@
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { LogoutIcon } from "@heroicons/react/outline";
-
-function handleLogout(instance: IPublicClientApplication) {
-  instance.logoutPopup().catch((e) => {
-    console.error(e);
-  });
-}
+import { useUser } from "../../context/UserProvider";
 
 const SignOutButton = () => {
   const { instance } = useMsal();
+  const { dispatch } = useUser();
+  const handleLogout = (instance: IPublicClientApplication) => {
+    instance
+      .logoutPopup()
+      .then(() => dispatch({ type: "logout" }))
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
   return (
     <button

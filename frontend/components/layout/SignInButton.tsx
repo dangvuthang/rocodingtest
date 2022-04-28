@@ -4,35 +4,40 @@ import { loginRequest } from "../../src/authConfig";
 import { postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
 import { LoginIcon } from "@heroicons/react/outline";
-
-const handleLogin = async (instance: IPublicClientApplication) => {
-  let auth;
-  try {
-    auth = await instance.loginPopup(loginRequest);
-  } catch (error) {
-    console.log(error);
-  }
-  if (auth) {
-    try {
-      const request = await postRequest({
-        url: "/users/register",
-        token: auth.accessToken,
-      });
-      console.log(request);
-    } catch (error) {
-      const errorBody = (error as any)?.response?.data;
-      if (errorBody?.status === "special") {
-        Router.push("/face-taken");
-        // Navigate to face taken page
-      } else {
-        console.log(error);
-      }
-    }
-  }
-};
+import { toast } from "react-toastify";
+import { User, useUser } from "../../context/UserProvider";
 
 const SignInButton = () => {
   const { instance } = useMsal();
+  const { dispatch } = useUser();
+
+  const handleLogin = async (instance: IPublicClientApplication) => {
+    let auth;
+    try {
+      auth = await instance.loginPopup(loginRequest);
+    } catch (error) {
+      console.log(error);
+    }
+    if (auth) {
+      try {
+        const request = await postRequest({
+          url: "/users/register",
+          token: auth.accessToken,
+        });
+        const user = request.data.data.user as User;
+        dispatch({ type: "login", payload: user });
+      } catch (error) {
+        const errorBody = (error as any)?.response?.data;
+        if (errorBody?.status === "special") {
+          toast.info("Creating account");
+          // Navigate to face taken page
+          Router.push("/face-taken");
+        } else {
+          console.log(error);
+        }
+      }
+    }
+  };
 
   return (
     <button
