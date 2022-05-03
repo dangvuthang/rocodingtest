@@ -8,6 +8,7 @@ const captureScreen = async () => {
     return base64Image;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -22,10 +23,11 @@ const savedToCloudinary = async (image: string) => {
         formData
       );
       console.log(result);
-      return result.data.secure_url;
+      return result.data.secure_url as string;
     }
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
