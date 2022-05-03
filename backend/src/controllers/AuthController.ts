@@ -70,7 +70,6 @@ export const checkAccountInDb = async (
     const userSavedInDb = await User.findOne({
       email: microsoftAccount.mail.toLowerCase(),
     });
-    console.log(userSavedInDb);
     if (userSavedInDb) {
       req.user = userSavedInDb;
     }
@@ -88,7 +87,10 @@ export const register = async (req: AuthRequest, res: Response) => {
   const microsoftAccount = req.microsoftAccount!;
   const photoUrl = req.body.photoUrl;
   if (user) {
-    return res.status(204).end();
+    return res.status(200).json({
+      status: "success",
+      data: { user },
+    });
   }
   if (!photoUrl) {
     return res.status(400).json({
