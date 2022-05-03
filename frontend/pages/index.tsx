@@ -12,7 +12,7 @@ export default function HomePage() {
   const isAuthenticated = useIsAuthenticated();
   React.useEffect(() => {
     if (isAuthenticated === true) {
-      Router.push("/dashboard")
+      Router.push(`/dashboard`)
         .then(() => console.log("DONE"))
         .catch((err) => console.log(err));
     }

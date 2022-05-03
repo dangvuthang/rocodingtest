@@ -1,0 +1,201 @@
+import * as React from 'react'
+import dayjs from 'dayjs'
+import CreatedTests from '../../../components/interfaces/CreatedTests'
+import useAccessToken from '../../../hooks/useAccessToken';
+import Router from "next/router";
+import { getRequest, patchRequest} from "../../../util/axiosInstance";
+import Loadder from "../../../components/dashboard/loadingpage";
+import toast, { Toaster } from 'react-hot-toast';
+
+  export default function Dashboard() {
+    const accessToken = useAccessToken();
+    const [currentTest, setcurrentTest]= React.useState<CreatedTests | any>({});
+    const [exam, setExam] = React.useState<CreatedTests| any>({})
+    let [startedDate, setstartedDate] = React.useState<string>(``)
+    let [endDate, setendDate] = React.useState<string>(``)
+    let [duration_value, setduration_value] = React.useState<number>(0)
+    const [loading, setLoading]= React.useState<Boolean>(true);
+    React.useEffect(() => {
+        const getTest = async () => {
+          const path = Router.query.id;
+          try {
+            const request = await getRequest(
+              {
+                url: `/tests/${path}`,
+                token: accessToken
+              });
+            const atest = request.data.data.test;
+            console.log(atest)
+            setcurrentTest(atest);
+            setstartedDate(dayjs(atest.startedDate).format('YYYY-MM-DDTHH:mm:ss'));
+            setendDate(dayjs(atest.endDate).format('YYYY-MM-DDTHH:mm:ss'));
+            setLoading(false);
+          } catch (error) {
+            console.log("No test was found here")
+          }
+        };
+        getTest();
+        console.log(startedDate);
+        console.log(endDate);
+      }, [accessToken]);
+      
+    const updateExam = async (e: React.FormEvent, _id: string, updatedTest: CreatedTests) => {
+      e.preventDefault();
+      const path = Router.query.id;
+      patchRequest({
+        url: `/tests/${path}`,
+        body: updatedTest,
+        token: accessToken
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+      });
+    };
+  
+    const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null>) => {
+        setExam({
+        ...exam,
+        [e.currentTarget.id]: e.currentTarget.value,
+      })
+    }
+    const handleStartedDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null> ): void => {
+      setExam({
+        ...exam,
+        ["startedDate"]: e.currentTarget.value.substring(0, 16),
+      })
+      setstartedDate(e.currentTarget.value.substring(0, 16))
+    }
+    const handleEndDate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null> ): void => {
+      setExam({
+        ...exam,
+        ["endDate"]: e.currentTarget.value.substring(0, 16),
+      })
+      setendDate(e.currentTarget.value.substring(0, 16))
+    }
+
+    React.useEffect(() => {
+      let date1 = dayjs(startedDate)
+      let date2 = dayjs(endDate)
+      setduration_value(date2.diff(date1, 'minute', true))
+      handleDuration()
+    },[duration_value,startedDate,endDate]);
+    const handleDuration = ( ): void => {
+      if(duration_value>0){
+        setExam({
+          ...exam,
+          ["duration"]: duration_value,
+        })
+      }
+      else{
+         setExam({
+          ...exam,
+          ["duration"]: duration_value,
+        })
+      }
+    }
+    const handleDuraionValue = ( duraionNum: number) => {
+      if(duraionNum <= 60 ){
+        return `${duraionNum} mins `;
+      }
+      else{
+        return `${Math.floor(duraionNum/60)} hour `;
+      }
+    }
+
+    const notify = () => {
+      toast.success('Exam has been successfully updated!', {
+        duration: 3000,
+        position: 'top-right',
+        icon: '👏',
+        });
+    };
+
+  return (
+    <div>
+    { loading ? 
+  (
+    <Loadder/>
+  ) 
+    : 
+  (
+    <div className="mt-10 sm:mt-0">
+    <div className="mt-5 md:mt-0 md:col-span-2">
+      <form onSubmit={(e) => updateExam( e, currentTest._id , exam)} method="post" className='Form' >
+        <div className="shadow overflow-hidden sm:rounded-md">
+          <div className="mx-4 px-4 py-5 bg-white sm:p-6">
+            <div className="flex flex-col gap-6 divide-y">
+              <div className="px-4 sm:px-0">
+                <h3 className="text-lg font-medium leading-6 text-gray-900">Add Examination</h3>
+                <p className="italic pt-2 text-sm text-gray-600">
+                  "Education breeds confidence. Confidence breeds hope. Hope breeds peace. ~ Confucius"
+                </p>
+              </div>
+              <div className=" pt-6 flex flex-row space-x-80 ">
+                <label className="block text-sm font-medium text-gray-700">
+                  Title of Exam
+                </label>
+                <input defaultValue={currentTest.name} onChange={handleForm} type="text" name="name" id="name" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-2/5 sm:text-sm border border-gray-300 rounded-md" />
+              </div>
+              <div className="pt-6 flex flex-row space-x-80 gap-7">
+                <label className="block text-sm font-medium text-gray-700">
+                  Duration
+                </label>
+                <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
+                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="text" name="duration" id="duration" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-2/12 sm:text-sm border border-gray-300 rounded-md" readOnly/>
+                  </div>              
+               </div>
+              <div className=" pt-6 flex flex-row space-x-80 gap-6">
+                <label className="block text-sm font-medium text-gray-700">
+                  Question
+                </label>
+                <div className="w-full selection:bg-fuchsia-300 selection:text-fuchsia-900">
+                  <textarea defaultValue={currentTest.question} placeholder="Your question details ..." onChange={handleForm} rows={6} id="question" name="question" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-4/5 sm:text-sm border border-gray-300 rounded-md"></textarea>
+                    <p className="mt-2 text-sm text-gray-500">
+                      Please state your question according to the exam's purpose. 
+                      <span>
+                        <a className="pl-1 relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500" target="_blank" href="https://commonmark.org/help/"> 
+                          Need help writing in Markdown format?
+                        </a>
+                      </span>
+                    </p>
+                </div>
+              </div>
+              <div className="pt-6 flex flex-row space-x-80">
+                <label className="block text-sm font-medium text-gray-700">
+                  StartedDate:
+                </label>
+                <div className="">
+                  <input defaultValue={startedDate} onChange={handleStartedDate} step ="1" type="datetime-local" id="startedDate" name="startedDate"/>                  
+                </div>
+              </div>
+              <div className="pt-6 flex flex-row space-x-80 gap-6">
+                <label className="block text-sm font-medium text-gray-700">
+                  EndDate:
+                </label>
+                <div className="">
+                  <input defaultValue={endDate} onChange={handleEndDate} step ="1" type="datetime-local" id="endDate" name="endDate"/>                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
+            <button onClick={notify} disabled={exam === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              Update Exam
+            </button>
+            <button onClick={() => Router.push('/dashboard')} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              Cancel
+            </button>
+            <Toaster />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  )
+}
+</div>
+  )
+}

@@ -2,7 +2,7 @@ import { teammates } from "../data/teammate";
 
 export default function TeammateSection() {
   return (
-    <div className="text-gray-600 body-font">
+    <div id="teammatesection"  className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
         <div className="flex flex-col text-center w-full mb-20">
           <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">

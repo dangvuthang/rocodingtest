@@ -2,12 +2,10 @@ import * as React from "react";
 import ExamCard from "../components/dashboard/ExamCard";
 import AddExam from "../components/dashboard/AddExam";
 import CreatedTests from "../components/interfaces/CreatedTests";
-import EditExam from "../components/dashboard/EditExam";
-import { deleteRequest, getRequest, postRequest, patchRequest } from "../util/axiosInstance";
+import { deleteRequest, getRequest, postRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 import Sidebar from "../components/dashboard/Ds_layout/Sidebar";
 import Pagination from "../components/dashboard/Ds_layout/Pagination";
-import ExamDetail from "../components/dashboard/ExamDetail";
 import useAccessToken from "../hooks/useAccessToken";
 import Layout from "../components/layout/Layout";
 import { useIsAuthenticated } from "@azure/msal-react";
@@ -15,10 +13,7 @@ import Router from "next/router";
 
 export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[]>([])
-  const [currentUser, setCurrentUser] = React.useState<CreatedTests | {}>()
-  const [editing, setEditing] = React.useState(false)
   const [adding, setAdding] = React.useState(false)
-  const [viewing, setViewing] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
 
   const handleSearch = (
@@ -42,7 +37,7 @@ export default function Dashboard() {
   const accessToken = useAccessToken();
   console.log(accessToken)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated === false) {
       Router.push("/")
         .then(() => console.log("DONE"))
@@ -51,21 +46,21 @@ export default function Dashboard() {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    const getTest = async () => {
+    const getTests = async () => {
       try {
         const request = await getRequest(
           {
-            url: `/tests/60f552932152bb2281277f02`,
+            url: `/users/60f6ce0e02f5102cea240400/tests`,
             token: accessToken
           });
         console.log(request)
-        const atest = request.data.data.test;
-        setTests([...tests, atest]);
+        const atest = request.data.data.tests;
+        setTests(atest);
       } catch (error) {
         console.log("No test was found here")
       }
     };
-    getTest();
+    getTests();
   }, [accessToken]);
 
   const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
@@ -95,7 +90,7 @@ export default function Dashboard() {
 
   const deleteExam = async (deleteId: string) => {
     deleteRequest({
-      url: `/tests/6256cd40f249cc47d2af8340`,
+      url: `/tests/${deleteId}`,
       token: accessToken
     })
       .then((response) => {
@@ -109,74 +104,22 @@ export default function Dashboard() {
     );
     setTests(exams);
   };
-  const updateExam = async (e: React.FormEvent, _id: string, updatedTest: CreatedTests) => {
-    e.preventDefault();
-    for (let test of tests) {
-      if (test._id === _id) {
-        patchRequest({
-          url: `/tests/60f552932152bb2281277f02`,
-          body: updatedTest,
-          token: accessToken
-        })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        setTests(
-          tests.map(() => updatedTest)
-        );
-      }
-      else {
-        setTests(
-          tests.map((test) => test)
-        );
-      }
-    }
-  };
-
   const editRow = async (test: any) => {
-    setEditing(true);
-    setCurrentUser({
-      _id: test._id,
-      name: test.name,
-      duration: test.duration,
-      question: test.question,
-      startedDate: test.startedDate,
-      endDate: test.endDate,
-    });
+    Router.push(`/dashboard/editExam/${test._id}`)
   };
   const showExam = async (test: any) => {
-    setViewing(true);
-    setCurrentUser({
-      _id: test._id,
-      name: test.name,
-      duration: test.duration,
-      question: test.question,
-      startedDate: test.startedDate,
-      endDate: test.endDate,
-    });
+    Router.push(`/dashboard/viewExam/${test._id}`)
   };
 
   return (
     <Layout>
       <div className="h-screen bg-white">
-        {editing ? (
-          <EditExam
-            setEditing={setEditing}
-            updateExam={updateExam}
-            currentUser={currentUser}
-          />
-        ) : adding ? (
+        { adding ? (
           <AddExam setAdding={setAdding} saveExam={saveExam} />
-        ) : viewing ? (
-          <ExamDetail setViewing={setViewing} currentUser={currentUser} />
         ) : (
           <div className="h-full flex">
             {/* Sidebar */}
             <Sidebar />
-
             {/* Content */}
             <div className="w-full h-screen">
               {/* Button Area */}

@@ -1,6 +1,8 @@
 import * as React from 'react'
 import CreatedTests from "../interfaces/CreatedTests";
 import dayjs from 'dayjs'
+import toast, { Toaster } from 'react-hot-toast';
+
 type Props = {
   saveExam: (e: React.FormEvent, formData: CreatedTests | any) => void
   setAdding: (adding: boolean) => any,
@@ -10,7 +12,6 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
   let [startedDate, setstartedDate] = React.useState("")
   let [endDate, setendDate] = React.useState("")
   let [duration_value, setduration_value] = React.useState<number>(0)
-
   const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement > ): void => {
     setFormData({
       ...formData,
@@ -53,10 +54,19 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
     if(duraionNum <= 60 ){
       return `${duraionNum} mins `;
     }
-    else {
+    else{
       return `${Math.floor(duraionNum/60)} hour `;
     }
   }
+
+  const notify = () => {
+    toast.success('Exam has been successfully updated!', {
+      duration: 3000,
+      position: 'top-right',
+      icon: '👏',
+      });
+  };
+  
   return (
     <div className="mt-10 sm:mt-0">
       <div className="mt-5 md:mt-0 md:col-span-2">
@@ -81,7 +91,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     Duration
                   </label>
                   <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
-                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="string" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/6 sm:text-sm border border-gray-300 rounded-md" />
+                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="string" name="duration" id="duration" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-1/6 sm:text-sm border border-gray-300 rounded-md" readOnly/>
                   </div>                
                 </div>
                 <div className=" pt-6 flex flex-row space-x-80 gap-6">
@@ -120,12 +130,13 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
               </div>
             </div>
             <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
-              <button disabled={formData === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button onClick={notify} disabled={formData === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Save Exam
               </button>
               <button onClick={() => setAdding(false)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Cancel
               </button>
+              <Toaster/>
             </div>
           </div>
         </form>
@@ -133,27 +144,4 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
     </div>
   )
 }
-{/*
-  <form className='Form' onSubmit={(e) => saveExam(e, formData)}>
-            <div>
-                <div className='Form--field'>
-                <label htmlFor='name'>Name</label>
-                <input onChange={handleForm} type='text' id='name' />
-                </div>
-                <div className='Form--field'>
-                <label htmlFor='body'>Question</label>
-                <input onChange={handleForm} type='text' id='question' />
-                </div>
-            </div>
-            <button
-                className='Form__button'
-                disabled={formData === undefined ? true : false}
-            >
-                Add Exam
-            </button>
-            <button onClick={() => setAdding(false)} className="button muted-button">
-              Cancel
-            </button>
-        </form>
-*/ }
 export default AddExam;

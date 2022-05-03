@@ -3,7 +3,7 @@ import * as React from "react";
 import dayjs from "dayjs";
 
 type Property = {
-  prop: CreatedTests;
+  prop: CreatedTests | any;
   deleteExam: (deleteId: string) => void;
   editRow: (prop: CreatedTests | any) => void;
   showExam: (prop: CreatedTests | any) => void;
@@ -58,6 +58,7 @@ const ExamCard: React.FC<Property> = ({
           <button
             onClick={() => {
               deleteExam(prop._id);
+              console.log(prop._id)
             }}
             className="btn"
           >
