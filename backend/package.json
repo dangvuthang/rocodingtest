@@ -26,13 +26,14 @@
   },
   "dependencies": {
     "@types/atob": "^2.1.2",
-    "atob": "^2.1.2",
     "@types/nodemailer": "^6.4.4",
+    "atob": "^2.1.2",
     "axios": "^0.26.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.2.8",
-    "nodemailer": "^6.7.3"
+    "nodemailer": "^6.7.3",
+    "twilio": "^3.76.1"
   }
 }
