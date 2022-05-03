@@ -15,6 +15,8 @@ import useAccessToken from "../hooks/useAccessToken";
 import { captureScreen, savedToCloudinary } from "../util/captureScreen";
 import ConfirmModal from "./ConfirmModal";
 import LoadingModal from "./LoadingModal";
+import useTwilioConversation from "../hooks/useTwilioConversation";
+import { useMsal } from "@azure/msal-react";
 
 interface ExamContentProps {
   test: Test;
@@ -22,6 +24,8 @@ interface ExamContentProps {
 }
 
 const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
+  const user = useMsal().accounts[0];
+
   const [run, setRun] = useState(false);
   const [language, setLanguage] = useState("javascript");
   const [content, setContent] = useState("");
@@ -39,6 +43,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   const isFullscreen = useFullScreen();
   const isFocused = useWindowFocus();
   const count = useRef(0);
+  const { sendMessage } = useTwilioConversation(test.conversationSid);
 
   const handleStartExam = async () => {
     setShowInstruction(false);
@@ -138,8 +143,11 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
       setAlertMessage("you are trying to navigate outside of the web page");
       setShowAlertMessage(true);
       setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+      sendMessage(
+        `${user.username} is trying to navigate outside of the web page`
+      );
     }
-  }, [isFocused, showInstruction]);
+  }, [isFocused, showInstruction, sendMessage, user.username]);
 
   // Detect minimize fullscreen
   useEffect(() => {
@@ -150,8 +158,9 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
       setAlertMessage("you are trying to minimize the web page");
       setShowAlertMessage(true);
       setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+      sendMessage(`${user.username} is trying to minimize the web page`);
     }
-  }, [isFullscreen, showInstruction]);
+  }, [isFullscreen, showInstruction, sendMessage, user.username]);
 
   // Detect glance tracking
   /*   useEffect(() => {
