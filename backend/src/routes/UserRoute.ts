@@ -7,14 +7,12 @@ import {
   register,
 } from "../controllers/AuthController";
 
-import {
-  sendEmail
-} from "../controllers/UserController";
-
+import { sendEmail, getMe } from "../controllers/UserController";
 
 const route = express.Router();
 
 route.post("/register", checkMicrosoftLogin, checkAccountInDb, register);
+route.get("/me", checkMicrosoftLogin, checkAccountInDb, getMe);
 route.get("/:userId/tests", getTestsByTeacherId);
 route.use(checkMicrosoftLogin, checkAccountInDb, checkIfTeacher);
 route.post("/send", sendEmail);

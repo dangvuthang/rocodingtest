@@ -1,11 +1,8 @@
 import { FC } from "react";
+import ImageTaken from "../components/ImageTaken";
 
 const FaceTaken: FC = () => {
-  return (
-    <div className="container mx-auto bg-blue-400">
-      <h1 className="text-white text-center">Hello World</h1>
-    </div>
-  );
+  return <ImageTaken />;
 };
 
 export default FaceTaken;

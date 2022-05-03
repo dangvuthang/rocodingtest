@@ -30,7 +30,8 @@
     "react-dom": "17.0.2",
     "react-markdown": "^8.0.1",
     "recharts": "^2.1.9",
-    "twilio": "^3.76.1"
+    "twilio": "^3.76.1",
+    "react-toastify": "^8.2.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.0",

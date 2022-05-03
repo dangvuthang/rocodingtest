@@ -9,6 +9,7 @@ import { getRequest, postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { useUser } from "../../context/UserProvider";
 dayjs.extend(isBetween);
 const LoadScript = dynamic(() => import("../../components/LoadScript"), {
   loading: () => <p>Loading Model...</p>,
@@ -27,6 +28,8 @@ export interface Test {
 
 const Exam = () => {
   const user = useMsal().accounts[0];
+  const { user: userInfo } = useUser();
+  const photoUrl = userInfo?.photoUrl;
   const accessToken = useAccessToken();
   const stream = useWebcam();
   const count = useRef(0);

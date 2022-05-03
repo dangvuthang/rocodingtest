@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmail = void 0;
+exports.getMe = exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const sendEmail = async (req, res) => {
     const email = process.env.EMAIL;
@@ -13,7 +13,7 @@ const sendEmail = async (req, res) => {
     const { subject, text, emails } = req.body;
     try {
         const transporter = nodemailer_1.default.createTransport({
-            host: 'smtp.gmail.com',
+            host: "smtp.gmail.com",
             port: 465,
             auth: {
                 user: email,
@@ -25,7 +25,7 @@ const sendEmail = async (req, res) => {
             to: emails,
             subject: subject,
             text: text,
-            headers: { 'x-myheader': 'test header' }
+            headers: { "x-myheader": "test header" },
         });
         return res.status(200).json({
             status: "success",
@@ -42,4 +42,17 @@ const sendEmail = async (req, res) => {
     }
 };
 exports.sendEmail = sendEmail;
+const getMe = async (req, res) => {
+    if (!req.user) {
+        return res.status(400).json({
+            status: "fail",
+            message: "No user found",
+        });
+    }
+    return res.status(200).json({
+        status: "success",
+        data: { user: req.user },
+    });
+};
+exports.getMe = getMe;
 //# sourceMappingURL=UserController.js.map
