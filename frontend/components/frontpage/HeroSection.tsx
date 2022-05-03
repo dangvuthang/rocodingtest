@@ -4,6 +4,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import dynamic from "next/dynamic";
 import { useIsAuthenticated } from "@azure/msal-react";
+import Link from "next/link";
 
 const navigation = [
   { name: 'Features', href: '#featurecontainer' },
@@ -55,12 +56,8 @@ const HeroSection = () => {
                   </div>
                 </div>
                 <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                  {navigation.map((item) => (
-                    <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
-                      {item.name}
-                    </a>
-                  ))}
                   {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+                  {isAuthenticated && (<Link href="/dashboard"><button className="btn hover:text-blue-400 hover:bg-white">Dashboard</button></Link>)}
                 </div>
               </nav>
             </div>

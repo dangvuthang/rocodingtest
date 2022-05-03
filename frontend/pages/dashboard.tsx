@@ -114,7 +114,7 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="h-screen bg-white">
-        { adding ? (
+        {adding ? (
           <AddExam setAdding={setAdding} saveExam={saveExam} />
         ) : (
           <div className="h-full flex">
@@ -174,7 +174,7 @@ export default function Dashboard() {
 
               {/* Exam Area */}
               {tests.length > 0 ? (
-                tests.map((test) => (
+                filteredData.map((test) => (
                   <ExamCard
                     showExam={showExam}
                     editRow={editRow}
