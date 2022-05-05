@@ -1,6 +1,7 @@
 import * as React from 'react'
 import CreatedTests from "../interfaces/CreatedTests";
 import dayjs from 'dayjs'
+import Router from "next/router";
 
 type Props = {
   saveExam: (e: React.FormEvent, formData: CreatedTests | any) => void
@@ -54,6 +55,12 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
     }
     else {
       return ``
+    }
+  }
+
+  const handleRouterDashboard = (routerData: CreatedTests | any) => {
+    if((routerData.name !== undefined) && (routerData.duration !== undefined) && (routerData.startedDate !== undefined) && (routerData.endDate !== undefined) && (routerData.question !== undefined) ){
+      setAdding
     }
   }
   

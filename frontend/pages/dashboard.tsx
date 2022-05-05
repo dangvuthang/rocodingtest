@@ -11,11 +11,14 @@ import Layout from "../components/layout/Layout";
 import { useIsAuthenticated } from "@azure/msal-react";
 import Router from "next/router";
 import { toast } from "react-toastify";
-
+import { useUser } from "../context/UserProvider";
 export default function Dashboard() {
+  const { user } = useUser();
+  const user_id = user?._id;
   const [tests, setTests] = React.useState<CreatedTests[]>([])
   const [adding, setAdding] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
+  console.log(user_id);
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -51,7 +54,7 @@ export default function Dashboard() {
       try {
         const request = await getRequest(
           {
-            url: `/users/625d7629ac85654a39873bcc/tests`,
+            url: `/users/${user_id}/tests`,
             token: accessToken
           });
         console.log(request)
@@ -62,7 +65,7 @@ export default function Dashboard() {
       }
     };
     getTests();
-  }, [accessToken]);
+  }, [accessToken,user_id]);
 
   const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
     e.preventDefault();
@@ -99,7 +102,8 @@ export default function Dashboard() {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 4000,
           icon: "👏"
-      });
+        })
+        setAdding(false)
     }
   };
 
@@ -118,7 +122,7 @@ export default function Dashboard() {
       (exam: CreatedTests) => exam._id !== deleteId
     );
     setTests(exams);
-    toast.success("The exam is successfuly deleted !", {
+    toast.success("The exam is successfuly deleted!", {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 4000,
       icon: "🔥"

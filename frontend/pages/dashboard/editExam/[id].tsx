@@ -55,6 +55,7 @@ import {toast} from 'react-toastify';
         autoClose: 4000,
         icon: "🚀"
       });
+      Router.push(`/dashboard`)
     };
   
     const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null>) => {
