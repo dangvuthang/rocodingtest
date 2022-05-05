@@ -9,17 +9,15 @@ type Property = {
   showExam: (prop: CreatedTests | any) => void;
 };
 
-const handleDuraionValue = ( duraionNum: number) => {
-  if(duraionNum <= 3600 ){
-    return `${duraionNum/60} mins `;
+const handleDuraionValue = (duraionNum: number) => {
+  if (duraionNum <= 3600) {
+    return `${duraionNum / 60} mins `;
+  } else if (duraionNum > 3600) {
+    return `${Math.floor(duraionNum / 3600)} hour `;
+  } else {
+    return ``;
   }
-  else if (duraionNum > 3600){
-    return `${Math.floor(duraionNum/3600)} hour `;
-  }
-  else {
-    return ``
-  }
-}
+};
 
 const ExamCard: React.FC<Property> = ({
   prop,
@@ -58,6 +56,16 @@ const ExamCard: React.FC<Property> = ({
       <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
         <div>
           <button
+            // onClick={() => {
+            //   editRow(prop);
+            // }}
+            className="btn"
+          >
+            Notify student
+          </button>
+        </div>
+        <div>
+          <button
             onClick={() => {
               editRow(prop);
             }}
@@ -70,7 +78,7 @@ const ExamCard: React.FC<Property> = ({
           <button
             onClick={() => {
               deleteExam(prop._id);
-              console.log(prop._id)
+              console.log(prop._id);
             }}
             className="btn"
           >
