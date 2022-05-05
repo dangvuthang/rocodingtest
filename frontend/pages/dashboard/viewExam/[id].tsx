@@ -41,7 +41,6 @@ export default function Dashboard() {
   const [submissions, setSubmissions] = React.useState<SubmissionDetail[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(true);
 
-
   React.useEffect(() => {
     const getTest = async () => {
       const path = Router.query.id;
@@ -54,7 +53,6 @@ export default function Dashboard() {
         const atest = request.data.data.test;
         console.log(atest)
         setcurrentTest(atest);
-
       } catch (error) {
         console.log("No test was found here")
       }
@@ -82,6 +80,17 @@ export default function Dashboard() {
       query: { sid: id, tid: currentTest._id }
     });
   }
+  const handleDuraionValue = ( duraionNum: number) => {
+    if(duraionNum <= 3600 ){
+      return `${duraionNum/60} mins `;
+    }
+    else if (duraionNum > 3600){
+      return `${Math.floor(duraionNum/3600)} hour `;
+    }
+    else {
+      return ``
+    }
+  }
 
   return (
     <div>
@@ -92,7 +101,7 @@ export default function Dashboard() {
         :
         (
           <div>
-            <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div className="container mx-auto bg-white shadow overflow-hidden sm:rounded-lg">
               <div className="flex justify-between items-center text-sm">
                 <div className=" px-4 py-5 sm:px-6">
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -122,7 +131,7 @@ export default function Dashboard() {
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500">Duration </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {currentTest.duration}
+                      {handleDuraionValue(currentTest.duration)}
                     </dd>
                   </div>
                   <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

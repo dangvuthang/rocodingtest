@@ -10,6 +10,7 @@ import useAccessToken from "../hooks/useAccessToken";
 import Layout from "../components/layout/Layout";
 import { useIsAuthenticated } from "@azure/msal-react";
 import Router from "next/router";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[]>([])
@@ -50,7 +51,7 @@ export default function Dashboard() {
       try {
         const request = await getRequest(
           {
-            url: `/users/60f6ce0e02f5102cea240400/tests`,
+            url: `/users/625d7629ac85654a39873bcc/tests`,
             token: accessToken
           });
         console.log(request)
@@ -73,19 +74,33 @@ export default function Dashboard() {
       endDate: formData.endDate,
       duration: formData.duration,
     };
-    {/*setTests([...tests, test]);*/ }
     console.log(test)
-    postRequest({
-      url: `/tests`,
-      body: test,
-      token: accessToken
-    })
-      .then((response) => {
-        console.log(response);
+    {/*setTests([...tests, test]);*/ }
+    if((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)){
+      toast.error("Please fill in every form !", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 6000,
+        icon: "⏳"
+      })  
+    }
+    else  {
+      postRequest({
+        url: `/tests`,
+        body: test,
+        token: accessToken
       })
-      .catch((error) => {
-        console.log(error);
-      });;
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });;
+        toast.success("Successfully added exam !", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 4000,
+          icon: "👏"
+      });
+    }
   };
 
   const deleteExam = async (deleteId: string) => {
@@ -103,6 +118,11 @@ export default function Dashboard() {
       (exam: CreatedTests) => exam._id !== deleteId
     );
     setTests(exams);
+    toast.success("The exam is successfuly deleted !", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 4000,
+      icon: "🔥"
+    });
   };
   const editRow = async (test: any) => {
     Router.push(`/dashboard/editExam/${test._id}`)

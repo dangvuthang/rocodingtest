@@ -9,6 +9,18 @@ type Property = {
   showExam: (prop: CreatedTests | any) => void;
 };
 
+const handleDuraionValue = ( duraionNum: number) => {
+  if(duraionNum <= 3600 ){
+    return `${duraionNum/60} mins `;
+  }
+  else if (duraionNum > 3600){
+    return `${Math.floor(duraionNum/3600)} hour `;
+  }
+  else {
+    return ``
+  }
+}
+
 const ExamCard: React.FC<Property> = ({
   prop,
   deleteExam,
@@ -36,7 +48,7 @@ const ExamCard: React.FC<Property> = ({
           </h2>
         </div>
         <div>
-          <h3 className="text-lg">{prop.duration} mins</h3>
+          <h3 className="text-lg">{handleDuraionValue(prop.duration)}</h3>
         </div>
         <div className="text-[#ACB3C8]">
           {dayjs(prop.startedDate).format("YYYY-MM-DDTHH:mm:ssZ[Z]")}

@@ -5,7 +5,7 @@ import useAccessToken from '../../../hooks/useAccessToken';
 import Router from "next/router";
 import { getRequest, patchRequest} from "../../../util/axiosInstance";
 import Loadder from "../../../components/dashboard/loadingpage";
-import toast, { Toaster } from 'react-hot-toast';
+import {toast} from 'react-toastify';
 
   export default function Dashboard() {
     const accessToken = useAccessToken();
@@ -25,7 +25,6 @@ import toast, { Toaster } from 'react-hot-toast';
                 token: accessToken
               });
             const atest = request.data.data.test;
-            console.log(atest)
             setcurrentTest(atest);
             setstartedDate(dayjs(atest.startedDate).format('YYYY-MM-DDTHH:mm:ss'));
             setendDate(dayjs(atest.endDate).format('YYYY-MM-DDTHH:mm:ss'));
@@ -35,8 +34,6 @@ import toast, { Toaster } from 'react-hot-toast';
           }
         };
         getTest();
-        console.log(startedDate);
-        console.log(endDate);
       }, [accessToken]);
       
     const updateExam = async (e: React.FormEvent, _id: string, updatedTest: CreatedTests) => {
@@ -52,6 +49,11 @@ import toast, { Toaster } from 'react-hot-toast';
         })
         .catch((error) => {
           console.log(error);
+      });
+      toast.success("The exam updated successfully !", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 4000,
+        icon: "🚀"
       });
     };
   
@@ -79,7 +81,7 @@ import toast, { Toaster } from 'react-hot-toast';
     React.useEffect(() => {
       let date1 = dayjs(startedDate)
       let date2 = dayjs(endDate)
-      setduration_value(date2.diff(date1, 'minute', true))
+      setduration_value(date2.diff(date1, 'second', true))
       handleDuration()
     },[duration_value,startedDate,endDate]);
     const handleDuration = ( ): void => {
@@ -97,22 +99,16 @@ import toast, { Toaster } from 'react-hot-toast';
       }
     }
     const handleDuraionValue = ( duraionNum: number) => {
-      if(duraionNum <= 60 ){
-        return `${duraionNum} mins `;
+      if(duraionNum <= 3600 ){
+        return `${duraionNum/60} mins `;
       }
-      else{
-        return `${Math.floor(duraionNum/60)} hour `;
+      else if (duraionNum > 3600){
+        return `${Math.floor(duraionNum/3600)} hour `;
+      }
+      else {
+        return ``
       }
     }
-
-    const notify = () => {
-      toast.success('Exam has been successfully updated!', {
-        duration: 3000,
-        position: 'top-right',
-        icon: '👏',
-        });
-    };
-
   return (
     <div>
     { loading ? 
@@ -121,7 +117,7 @@ import toast, { Toaster } from 'react-hot-toast';
   ) 
     : 
   (
-    <div className="mt-10 sm:mt-0">
+    <div className="container mx-auto mt-10 sm:mt-0">
     <div className="mt-5 md:mt-0 md:col-span-2">
       <form onSubmit={(e) => updateExam( e, currentTest._id , exam)} method="post" className='Form' >
         <div className="shadow overflow-hidden sm:rounded-md">
@@ -139,14 +135,6 @@ import toast, { Toaster } from 'react-hot-toast';
                 </label>
                 <input defaultValue={currentTest.name} onChange={handleForm} type="text" name="name" id="name" className=" shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-2/5 sm:text-sm border border-gray-300 rounded-md" />
               </div>
-              <div className="pt-6 flex flex-row space-x-80 gap-7">
-                <label className="block text-sm font-medium text-gray-700">
-                  Duration
-                </label>
-                <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
-                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="text" name="duration" id="duration" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-2/12 sm:text-sm border border-gray-300 rounded-md" readOnly/>
-                  </div>              
-               </div>
               <div className=" pt-6 flex flex-row space-x-80 gap-6">
                 <label className="block text-sm font-medium text-gray-700">
                   Question
@@ -165,30 +153,37 @@ import toast, { Toaster } from 'react-hot-toast';
               </div>
               <div className="pt-6 flex flex-row space-x-80">
                 <label className="block text-sm font-medium text-gray-700">
-                  StartedDate:
+                  Started Date:
                 </label>
                 <div className="">
-                  <input defaultValue={startedDate} onChange={handleStartedDate} step ="1" type="datetime-local" id="startedDate" name="startedDate"/>                  
+                  <input defaultValue={startedDate} onChange={handleStartedDate} type="datetime-local" id="startedDate" name="startedDate"/>                  
                 </div>
               </div>
               <div className="pt-6 flex flex-row space-x-80 gap-6">
                 <label className="block text-sm font-medium text-gray-700">
-                  EndDate:
+                  End Date:
                 </label>
                 <div className="">
-                  <input defaultValue={endDate} onChange={handleEndDate} step ="1" type="datetime-local" id="endDate" name="endDate"/>                  
+                  <input defaultValue={endDate} onChange={handleEndDate} type="datetime-local" id="endDate" name="endDate"/>                  
                 </div>
+              </div>
+              <div className="pt-6 flex flex-row space-x-80 gap-7">
+                <label className="block text-sm font-medium text-gray-700">
+                  Duration
+                </label>
+                <div className="w-full gap-2 flex flex-row selection:bg-fuchsia-300 selection:text-fuchsia-900">
+                    <input value={handleDuraionValue(duration_value)} onChange={handleDuration} type="text" name="duration" id="duration" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500  block w-2/12 sm:text-sm border border-gray-300 rounded-md" readOnly/>
+                  </div>              
               </div>
             </div>
           </div>
           <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
-            <button onClick={notify} disabled={exam === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button disabled={exam === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Update Exam
             </button>
             <button onClick={() => Router.push('/dashboard')} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Cancel
             </button>
-            <Toaster />
           </div>
         </div>
       </form>
