@@ -31,7 +31,9 @@ export default function Dashboard() {
         console.log("No test was found here");
       }
     };
-    getTest();
+    if(accessToken){
+      getTest();
+    }
   }, [accessToken]);
 
   React.useEffect(() => {
