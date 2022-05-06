@@ -1,6 +1,5 @@
 import * as React from "react";
 import ExamCard from "../components/dashboard/ExamCard";
-import AddExam from "../components/dashboard/AddExam";
 import CreatedTests from "../components/interfaces/CreatedTests";
 import { deleteRequest, getRequest, postRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
@@ -18,7 +17,7 @@ export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[]>([])
   const [adding, setAdding] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
-  console.log(user_id);
+    {/*console.log(user_id)*/}
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,7 +38,7 @@ export default function Dashboard() {
 
   const isAuthenticated = useIsAuthenticated();
   const accessToken = useAccessToken();
-  console.log(accessToken)
+  {/*console.log(accessToken)*/}
 
   useEffect(() => {
     if (isAuthenticated === false) {
@@ -66,46 +65,6 @@ export default function Dashboard() {
     };
     getTests();
   }, [accessToken,user_id]);
-
-  const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
-    e.preventDefault();
-    const test: CreatedTests = {
-      _id: formData._id,
-      name: formData.name,
-      question: formData.question,
-      startedDate: formData.startedDate,
-      endDate: formData.endDate,
-      duration: formData.duration,
-    };
-    console.log(test)
-    {/*setTests([...tests, test]);*/ }
-    if((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)){
-      toast.error("Please fill in every form !", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 6000,
-        icon: "⏳"
-      })  
-    }
-    else  {
-      postRequest({
-        url: `/tests`,
-        body: test,
-        token: accessToken
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });;
-        toast.success("Successfully added exam !", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 4000,
-          icon: "👏"
-        })
-        setAdding(false)
-    }
-  };
 
   const deleteExam = async (deleteId: string) => {
     deleteRequest({
@@ -138,9 +97,6 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="h-screen bg-white">
-        {adding ? (
-          <AddExam setAdding={setAdding} saveExam={saveExam} />
-        ) : (
           <div className="h-full flex">
             {/* Sidebar */}
             <Sidebar />
@@ -151,7 +107,7 @@ export default function Dashboard() {
                 <div>
                   <button
                     className="flex items-center btn"
-                    onClick={() => setAdding(true)}
+                    onClick={()=>{Router.push(`/dashboard/addExam`)}}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -176,13 +132,6 @@ export default function Dashboard() {
                       className="px-4 py-2 w-80"
                       placeholder="Search..."
                     />
-                    {/* <button className="flex items-center justify-center px-4 border-l">
-                            <svg className="w-6 h-6 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24">
-                              <path
-                                d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-                            </svg>
-                          </button> */}
                   </div>
                 </div>
               </div>
@@ -234,7 +183,7 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-        )}
+        )
       </div>
     </Layout>
   );

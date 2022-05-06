@@ -55,7 +55,7 @@ import {toast} from 'react-toastify';
         autoClose: 4000,
         icon: "🚀"
       });
-      Router.push(`/dashboard`)
+      Router.push(`/dashboard`);
     };
   
     const handleForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null>) => {
@@ -141,8 +141,8 @@ import {toast} from 'react-toastify';
                   Question
                 </label>
                 <div className="w-full selection:bg-fuchsia-300 selection:text-fuchsia-900">
-                  <textarea defaultValue={currentTest.question} placeholder="Your question details ..." onChange={handleForm} rows={6} id="question" name="question" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-4/5 sm:text-sm border border-gray-300 rounded-md"></textarea>
-                    <p className="mt-2 text-sm text-gray-500">
+                  <textarea defaultValue={currentTest.question} placeholder="Your question details ..." onChange={handleForm} rows={6} id="question" name="question" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-11/12 sm:text-sm border border-gray-300 rounded-md"></textarea>
+                    <p className="mr-8 mt-2 text-sm text-gray-500">
                       Please state your question according to the exam's purpose. 
                       <span>
                         <a className="pl-1 relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500" target="_blank" href="https://commonmark.org/help/"> 

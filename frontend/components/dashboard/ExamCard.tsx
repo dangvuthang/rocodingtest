@@ -8,7 +8,6 @@ type Property = {
   editRow: (prop: CreatedTests | any) => void;
   showExam: (prop: CreatedTests | any) => void;
 };
-
 const handleDuraionValue = ( duraionNum: number) => {
   if(duraionNum <= 3600 ){
     return `${duraionNum/60} mins `;
@@ -28,6 +27,7 @@ const ExamCard: React.FC<Property> = ({
   showExam,
 }) => {
   return (
+    
     <div
       key={prop._id}
       className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"
