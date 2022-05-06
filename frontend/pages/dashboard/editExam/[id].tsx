@@ -33,7 +33,9 @@ import {toast} from 'react-toastify';
             console.log("No test was found here")
           }
         };
-        getTest();
+        if(accessToken) {
+          getTest();
+        }
       }, [accessToken]);
       
     const updateExam = async (e: React.FormEvent, _id: string, updatedTest: CreatedTests) => {

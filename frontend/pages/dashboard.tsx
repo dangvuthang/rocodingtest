@@ -18,8 +18,6 @@ export default function Dashboard() {
   const [tests, setTests] = React.useState<CreatedTests[]>([])
   const [inputSearch, setInputSearch] = React.useState("");
 
-
-
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -44,15 +42,17 @@ export default function Dashboard() {
           {
             url: `/users/${user_id}/tests?`,
             token: accessToken
-          });
-        const atest = request.data.data.tests;
-        setTests(atest);
-      } catch (error) {
+          })
+        const atest = request.data.data.tests
+        setTests(atest)
+      } catch (error) {         
         console.log("No test was found here")
       }
-    };
-    getTests();
-  }, [accessToken, user_id, tests]);
+    }
+    if(user_id && accessToken) {
+      getTests()
+    }
+  }, [accessToken, user_id]);
 
   // Pagination
   const [currentPage, setCurrentPage] = React.useState(1);

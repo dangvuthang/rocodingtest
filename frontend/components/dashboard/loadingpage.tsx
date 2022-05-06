@@ -12,7 +12,7 @@ export default function Loadder()  {
               x="0px"
               y="0px"
               viewBox="0 0 100 70"
-              enable-background="new 0 0 100 70"
+              enableBackground="new 0 0 100 70"
               xmlSpace="preserve"
               width="60px"
               fill='navy'
