@@ -65,7 +65,7 @@ export default function Dashboard() {
       }
     };
     getTests();
-  }, [accessToken,user_id]);
+  }, [accessToken, user_id]);
 
   const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
     e.preventDefault();
@@ -79,14 +79,14 @@ export default function Dashboard() {
     };
     console.log(test)
     {/*setTests([...tests, test]);*/ }
-    if((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)){
+    if ((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)) {
       toast.error("Please fill in every form !", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 6000,
         icon: "⏳"
-      })  
+      })
     }
-    else  {
+    else {
       postRequest({
         url: `/tests`,
         body: test,
@@ -98,12 +98,12 @@ export default function Dashboard() {
         .catch((error) => {
           console.log(error);
         });;
-        toast.success("Successfully added exam !", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 4000,
-          icon: "👏"
-        })
-        setAdding(false)
+      toast.success("Successfully added exam !", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 4000,
+        icon: "👏"
+      })
+      setAdding(false)
     }
   };
 

@@ -1,6 +1,7 @@
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from "react";
 import dayjs from "dayjs";
+import Router from 'next/router';
 
 type Property = {
   prop: CreatedTests | any;
@@ -25,6 +26,10 @@ const ExamCard: React.FC<Property> = ({
   editRow,
   showExam,
 }) => {
+  const handleNoti = () => {
+    Router.push("/dashboard/notify");
+  }
+
   return (
     <div
       key={prop._id}
@@ -56,9 +61,9 @@ const ExamCard: React.FC<Property> = ({
       <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
         <div>
           <button
-            // onClick={() => {
-            //   editRow(prop);
-            // }}
+            onClick={() => {
+              handleNoti()
+            }}
             className="btn"
           >
             Notify student

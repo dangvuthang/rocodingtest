@@ -5,6 +5,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import dynamic from "next/dynamic";
 import { useIsAuthenticated } from "@azure/msal-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const navigation = [
   { name: 'Features', href: '#featurecontainer' },
@@ -21,6 +22,7 @@ const SignOutButton = dynamic(() => import("../../components/layout/SignOutButto
 
 const HeroSection = () => {
   const isAuthenticated = useIsAuthenticated();
+  const route = useRouter()
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -56,7 +58,9 @@ const HeroSection = () => {
                 </div>
                 <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
                   {isAuthenticated ? <SignOutButton /> : <SignInButton />}
-                  {isAuthenticated && (<Link href="/dashboard"><button className="btn hover:text-blue-400 hover:bg-white">Dashboard</button></Link>)}
+                  {isAuthenticated && (
+                    <button onClick={() => route.push({ pathname: "/dashboard" })} className="btn hover:text-blue-400 hover:bg-white">Dashboard</button>
+                  )}
                 </div>
               </nav>
             </div>
@@ -90,17 +94,11 @@ const HeroSection = () => {
                     </div>
                   </div>
                   <div className="px-2 pt-2 pb-3 space-y-1">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+                    {isAuthenticated && (<div>
+                      <button onClick={() => route.push({ pathname: "/dashboard" })} className="btn hover:text-blue-400 hover:bg-white">Dashboard</button>
+                    </div>)}
                   </div>
-                  {isAuthenticated ? <SignOutButton /> : <SignInButton />}
                 </div>
               </Popover.Panel>
             </Transition>
