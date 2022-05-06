@@ -2,13 +2,18 @@ import * as React from "react";
 import dynamic from "next/dynamic";
 import { useIsAuthenticated } from "@azure/msal-react";
 
-const SignInButton = dynamic(() => import("../../../components/layout/SignInButton"), {
-  ssr: false,
-});
-const SignOutButton = dynamic(() => import("../../../components/layout/SignOutButton"), {
-  ssr: false,
-});
-
+const SignInButton = dynamic(
+  () => import("../../../components/layout/SignInButton"),
+  {
+    ssr: false,
+  }
+);
+const SignOutButton = dynamic(
+  () => import("../../../components/layout/SignOutButton"),
+  {
+    ssr: false,
+  }
+);
 
 export default function Sidebar() {
   const isAuthenticated = useIsAuthenticated();
@@ -21,7 +26,7 @@ export default function Sidebar() {
       {/* SideBar */}
       {open === true ? (
         <aside className="w-56" aria-label="Sidebar">
-          <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-screen">
+          <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded h-screen">
             <ul className="space-y-2">
               <li>
                 <button className="p-2" onClick={toggleDrawer}>
@@ -46,11 +51,11 @@ export default function Sidebar() {
               <li>
                 <a
                   href="/dashboard"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -62,10 +67,10 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 "
                 >
                   <svg
-                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,10 +89,10 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 "
                 >
                   <svg
-                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +103,9 @@ export default function Sidebar() {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                  <span className="flex-1 ml-3 whitespace-nowrap">{isAuthenticated ? <SignOutButton /> : <SignInButton />}</span>
+                  <span className="flex-1 ml-3 whitespace-nowrap">
+                    {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+                  </span>
                 </a>
               </li>
             </ul>
@@ -106,7 +113,7 @@ export default function Sidebar() {
         </aside>
       ) : (
         <aside className="w-18" aria-label="Sidebar">
-          <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-screen">
+          <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded h-screen">
             <ul className="space-y-2">
               <li>
                 <button className="p-2" onClick={toggleDrawer}>
@@ -128,11 +135,11 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -143,10 +150,10 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 "
                 >
                   <svg
-                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 "
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -162,10 +169,10 @@ export default function Sidebar() {
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 "
                 >
                   <svg
-                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
