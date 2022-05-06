@@ -31,6 +31,7 @@ const ExamCard: React.FC<Property> = ({
   }
 
   return (
+    
     <div
       key={prop._id}
       className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"

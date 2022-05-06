@@ -6,8 +6,6 @@ import BigSection from "../components/frontpage/BigSection";
 import TeammateSection from "../components/frontpage/TeammateSection";
 import Layout from "../components/layout/Layout";
 import * as React from "react"
-import Router from "next/router";
-import { useIsAuthenticated } from "@azure/msal-react";
 export default function HomePage() {
   // const isAuthenticated = useIsAuthenticated();
   // React.useEffect(() => {

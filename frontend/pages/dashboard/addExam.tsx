@@ -1,13 +1,13 @@
 import * as React from 'react'
-import CreatedTests from "../interfaces/CreatedTests";
 import dayjs from 'dayjs'
 import Router from "next/router";
+import CreatedTests from '../../components/interfaces/CreatedTests';
+import { toast } from "react-toastify";
+import useAccessToken from "../../hooks/useAccessToken";
+import { postRequest } from "../../util/axiosInstance";
 
-type Props = {
-  saveExam: (e: React.FormEvent, formData: CreatedTests | any) => void
-  setAdding: (adding: boolean) => any,
-}
-const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
+const addExam = () => {
+  const accessToken = useAccessToken();
   const [formData, setFormData] = React.useState<CreatedTests | {}>({})
   let [startedDate, setstartedDate] = React.useState("")
   let [endDate, setendDate] = React.useState("")
@@ -58,17 +58,50 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
     }
   }
 
-  const handleRouterDashboard = (routerData: CreatedTests | any) => {
-    if((routerData.name !== undefined) && (routerData.duration !== undefined) && (routerData.startedDate !== undefined) && (routerData.endDate !== undefined) && (routerData.question !== undefined) ){
-      setAdding
+  const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
+    e.preventDefault();
+    const test: CreatedTests = {
+      _id: formData._id,
+      name: formData.name,
+      question: formData.question,
+      startedDate: formData.startedDate,
+      endDate: formData.endDate,
+      duration: formData.duration,
+    };
+    {/*setTests([...tests, test]);*/ }
+    if((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)){
+      toast.error("Please fill in every form !", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 6000,
+        icon: "⏳"
+      })  
     }
-  }
+    else  {
+      postRequest({
+        url: `/tests`,
+        body: test,
+        token: accessToken
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });;
+        toast.success("Successfully added exam !", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 4000,
+          icon: "👏"
+        })
+        Router.push(`/dashboard`);
+    }
+  };
   
   return (
-    <div className="container mx-auto mt-10 sm:mt-0">
+    <div className="mt-10 sm:mt-0">
       <div className="mt-5 md:mt-0 md:col-span-2">
         <form onSubmit={(e) => saveExam(e, formData)} method="post" className='Form' >
-          <div className="shadow overflow-hidden sm:rounded-md">
+          <div className="container mx-auto shadow overflow-hidden sm:rounded-md">
             <div className="mx-4 px-4 py-5 bg-white sm:p-6">
               <div className="flex flex-col gap-6 divide-y">
                 <div className="px-4 sm:px-0">
@@ -88,8 +121,8 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
                     Question
                   </label>
                   <div className="w-full selection:bg-fuchsia-300 selection:text-fuchsia-900">
-                    <textarea placeholder="Your question details ..." onChange={handleForm} rows={6} id="question" name="question" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-4/5 sm:text-sm border border-gray-300 rounded-md"></textarea>
-                      <p className="mt-2 text-sm text-gray-500">
+                    <textarea placeholder="Your question details ..." onChange={handleForm} rows={6} id="question" name="question" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-11/12 sm:text-sm border border-gray-300 rounded-md"></textarea>
+                      <p className="mr-8 mt-2 text-sm text-gray-500">
                         Please state your question according to the exam's purpose. 
                         <span>
                           <a className="pl-1 relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500" target="_blank" href="https://commonmark.org/help/"> 
@@ -129,7 +162,7 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
               <button disabled={formData === undefined ? true : false} type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Save Exam
               </button>
-              <button onClick={() => setAdding(false)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <button onClick={() => Router.push(`/dashboard`)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Cancel
               </button>
             </div>
@@ -139,4 +172,4 @@ const AddExam: React.FC<Props> = ({ saveExam, setAdding }) => {
     </div>
   )
 }
-export default AddExam;
+export default addExam;
