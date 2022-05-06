@@ -23,7 +23,7 @@ const NotifyStudent = () => {
       subject: emails.emailSubject,
       text: emails.emailContent
     };
-    console.log(email)
+
     if ((email.emails === undefined || (email.text === undefined))) {
       toast.error("Please fill in every form !", {
         position: toast.POSITION.TOP_RIGHT,
@@ -50,7 +50,6 @@ const NotifyStudent = () => {
     route.push({ pathname: "/dashboard" })
   }
 
-  console.log(emails);
   return (
     <div className="container mx-auto w-5/6">
       <div className="text-center font-medium font-bold leading-tight text-3xl my-5">

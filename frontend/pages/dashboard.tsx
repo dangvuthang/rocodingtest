@@ -11,13 +11,15 @@ import { useIsAuthenticated } from "@azure/msal-react";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { useUser } from "../context/UserProvider";
+
 export default function Dashboard() {
   const { user } = useUser();
   const user_id = user?._id;
   const [tests, setTests] = React.useState<CreatedTests[]>([])
   const [adding, setAdding] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
-  console.log(user_id);
+
+
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,20 +27,8 @@ export default function Dashboard() {
     setInputSearch(e.target.value.toLowerCase());
   };
 
-  const filteredData = tests.filter((el) => {
-    //if no input the return the original
-    if (inputSearch === "") {
-      return el;
-    }
-    //return the item which contains the user Search
-    else {
-      return el.name.toLowerCase().includes(inputSearch);
-    }
-  });
-
   const isAuthenticated = useIsAuthenticated();
   const accessToken = useAccessToken();
-  console.log(accessToken)
 
   useEffect(() => {
     if (isAuthenticated === false) {
@@ -53,10 +43,9 @@ export default function Dashboard() {
       try {
         const request = await getRequest(
           {
-            url: `/users/${user_id}/tests`,
+            url: `/users/${user_id}/tests?`,
             token: accessToken
           });
-        console.log(request)
         const atest = request.data.data.tests;
         setTests(atest);
       } catch (error) {
@@ -64,47 +53,19 @@ export default function Dashboard() {
       }
     };
     getTests();
-  }, [accessToken, user_id]);
+  }, [accessToken, user_id, tests]);
 
-  const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
-    e.preventDefault();
-    const test: CreatedTests = {
-      _id: formData._id,
-      name: formData.name,
-      question: formData.question,
-      startedDate: formData.startedDate,
-      endDate: formData.endDate,
-      duration: formData.duration,
-    };
-    console.log(test)
-    {/*setTests([...tests, test]);*/ }
-    if ((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)) {
-      toast.error("Please fill in every form !", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 6000,
-        icon: "⏳"
-      })
-    }
-    else {
-      postRequest({
-        url: `/tests`,
-        body: test,
-        token: accessToken
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      toast.success("Successfully added exam !", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 4000,
-        icon: "👏"
-      })
-      setAdding(false)
-    }
-  };
+  // Pagination
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [postsPerPage] = React.useState(4);
+
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = tests.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const deleteExam = async (deleteId: string) => {
     deleteRequest({
@@ -187,14 +148,24 @@ export default function Dashboard() {
             {/* Pagination */}
             <div>
               <div>
-                <Pagination />
+                <Pagination postsPerPage={postsPerPage}
+                  totalPosts={tests.length}
+                  paginate={paginate} currentPage={currentPage} />
               </div>
             </div>
             {/* End Pagination */}
 
             {/* Exam Area */}
             {tests.length > 0 ? (
-              filteredData.map((test) => (
+              currentPosts.filter((el) => {
+                if (inputSearch === "") {
+                  return el;
+                }
+                //return the item which contains the user Search
+                else {
+                  return el.name.toLowerCase().includes(inputSearch);
+                }
+              }).map((test) => (
                 <ExamCard
                   showExam={showExam}
                   editRow={editRow}
