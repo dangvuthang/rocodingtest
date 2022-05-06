@@ -59,7 +59,7 @@ const ExamCard: React.FC<Property> = ({
         </div>
       </div>
       {/* Button Edit and Delete */}
-      <div className="flex mr-4 content-center justify-end gap-2 w-2/6">
+      <div className="flex mr-4 content-center justify-end gap-1 w-2/6">
         <div>
           <button
             onClick={() => {
@@ -67,7 +67,7 @@ const ExamCard: React.FC<Property> = ({
             }}
             className="btn"
           >
-            Notify student
+            Notify 
           </button>
         </div>
         <div>

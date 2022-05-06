@@ -1,7 +1,7 @@
 import * as React from "react";
 import ExamCard from "../components/dashboard/ExamCard";
 import CreatedTests from "../components/interfaces/CreatedTests";
-import { deleteRequest, getRequest, postRequest } from "../util/axiosInstance";
+import { deleteRequest, getRequest } from "../util/axiosInstance";
 import { useEffect } from "react";
 import Sidebar from "../components/dashboard/Ds_layout/Sidebar";
 import Pagination from "../components/dashboard/Ds_layout/Pagination";
@@ -15,7 +15,6 @@ export default function Dashboard() {
   const { user } = useUser();
   const user_id = user?._id;
   const [tests, setTests] = React.useState<CreatedTests[]>([])
-  const [adding, setAdding] = React.useState(false)
   const [inputSearch, setInputSearch] = React.useState("");
   console.log(user_id);
 
@@ -65,47 +64,6 @@ export default function Dashboard() {
     };
     getTests();
   }, [accessToken, user_id]);
-
-  const saveExam = async (e: React.FormEvent, formData: CreatedTests | any) => {
-    e.preventDefault();
-    const test: CreatedTests = {
-      _id: formData._id,
-      name: formData.name,
-      question: formData.question,
-      startedDate: formData.startedDate,
-      endDate: formData.endDate,
-      duration: formData.duration,
-    };
-    console.log(test)
-    {/*setTests([...tests, test]);*/ }
-    if ((test.name === undefined) || (test.question === undefined) || (test.startedDate === undefined) || (test.endDate === undefined) || (test.duration === undefined)) {
-      toast.error("Please fill in every form !", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 6000,
-        icon: "⏳"
-      })
-    }
-    else {
-      postRequest({
-        url: `/tests`,
-        body: test,
-        token: accessToken
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      toast.success("Successfully added exam !", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 4000,
-        icon: "👏"
-      })
-      setAdding(false)
-    }
-  };
-
   const deleteExam = async (deleteId: string) => {
     deleteRequest({
       url: `/tests/${deleteId}`,
@@ -196,6 +154,7 @@ export default function Dashboard() {
             {tests.length > 0 ? (
               filteredData.map((test) => (
                 <ExamCard
+                  key={test._id}
                   showExam={showExam}
                   editRow={editRow}
                   prop={test}
@@ -210,7 +169,7 @@ export default function Dashboard() {
                 </p>
                 <button
                   className="flex items-center btn"
-                  onClick={() => setAdding(true)}
+                  onClick={() => {Router.push(`/dashboard/addExam`)}}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +189,6 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        )
       </div>
     </Layout>
   );
