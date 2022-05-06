@@ -15,7 +15,7 @@ import { useUser } from "../context/UserProvider";
 export default function Dashboard() {
   const { user } = useUser();
   const user_id = user?._id;
-  const [tests, setTests] = React.useState<CreatedTests[]>([])
+  const [tests, setTests] = React.useState<CreatedTests[]>([]);
   const [inputSearch, setInputSearch] = React.useState("");
 
   const handleSearch = (
@@ -38,19 +38,19 @@ export default function Dashboard() {
   useEffect(() => {
     const getTests = async () => {
       try {
-        const request = await getRequest(
-          {
-            url: `/users/${user_id}/tests?`,
-            token: accessToken
-          })
-        const atest = request.data.data.tests
-        setTests(atest)
-      } catch (error) {         
-        console.log("No test was found here")
+        const request = await getRequest({
+          url: `/users/${user_id}/tests?`,
+          token: accessToken,
+        });
+        const atest = request.data.data.tests;
+        const test = atest.reverse();
+        setTests(test);
+      } catch (error) {
+        console.log("No test was found here");
       }
-    }
-    if(user_id && accessToken) {
-      getTests()
+    };
+    if (user_id && accessToken) {
+      getTests();
     }
   }, [accessToken, user_id]);
 
@@ -69,7 +69,7 @@ export default function Dashboard() {
   const deleteExam = async (deleteId: string) => {
     deleteRequest({
       url: `/tests/${deleteId}`,
-      token: accessToken
+      token: accessToken,
     })
       .then((response) => {
         console.log(response);
@@ -84,14 +84,14 @@ export default function Dashboard() {
     toast.success("The exam is successfuly deleted!", {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 4000,
-      icon: "🔥"
+      icon: "🔥",
     });
   };
   const editRow = async (test: any) => {
-    Router.push(`/dashboard/editExam/${test._id}`)
+    Router.push(`/dashboard/editExam/${test._id}`);
   };
   const showExam = async (test: any) => {
-    Router.push(`/dashboard/viewExam/${test._id}`)
+    Router.push(`/dashboard/viewExam/${test._id}`);
   };
 
   return (
@@ -107,7 +107,9 @@ export default function Dashboard() {
               <div>
                 <button
                   className="flex items-center btn"
-                  onClick={() => { Router.push(`/dashboard/addExam`) }}
+                  onClick={() => {
+                    Router.push(`/dashboard/addExam`);
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -147,32 +149,37 @@ export default function Dashboard() {
             {/* Pagination */}
             <div>
               <div>
-                <Pagination postsPerPage={postsPerPage}
+                <Pagination
+                  postsPerPage={postsPerPage}
                   totalPosts={tests.length}
-                  paginate={paginate} currentPage={currentPage} />
+                  paginate={paginate}
+                  currentPage={currentPage}
+                />
               </div>
             </div>
             {/* End Pagination */}
 
             {/* Exam Area */}
             {tests.length > 0 ? (
-              currentPosts.filter((el) => {
-                if (inputSearch === "") {
-                  return el;
-                }
-                //return the item which contains the user Search
-                else {
-                  return el.name.toLowerCase().includes(inputSearch);
-                }
-              }).map((test) => (
-                <ExamCard
-                  key={test._id}
-                  showExam={showExam}
-                  editRow={editRow}
-                  prop={test}
-                  deleteExam={deleteExam}
-                />
-              ))
+              currentPosts
+                .filter((el) => {
+                  if (inputSearch === "") {
+                    return el;
+                  }
+                  //return the item which contains the user Search
+                  else {
+                    return el.name.toLowerCase().includes(inputSearch);
+                  }
+                })
+                .map((test) => (
+                  <ExamCard
+                    key={test._id}
+                    showExam={showExam}
+                    editRow={editRow}
+                    prop={test}
+                    deleteExam={deleteExam}
+                  />
+                ))
             ) : (
               <div className="grid place-items-center h-max">
                 <p>
@@ -181,7 +188,9 @@ export default function Dashboard() {
                 </p>
                 <button
                   className="flex items-center btn"
-                  onClick={() => {Router.push(`/dashboard/addExam`)}}
+                  onClick={() => {
+                    Router.push(`/dashboard/addExam`);
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

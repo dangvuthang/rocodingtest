@@ -1,7 +1,7 @@
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from "react";
 import dayjs from "dayjs";
-import Router from 'next/router';
+import Router from "next/router";
 
 type Property = {
   prop: CreatedTests | any;
@@ -28,10 +28,9 @@ const ExamCard: React.FC<Property> = ({
 }) => {
   const handleNoti = () => {
     Router.push("/dashboard/notify");
-  }
+  };
 
   return (
-    
     <div
       key={prop._id}
       className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"
@@ -55,7 +54,7 @@ const ExamCard: React.FC<Property> = ({
           <h3 className="text-lg">{handleDuraionValue(prop.duration)}</h3>
         </div>
         <div className="text-[#ACB3C8]">
-          {dayjs(prop.startedDate).format("YYYY-MM-DDTHH:mm:ssZ[Z]")}
+          Exam started at {dayjs(prop.startedDate).format("HH:MM MM/DD/YYYY")}
         </div>
       </div>
       {/* Button Edit and Delete */}
@@ -63,11 +62,11 @@ const ExamCard: React.FC<Property> = ({
         <div>
           <button
             onClick={() => {
-              handleNoti()
+              handleNoti();
             }}
             className="btn"
           >
-            Notify 
+            Notify
           </button>
         </div>
         <div>
