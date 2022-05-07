@@ -72,6 +72,7 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
           await Promise.all([p1,p2, p3]).then(async () => {
             if(imageUrl){
               const REFERENCE_IMAGE = 'https://www2.deloitte.com/content/dam/Deloitte/nl/Images/promo_images/deloitte-nl-cm-digital-human-promo.jpg';
+              // const REFERENCE_IMAGE = user!.photoUrl;
               const QUERY_IMAGE = imageUrl;
               const tyniOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.5 })
   
