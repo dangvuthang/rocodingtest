@@ -1,4 +1,3 @@
-import { Container, Typography } from "@mui/material";
 import Head from "next/head";
 
 type Props = {
@@ -17,16 +16,16 @@ export default function Page({
   return (
     <PageWrapper title={seoTitle ?? title} maxWidth={maxWidth}>
       {title ? (
-        <Typography variant="h1" sx={{ mb: 2 }}>
+        <h1 className='mb-2'>
           {title}
-        </Typography>
+        </h1>
       ) : null}
       {children}
     </PageWrapper>
   );
 }
 
-function PageWrapper({ children, title, maxWidth = "md" }: Props): JSX.Element {
+function PageWrapper({ children, title, maxWidth = "md" }: Props){
   let titleString = "HACKERMIT";
   if (title) {
     titleString = "HACKERMIT | " + title;
@@ -39,7 +38,7 @@ function PageWrapper({ children, title, maxWidth = "md" }: Props): JSX.Element {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
           <meta
             name="description"
-            content="Modern website templates built with React, Next, Material-UI, Firebase, and more."
+            content="Modern website templates built with React, Next, Tailwind, Firebase, and more."
           />
         </Head>
         {children}
@@ -47,7 +46,7 @@ function PageWrapper({ children, title, maxWidth = "md" }: Props): JSX.Element {
     );
   } else {
     return (
-      <Container maxWidth={maxWidth} sx={{ pt: 2 }}>
+      <div className="container pt-2">
         <Head>
           <title>{titleString}</title>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -57,7 +56,7 @@ function PageWrapper({ children, title, maxWidth = "md" }: Props): JSX.Element {
           />
         </Head>
         {children}
-      </Container>
+      </div>
     );
   }
 }

@@ -2,20 +2,18 @@ import express, { Router } from "express";
 import {
   checkAccountInDb,
   checkMicrosoftLogin,
-  checkIfTeacher,
 } from "../controllers/AuthController";
 import {
-  getRecordByTestId,
-  getRecordByTestIdAndStudentId,
   createRecord,
+  updateRecord,
+  checkExistenceRecord,
 } from "../controllers/RecordController";
 
 const routes: Router = express.Router();
 
 routes.use(checkMicrosoftLogin, checkAccountInDb);
 routes.post("/", createRecord);
-routes.use(checkIfTeacher);
-routes.get("/tests/:testId", getRecordByTestId);
-routes.get("/tests/:testId/users/:userId", getRecordByTestIdAndStudentId);
+routes.post("/check", checkExistenceRecord);
+routes.patch("/:id", updateRecord);
 
 export default routes;

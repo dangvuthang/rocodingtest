@@ -1,19 +1,27 @@
 import Editor from "@monaco-editor/react";
-import { FC, useState, ChangeEvent } from "react";
+import { FC, ChangeEvent, Dispatch, SetStateAction } from "react";
 
-interface CodeAreaProps {}
+interface CodeAreaProps {
+  language: string;
+  setLanguage: Dispatch<SetStateAction<string>>;
+  content: string;
+  setContent: Dispatch<SetStateAction<string>>;
+}
 
 const languages = ["javascript", "java", "python"];
 
 const displayLanguage = (language: string) =>
   `${language.slice(0, 1).toUpperCase() + language.slice(1)}`;
 
-const CodeArea: FC<CodeAreaProps> = () => {
-  const [language, setLanguage] = useState("javascript");
-  const [content, setContent] = useState("");
-
+const CodeArea: FC<CodeAreaProps> = ({
+  language,
+  content,
+  setLanguage,
+  setContent,
+}) => {
   const handleContentChanged = (value: string | undefined) => {
     if (value) setContent(value);
+    else setContent("");
   };
 
   const handleLanguageChanged = (e: ChangeEvent<HTMLSelectElement>) => {

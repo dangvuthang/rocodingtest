@@ -30,7 +30,7 @@ const FaceIdentity: FC = () => {
       }
 
       Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+        faceapi.nets.tinyFaceDetector.loadFromUri('./public/models'),
       ]).then(startVideo)
 
       video.addEventListener('play', () => {
@@ -46,8 +46,10 @@ const FaceIdentity: FC = () => {
               canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height)
               faceapi.draw.drawDetections(canvas, resizedDetections)
               faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-              if (detections.length > 2) {
+              if (detections.length > 1) {
                 console.log("Cheating");
+              } else if (detections.length == 0 ){
+                console.log("Cheating")
               }
             }, 100)
           } catch (error) {

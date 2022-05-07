@@ -3,14 +3,15 @@ import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { canvas, faceDetectionNet, faceDetectionOptions, saveFile } from './models';
 
 
+
 const FaceRecognition = async () => {
 
-  const REFERENCE_IMAGE = '../images/.jpg'
+  const REFERENCE_IMAGE = ''
   const QUERY_IMAGE = '../images/.jpg'
 
-  await faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-  await faceapi.nets.faceLandmark68Net.loadFromUri('/models')
-  await faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+  await faceapi.nets.tinyFaceDetector.loadFromUri('./public/models')
+  await faceapi.nets.faceLandmark68Net.loadFromUri('./public/models')
+  await faceapi.nets.faceRecognitionNet.loadFromUri('./public/models')
 
   const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
   const queryImage = await canvas.loadImage(QUERY_IMAGE)
@@ -45,9 +46,11 @@ const FaceRecognition = async () => {
   const outQuery = faceapi.createCanvasFromMedia(queryImage)
   queryDrawBoxes.forEach(drawBox => drawBox.draw(outQuery))
   if (similarityScore < 0.5){
-    saveFile('queryImage.jpg', (outQuery as any).toBuffer('image/jpeg'));
-    console.log('not similarityScore');
+    return false;
+    // saveFile('queryImage.jpg', (outQuery as any).toBuffer('image/jpeg'));
+    // console.log('not similarityScore');
   }
+  return true;
 
 }
 

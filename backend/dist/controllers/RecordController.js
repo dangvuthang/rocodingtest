@@ -3,91 +3,77 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecordByTestIdAndStudentId = exports.getRecordByTestId = exports.createRecord = void 0;
+exports.updateRecord = exports.checkExistenceRecord = exports.createRecord = void 0;
 const Record_1 = __importDefault(require("../models/Record"));
 const createRecord = async (req, res) => {
-    let record;
-    let { attendanceDate, numberOfCheats, evidence, userId, testId, submissionId, } = req.body;
-    userId = req.user._id;
     try {
-        record = await Record_1.default.create({
-            attendanceDate,
-            numberOfCheats,
-            evidence,
-            userId,
-            testId,
-            submissionId,
+        const record = await Record_1.default.create({
+            userId: req.user._id,
+            testId: req.body.testId,
+        });
+        res.status(201).json({
+            status: "success",
+            data: {
+                record,
+            },
         });
     }
-    catch (err) {
-        return res.status(400).json({
-            status: "error",
-            message: err.message,
+    catch (error) {
+        res.status(400).json({
+            status: "fail",
+            message: error.message,
         });
     }
-    return res.status(201).json({
-        status: "success",
-        data: {
-            record,
-        },
-    });
 };
 exports.createRecord = createRecord;
-const getRecordByTestId = async (req, res) => {
-    let records;
+const checkExistenceRecord = async (req, res) => {
     try {
-        records = await Record_1.default.find({ testId: req.params.testId });
+        const record = await Record_1.default.findOne({
+            userId: req.user._id,
+            testId: req.body.testId,
+        });
+        console.log(record);
+        if (!record) {
+            res.status(200).json({
+                status: "allowed",
+            });
+        }
+        else {
+            res.status(400).json({
+                status: "diallowed",
+            });
+        }
     }
-    catch (err) {
-        return res.status(400).json({
-            status: "error",
-            message: err.message,
+    catch (error) {
+        res.status(400).json({
+            status: "fail",
+            message: error.message,
         });
     }
-    if (!records) {
-        return res.status(400).json({
-            status: "error",
-            message: "There is no record found",
-        });
-    }
-    return res.status(201).json({
-        status: "success",
-        data: {
-            records,
-        },
-    });
 };
-exports.getRecordByTestId = getRecordByTestId;
-const getRecordByTestIdAndStudentId = async (req, res) => {
-    let record;
+exports.checkExistenceRecord = checkExistenceRecord;
+const updateRecord = async (req, res) => {
     try {
-        record = await Record_1.default.find({
-            testId: req.params.testId,
-            userId: req.params.userId,
+        const record = await Record_1.default.findById(req.params.id);
+        if (record) {
+            record.numberOfCheats++;
+            record.evidence.push(req.body.evidence);
+            await record.save();
+            res.status(204).end();
+        }
+        else {
+            res.status(404).json({
+                status: "fail",
+                message: "Not found current record",
+            });
+        }
+    }
+    catch (error) {
+        res.status(400).json({
+            status: "fail",
+            message: error.message,
         });
     }
-    catch (err) {
-        return res.status(400).json({
-            status: "error",
-            errors: [
-                {
-                    msg: err,
-                },
-            ],
-        });
-    }
-    if (!record) {
-        return res.status(400).json({
-            status: "error",
-            message: "There is no record found",
-        });
-    }
-    return res.status(201).json({
-        status: "success",
-        data: {
-            record,
-        },
-    });
 };
-exports.getRecordByTestIdAndStudentId = getRecordByTestIdAndStudentId;
+exports.updateRecord = updateRecord;
 //# sourceMappingURL=RecordController.js.map

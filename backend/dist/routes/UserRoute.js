@@ -9,6 +9,7 @@ const AuthController_1 = require("../controllers/AuthController");
 const UserController_1 = require("../controllers/UserController");
 const route = express_1.default.Router();
 route.post("/register", AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountInDb, AuthController_1.register);
+route.get("/me", AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountInDb, UserController_1.getMe);
 route.get("/:userId/tests", TestController_1.getTestsByTeacherId);
 route.use(AuthController_1.checkMicrosoftLogin, AuthController_1.checkAccountInDb);
 route.post("/send", UserController_1.sendEmail);
