@@ -1,31 +1,25 @@
-import * as faceapi from 'face-api.js';
 import { FC, Dispatch, useEffect, useRef, useState, SetStateAction } from "react";
 import { canvas, faceDetectionOptions } from './models';
-import { getRequest } from "../util/axiosInstance";
-import useAccessToken from "../hooks/useAccessToken";
 import useWebcam from "../hooks/useWebcam";
 import React from "react";
+import { useUser } from '../context/UserProvider';
 
 const width = 320;
 let height = 0;
-export interface User {
-  _id: string;
-  email: string;
-  fullName: string;
-  photoUrl: string;
-  role: string;
-}
 
 interface FaceRecognitionProps {
   onChange: Dispatch<SetStateAction<boolean>>;
 }
+
 const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef2 = useRef<HTMLCanvasElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const stream = useWebcam();
-  const token = useAccessToken();
+  const {user} = useUser();
   let similarityScore = 1;
 
   useEffect(() => {
@@ -65,59 +59,58 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
     }
   };
 
-  const handleSendImage = async () => {
-    if (imageUrl) {
-      let REFERENCE_IMAGE;
 
-      try {
-        const request = await getRequest({ url: "/users/me", token });
-        const user = request.data.data.user as User;
-        REFERENCE_IMAGE = user.photoUrl;
-      } catch (error) {
-        console.log(error);
-      }
+  const handleSendImage = () => {
 
-      const QUERY_IMAGE = imageUrl
+    const loadModel = async () => {
+      const FACEAPI = (window as any).FACEAPI;
+      if(!FACEAPI){
+        try {
+          const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
+          const p2 =  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+          const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('./models')
+          await Promise.all([p1,p2, p3]).then(async () => {
+            if(imageUrl){
+              const REFERENCE_IMAGE = 'https://www2.deloitte.com/content/dam/Deloitte/nl/Images/promo_images/deloitte-nl-cm-digital-human-promo.jpg';
+              const QUERY_IMAGE = imageUrl;
+              const tyniOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.5 })
+  
+              const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
+              const queryImage = await canvas.loadImage(QUERY_IMAGE)
 
-      await faceapi.nets.tinyFaceDetector.loadFromUri('./models')
-      await faceapi.nets.faceLandmark68Net.loadFromUri('./models')
-      await faceapi.nets.faceRecognitionNet.loadFromUri('./models')
+              referenceImage.setAttribute('crossOrigin', 'anonymous')
+              queryImage.setAttribute('crossOrigin', 'anonymous')
+  
+              const resultsQuery = await faceapi.detectAllFaces(queryImage, tyniOptions)
+              .withFaceLandmarks()
+              .withFaceDescriptors()
+  
+              const resultsRef = await faceapi.detectAllFaces(referenceImage, tyniOptions)
+              .withFaceLandmarks()
+              .withFaceDescriptors()
+  
+              const faceMatcher = new faceapi.FaceMatcher(resultsRef)
 
-      const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
-      const queryImage = await canvas.loadImage(QUERY_IMAGE)
+              console.log(faceMatcher)
 
-      const resultsRef = await faceapi.detectAllFaces(referenceImage, faceDetectionOptions)
-        .withFaceLandmarks()
-        .withFaceDescriptors()
-
-      const resultsQuery = await faceapi.detectAllFaces(queryImage, faceDetectionOptions)
-        .withFaceLandmarks()
-        .withFaceDescriptors()
-
-      const faceMatcher = new faceapi.FaceMatcher(resultsRef)
-
-      const labels = faceMatcher.labeledDescriptors
-        .map(ld => ld.label)
-      const refDrawBoxes = resultsRef
-        .map(res => res.detection.box)
-        .map((box, i) => new faceapi.draw.DrawBox(box, { label: labels[i] }))
-      const outRef = faceapi.createCanvasFromMedia(referenceImage)
-      refDrawBoxes.forEach(drawBox => drawBox.draw(outRef))
-
-      const queryDrawBoxes = resultsQuery.map(res => {
-        const bestMatch = faceMatcher.findBestMatch(res.descriptor)
-        if (bestMatch.distance < 0.5){
-          similarityScore = bestMatch.distance
+              const queryDrawBoxes = resultsQuery.map((res: { descriptor: any; }) => {
+                const bestMatch = faceMatcher.findBestMatch(res.descriptor)
+                similarityScore = bestMatch.distance
+              })
+              if (similarityScore < 0.5){
+                console.log("Similarity")
+                onChange(false);
+              }
+              onChange(true);
+              console.log("Not Similarity")
+            }
+          })
+        } catch (error) {
+          console.error(error);
         }
-        return new faceapi.draw.DrawBox(res.detection.box, { label: bestMatch.toString() })
-      })
-      const outQuery = faceapi.createCanvasFromMedia(queryImage)
-      queryDrawBoxes.forEach(drawBox => drawBox.draw(outQuery))
-      if (similarityScore < 0.5){
-        onChange(false);
       }
-      onChange(true);
     }
+    loadModel();
   };
 
   return (

@@ -1,5 +1,4 @@
 import * as faceapi from 'face-api.js';
-import { canvas, faceDetectionNet, faceDetectionOptions, saveFile } from './models';
 import { Dispatch, FC, SetStateAction, useEffect, VFC } from "react";
 import React from 'react';
 

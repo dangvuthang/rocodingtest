@@ -23,6 +23,7 @@
     "@mui/material": "^5.5.1",
     "@types/webrtc": "^0.0.32",
     "axios": "^0.26.1",
+    "canvas": "^2.9.1",
     "dayjs": "^1.11.0",
     "face-api.js": "^0.22.2",
     "html2canvas": "^1.4.1",
