@@ -11,7 +11,12 @@ interface Navigator {
       ) : void;
 }
 
-const FaceIdentity: FC = () => {
+interface FaceIdentityProps {
+  onChange: Dispatch<SetStateAction<boolean>>;
+}
+
+
+const FaceIdentity: FC<FaceIdentityProps> = ({ onChange })  => {
 
   const video = document.createElement('video') as HTMLVideoElement;
   video.setAttribute("id", "faceIdentity");
@@ -47,9 +52,11 @@ const FaceIdentity: FC = () => {
               faceapi.draw.drawDetections(canvas, resizedDetections)
               faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
               if (detections.length > 1) {
-                console.log("Cheating");
+                onChange(false)
               } else if (detections.length == 0 ){
-                console.log("Cheating")
+                onChange(false)
+              } else {
+                onChange(true)
               }
             }, 100)
           } catch (error) {
