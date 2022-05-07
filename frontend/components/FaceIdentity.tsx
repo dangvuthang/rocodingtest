@@ -30,7 +30,7 @@ const FaceIdentity: FC = () => {
       }
 
       Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('./public/models'),
+        faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
       ]).then(startVideo)
 
       video.addEventListener('play', () => {

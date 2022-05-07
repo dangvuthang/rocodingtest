@@ -15,6 +15,7 @@ import useAccessToken from "../hooks/useAccessToken";
 import { captureScreen, savedToCloudinary } from "../util/captureScreen";
 import ConfirmModal from "./ConfirmModal";
 import LoadingModal from "./LoadingModal";
+import FaceRecognition from "./FaceRecognition";
 
 interface ExamContentProps {
   test: Test;
@@ -163,6 +164,16 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
     }
   }, [isWatching, showInstruction]); */
 
+  // Detect face recognization
+  // useEffect(() => {
+  //   if (showInstruction) return;
+  //   if (!isWatching) {
+  //     setAlertMessage("Face is not similar");
+  //     setShowAlertMessage(true);
+  //     setRemainingTime((time) => time - 1);
+  //   }
+  // }, [isWatching, showInstruction]);
+
   useEffect(() => {
     if (remainingTime === 0 && showAlertMessage === false) {
       handleSubmitCode();
@@ -172,6 +183,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   return (
     <>
       {/* <GlanceTracker onChange={setIsWatching} /> */}
+      {/*<FaceRecognition onChange={setIsWatching}/>*/}
       <LoadingModal open={loading} />
       <InstructionModal
         open={showInstruction}

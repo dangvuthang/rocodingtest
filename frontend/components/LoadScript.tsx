@@ -8,6 +8,10 @@ const LoadScript: FC = () => {
         src="/jeelizGlanceTracker.js"
         strategy="beforeInteractive"
       ></Script>
+      <Script
+        src="/face-api.js"
+        strategy="beforeInteractive"
+      ></Script>
     </>
   );
 };
