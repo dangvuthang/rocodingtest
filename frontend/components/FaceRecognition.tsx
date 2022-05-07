@@ -1,5 +1,5 @@
 import { FC, Dispatch, useEffect, useRef, useState, SetStateAction } from "react";
-import { canvas, faceDetectionOptions } from './models';
+import { canvas } from './models';
 import useWebcam from "../hooks/useWebcam";
 import React from "react";
 import { useUser } from '../context/UserProvider';
@@ -14,8 +14,6 @@ interface FaceRecognitionProps {
 const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const canvasRef2 = useRef<HTMLCanvasElement | null>(null);
-  const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const stream = useWebcam();
@@ -75,21 +73,21 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
               // const REFERENCE_IMAGE = user!.photoUrl;
               const QUERY_IMAGE = imageUrl;
               const tyniOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.5 })
-  
+
               const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
               const queryImage = await canvas.loadImage(QUERY_IMAGE)
 
               referenceImage.setAttribute('crossOrigin', 'anonymous')
               queryImage.setAttribute('crossOrigin', 'anonymous')
-  
+
               const resultsQuery = await faceapi.detectAllFaces(queryImage, tyniOptions)
               .withFaceLandmarks()
               .withFaceDescriptors()
-  
+
               const resultsRef = await faceapi.detectAllFaces(referenceImage, tyniOptions)
               .withFaceLandmarks()
               .withFaceDescriptors()
-  
+
               const faceMatcher = new faceapi.FaceMatcher(resultsRef)
 
               console.log(faceMatcher)
