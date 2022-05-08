@@ -114,63 +114,83 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   }, [accessToken, content, isFullscreen, onDone, recordId, test._id]);
 
   const handleCloseWarning = async () => {
-    const image = await captureScreen().catch((err) => console.log(err));
     setShowAlertMessage(false);
     if (!isFullscreen && remainingTime !== 0) {
       await document.documentElement
         .requestFullscreen()
         .catch((err) => console.log(err));
     }
-    let evidence;
-    if (image) {
-      evidence = await savedToCloudinary(image).catch((err) =>
-        console.log(err)
-      );
-    }
-    if (recordId) {
-      await patchRequest({
-        url: `/records/${recordId}`,
-        body: { evidence },
-        token: accessToken,
-      }).catch((err) => console.log(err));
-    }
   };
+
+  // Capture evidence
+  useEffect(() => {
+    const capturedEvidence = async () => {
+      const image = await captureScreen().catch((err) => console.log(err));
+      let evidence;
+      if (image) {
+        evidence = await savedToCloudinary(image).catch((err) =>
+          console.log(err)
+        );
+      }
+      if (recordId) {
+        await patchRequest({
+          url: `/records/${recordId}`,
+          body: { evidence },
+          token: accessToken,
+        }).catch((err) => console.log(err));
+      }
+    };
+    if (showAlertMessage) {
+      capturedEvidence();
+    }
+  }, [accessToken, recordId, showAlertMessage]);
 
   // Detect navigate outside webste
   useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
-      setAlertMessage("you are trying to navigate outside of the web page");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => (time > 0 ? time - 1 : 0));
-      sendMessage(
-        `${user.username} is trying to navigate outside of the web page`
-      );
+      if (!showAlertMessage) {
+        setAlertMessage("you are trying to navigate outside of the web page");
+        setShowAlertMessage(true);
+        setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+        sendMessage(
+          `${user.username} is trying to navigate outside of the web page`
+        );
+      }
     }
   }, [isFocused, showInstruction, sendMessage, user.username]);
 
   // Detect minimize fullscreen
-  useEffect(() => {
-    if (showInstruction) return;
-    if (!isFullscreen) {
-      count.current++;
-      if (count.current === 1) return;
-      setAlertMessage("you are trying to minimize the web page");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => (time > 0 ? time - 1 : 0));
-      sendMessage(`${user.username} is trying to minimize the web page`);
-    }
-  }, [isFullscreen, showInstruction, sendMessage, user.username]);
+  // useEffect(() => {
+  //   console.log({ isFullscreen, showInstruction });
+  //   if (showInstruction) return;
+  //   if (!isFullscreen) {
+  //     count.current++;
+  //     if (count.current === 1) return;
+  //     if (!showAlertMessage) {
+  //       setAlertMessage("you are trying to minimize the web page");
+  //       setShowAlertMessage(true);
+  //       setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+  //       // sendMessage(`${user.username} is trying to minimize the web page`);
+  //     }
+  //   }
+  // }, [
+  //   isFullscreen,
+  //   showInstruction,
+  //   sendMessage,
+  //   user.username,
+  //   showInstruction,
+  // ]);
 
   // Detect glance tracking
-  /*   useEffect(() => {
-    if (showInstruction) return;
-    if (!isWatching) {
-      setAlertMessage("you are not looking at the screen");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => time - 1);
-    }
-  }, [isWatching, showInstruction]); */
+  // useEffect(() => {
+  //   if (showInstruction) return;
+  //   if (!isWatching) {
+  //     setAlertMessage("you are not looking at the screen");
+  //     setShowAlertMessage(true);
+  //     setRemainingTime((time) => time - 1);
+  //   }
+  // }, [isWatching, showInstruction]);
 
   useEffect(() => {
     if (remainingTime === 0 && showAlertMessage === false) {

@@ -43,11 +43,11 @@ export default async function handler(
     const chatGrant = new ChatGrant({
       serviceSid: process.env.TWILIO_CHAT_SERVICE,
     });
-    const paricipant = await client.conversations
+
+    await client.conversations
       .conversations(sid)
       .participants.create({ identity })
       .catch((err) => console.log(err));
-    console.log({ paricipant });
 
     token.addGrant(chatGrant);
     return res.status(200).json({
