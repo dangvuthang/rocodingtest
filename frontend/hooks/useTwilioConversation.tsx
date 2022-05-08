@@ -4,14 +4,12 @@ import {
   Conversation,
 } from "@twilio/conversations";
 import { useMsal } from "@azure/msal-react";
-import useDetectTab from "./useDetectTab";
 import axios from "axios";
 
 const useTwilioConversation = (sid: string) => {
   const user = useMsal().accounts[0];
   const [twilioToken, setTwilioToken] = useState("");
   const [conversation, setConversation] = useState<Conversation | null>(null);
-  const openInAnotherTab = useDetectTab();
 
   const sendMessage = useCallback(
     async (message: string) => {
@@ -30,7 +28,7 @@ const useTwilioConversation = (sid: string) => {
     const getTwilioToken = async () => {
       try {
         const request = await axios.post("/api/twilio", {
-          identity: openInAnotherTab ? "guestUser1" : user.username,
+          identity: user.username,
           sid,
         });
         const token = request.data.data.token;
@@ -42,7 +40,7 @@ const useTwilioConversation = (sid: string) => {
     if (user) {
       getTwilioToken();
     }
-  }, [user, openInAnotherTab, sid]);
+  }, [user, sid]);
 
   useEffect(() => {
     let conversationsClient: ConversationsClient | null = null;
