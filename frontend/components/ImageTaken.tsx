@@ -2,6 +2,7 @@ import Router from "next/router";
 import { FC, useRef, useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { User, useUser } from "../context/UserProvider";
 import useAccessToken from "../hooks/useAccessToken";
 import useWebcam from "../hooks/useWebcam";
 import { postRequest } from "../util/axiosInstance";
@@ -21,7 +22,7 @@ const ImageTaken: FC<ImageTakenProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const stream = useWebcam();
   const token = useAccessToken();
-
+  const { dispatch } = useUser();
   useEffect(() => {
     const video = videoRef.current!;
     const canvas = canvasRef.current!;
@@ -76,7 +77,17 @@ const ImageTaken: FC<ImageTakenProps> = () => {
             token,
             body: { photoUrl: link },
           });
-          console.log(request);
+          const user = request.data.data.user as User;
+          dispatch({
+            type: "login",
+            payload: {
+              _id: user._id,
+              email: user.email,
+              role: user.role,
+              photoUrl: user.photoUrl,
+              fullName: user.fullName,
+            },
+          });
         } catch (error) {
           console.log(error);
         } finally {

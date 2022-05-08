@@ -1,46 +1,31 @@
 import { FC, useEffect, useState } from "react";
-import { red } from "@mui/material/colors";
-import { Box } from "@mui/material";
-import { Timer as Time } from "@mui/icons-material";
+import { ClockIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
-const deadline = dayjs().add(1, "hour");
+interface TimerProps {
+  endDate: string;
+}
 
-interface TimerProps {}
-
-const Timer: FC<TimerProps> = () => {
+const Timer: FC<TimerProps> = ({ endDate }) => {
   const [remainingTime, setRemainingTime] = useState("Loading...");
 
   useEffect(() => {
     const id = setInterval(() => {
       const currentTime = dayjs();
+      const deadline = dayjs(new Date(endDate));
       const timeLeft = dayjs.duration(deadline.diff(currentTime));
       setRemainingTime(timeLeft.format("HH:mm:ss"));
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [endDate]);
 
   return (
-    <Box
-      px={6}
-      sx={{
-        marginRight: "10px",
-        backgroundColor: red[600],
-        opacity: "0.8",
-        color: red[50],
-        overflow: "hidden",
-        borderTopLeftRadius: "10px",
-        borderTopRightRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Time fontSize="small" sx={{ display: "inline-block", mr: "2px" }} />
-      Time remaining: {remainingTime}
-    </Box>
+    <div className="flex bg-red-600 text-white gap-x-1 items-center opacity-[0.77] px-12 justify-center border rounded-t-xl text-lg">
+      <ClockIcon className="h-5 w-5 flex" />
+      <span className="flex">Time remaining: {remainingTime}</span>
+    </div>
   );
 };
 

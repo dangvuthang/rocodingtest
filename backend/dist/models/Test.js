@@ -31,6 +31,7 @@ const TestSchema = new mongoose_1.Schema({
     link: { type: String, required: true },
     duration: { type: Number, required: true },
     question: { type: String, required: true },
+    conversationSid: { type: String, required: true },
     teacherId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
 });
 exports.default = mongoose_1.default.model("Test", TestSchema);
