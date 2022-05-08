@@ -1,25 +1,21 @@
-import { useMsal } from "@azure/msal-react";
-import dynamic from "next/dynamic";
-const SignInButton = dynamic(
-  () => import("../components/layout/SignInButton"),
-  { ssr: false }
-);
-const SignOutButton = dynamic(
-  () => import("../components/layout/SignOutButton"),
-  { ssr: false }
-);
-import useAccessToken from "../hooks/useAccessToken";
-
+import HeroSection from "../components/frontpage/HeroSection";
+import Page from "../components/layout/Page";
+import ContactSection from "../components/frontpage/ContactSection";
+import FeatureContainer from "../components/frontpage/FeatureContainer";
+import BigSection from "../components/frontpage/BigSection";
+import TeammateSection from "../components/frontpage/TeammateSection";
+import Layout from "../components/layout/Layout";
+import * as React from "react";
 export default function HomePage() {
-  const token = useAccessToken();
-  const user = useMsal().accounts[0];
-  console.log(token);
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-center mt-2">
-        {user ? <SignOutButton /> : <SignInButton />}
-      </div>
-      <h1>Rework in progress...</h1>
-    </div>
+    <Layout>
+      <Page maxWidth={false}>
+        <HeroSection />
+        <FeatureContainer />
+        <BigSection />
+        <TeammateSection />
+        <ContactSection />
+      </Page>
+    </Layout>
   );
 }

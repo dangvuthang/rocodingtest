@@ -3,12 +3,7 @@ import Script from "next/script";
 
 const LoadScript: FC = () => {
   return (
-    <>
-      <Script
-        src="/jeelizGlanceTracker.js"
-        strategy="beforeInteractive"
-      ></Script>
-    </>
+    <Script src="/jeelizGlanceTracker.js" strategy="beforeInteractive"></Script>
   );
 };
 
