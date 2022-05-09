@@ -11,20 +11,16 @@ interface FaceIdentityProps {
 
 const FaceIdentity: FC<FaceIdentityProps> = ()  => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stream = useWebcam();
 
   useEffect(() => {
     const video = videoRef.current!;
-    const canvas = canvasRef.current!;
     video.addEventListener(
       "playing",
       function (ev) {
         height = video.videoHeight / (video.videoWidth / width);
         video.setAttribute("width", width.toString());
         video.setAttribute("height", height.toString());
-        canvas.setAttribute("width", width.toString());
-        canvas.setAttribute("height", height.toString());
       },
       false
     );
@@ -41,45 +37,29 @@ const FaceIdentity: FC<FaceIdentityProps> = ()  => {
   useEffect(() => {
     const video = videoRef.current!;
     const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-    const p2 =  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
-    const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('/models')
-    Promise.all([p1,p2,p3]).then( async () => {
-      const canvas = faceapi.createCanvas(video);
-          if (canvas){
-            try {
-              document.body.append(canvas);
-              const displaySize = { width: video.width, height: video.height };
-              faceapi.matchDimensions(canvas, displaySize);
-              setInterval(async () => {
-                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-                const resizedDetections = faceapi.resizeResults(detections, displaySize)
-                canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height)
-                faceapi.draw.drawDetections(canvas, resizedDetections)
-                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-                if (detections.length > 1) {
-                  console.log("False")
-                  return false
-                } else if (detections.length == 0 ){
-                  console.log("False")
-                  return false
-                } else {
-                  console.log("True")
-                  return true
-                }
-              }, 100)
-            } catch (error) {
-              console.error(error);
-            }
+    Promise.all([p1]).then( async () => {
+      try {
+        setInterval(async () => {
+          const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+          if (detections.length > 1) {
+            console.log("False")
+            return false
+          } else if (detections.length == 0 ){
+            console.log("False")
+            return false
+          } else {
+            console.log("True")
+            return true
           }
+        }, 1000)
+      } catch (error) {
+        console.error(error);
+      }
     })
   });
 
   return <>
-    <canvas
-      ref={canvasRef}
-      className="absolute top-[45px] right-0 w-10 h-10 z-10"
-    ></canvas>
-    <video ref={videoRef} id="faceIdentity" width="720" height="560" autoPlay muted></video>
+    <video ref={videoRef} width="720" height="560" id="faceIdentity" className="hidden"></video>
   </>
 }
 export default FaceIdentity;
