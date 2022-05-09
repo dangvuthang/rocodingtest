@@ -23,6 +23,7 @@ export interface Test {
   link: string;
   duration: number;
   question: string;
+  conversationSid: string;
 }
 
 const Exam = () => {

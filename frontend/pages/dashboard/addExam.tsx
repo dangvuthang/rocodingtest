@@ -5,8 +5,8 @@ import CreatedTests from "../../components/interfaces/CreatedTests";
 import { toast } from "react-toastify";
 import useAccessToken from "../../hooks/useAccessToken";
 import { postRequest } from "../../util/axiosInstance";
-
-const addExam = () => {
+import Link from "next/link";
+const AddExam = () => {
   const accessToken = useAccessToken();
   const [formData, setFormData] = React.useState<CreatedTests | {}>({});
   let [startedDate, setstartedDate] = React.useState("");
@@ -124,8 +124,8 @@ const addExam = () => {
                     Add Examination
                   </h3>
                   <p className="italic pt-2 text-sm text-gray-600">
-                    "Education breeds confidence. Confidence breeds hope. Hope
-                    breeds peace. ~ Confucius"
+                    &quot;Education breeds confidence. Confidence breeds hope.
+                    Hope breeds peace. ~ Confucius&quot;
                   </p>
                 </div>
                 <div className=" pt-6 flex flex-row space-x-80 ">
@@ -154,16 +154,14 @@ const addExam = () => {
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-11/12 sm:text-sm border border-gray-300 rounded-md"
                     ></textarea>
                     <p className="mr-8 mt-2 text-sm text-gray-500">
-                      Please state your question according to the exam's
+                      Please state your question according to the exam&apos;s
                       purpose.
                       <span>
-                        <a
-                          className="pl-1 relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                          target="_blank"
-                          href="https://commonmark.org/help/"
-                        >
-                          Need help writing in Markdown format?
-                        </a>
+                        <Link href="https://commonmark.org/help/">
+                          <a className="pl-1 relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                            Need help writing in Markdown format?
+                          </a>
+                        </Link>
                       </span>
                     </p>
                   </div>
@@ -233,4 +231,4 @@ const addExam = () => {
     </div>
   );
 };
-export default addExam;
+export default AddExam;

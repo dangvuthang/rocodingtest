@@ -3,17 +3,28 @@ import dynamic from "next/dynamic";
 import { useIsAuthenticated } from "@azure/msal-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useUser } from "../../context/UserProvider";
 
-const SignInButton = dynamic(() => import("../../components/layout/SignInButton"), {
-  ssr: false,
-});
-const SignOutButton = dynamic(() => import("../../components/layout/SignOutButton"), {
-  ssr: false,
-});
+const SignInButton = dynamic(
+  () => import("../../components/layout/SignInButton"),
+  {
+    ssr: false,
+  }
+);
+const SignOutButton = dynamic(
+  () => import("../../components/layout/SignOutButton"),
+  {
+    ssr: false,
+  }
+);
 
 const HeroSection = () => {
   const isAuthenticated = useIsAuthenticated();
-  const route = useRouter()
+  const { user } = useUser();
+  const route = useRouter();
+  const didSignUp = isAuthenticated && user?._id;
+  const isTeacher = didSignUp && user?.role === "teacher";
+
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -28,7 +39,10 @@ const HeroSection = () => {
             <polygon points="50,0 100,0 50,100 0,100" />
           </svg>
           <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
-            <nav className="relative flex items-center justify-between sm:h-10 lg:justify-start" aria-label="Global">
+            <nav
+              className="relative flex items-center justify-between sm:h-10 lg:justify-start"
+              aria-label="Global"
+            >
               <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
                 <div className="flex items-center justify-between w-full md:w-auto">
                   <a href="#">
@@ -41,9 +55,14 @@ const HeroSection = () => {
                 </div>
               </div>
               <div className=" md:block md:ml-10 md:pr-4 md:space-x-8">
-                {isAuthenticated ? <SignOutButton /> : <SignInButton />}
-                {isAuthenticated && (
-                  <button onClick={() => route.push({ pathname: "/dashboard" })} className="btn hover:text-blue-400 hover:bg-white">Dashboard</button>
+                {didSignUp ? <SignOutButton /> : <SignInButton />}
+                {isTeacher && (
+                  <button
+                    onClick={() => route.push({ pathname: "/dashboard" })}
+                    className="btn hover:text-blue-400 hover:bg-white"
+                  >
+                    Dashboard
+                  </button>
                 )}
               </div>
             </nav>
@@ -51,8 +70,10 @@ const HeroSection = () => {
           <div className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">HACKERMIT</span>{' '}
-                <span className="block text-indigo-600 xl:inline">Online Exam Maker</span>
+                <span className="block xl:inline">HACKERMIT</span>{" "}
+                <span className="block text-indigo-600 xl:inline">
+                  Online Exam Maker
+                </span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                 Easy to organize online exams. Stability and Secure.
@@ -88,5 +109,5 @@ const HeroSection = () => {
       </div>
     </div>
   );
-}
+};
 export default HeroSection;

@@ -2,6 +2,12 @@ import Test from "../models/Test";
 import { Response } from "express";
 import mongoose from "mongoose";
 import { AuthRequest } from "../controllers/AuthController";
+import twilio from "twilio";
+
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID!,
+  process.env.TWILIO_AUTH_TOKEN!
+);
 
 export const getTest = async (req: AuthRequest, res: Response) => {
   const id = req.params.id;
@@ -63,10 +69,19 @@ export const getTestByUserAndId = async (req: AuthRequest, res: Response) => {
 
 export const createTest = async (req: AuthRequest, res: Response) => {
   const _id = new mongoose.Types.ObjectId();
-  let { name, startedDate, endDate, link, duration, question, teacherId } =
-    req.body;
-  teacherId = req.user!._id;
-  link = "http://localhost:3000/exam/" + _id;
+  const { name, startedDate, endDate, duration, question } = req.body;
+  const teacherId = req.user!._id;
+  const link = "http://localhost:3000/exam/" + _id;
+  let conversationSid;
+  try {
+    const conversation = await client.conversations.conversations.create();
+    conversationSid = conversation.sid;
+  } catch (error) {
+    return res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
   let test;
   try {
     test = await Test.create({
@@ -78,6 +93,7 @@ export const createTest = async (req: AuthRequest, res: Response) => {
       duration,
       question,
       teacherId,
+      conversationSid,
     });
   } catch (err) {
     return res.status(400).json({

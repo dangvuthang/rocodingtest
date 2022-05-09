@@ -31,7 +31,7 @@ export default function Dashboard() {
         console.log("No test was found here");
       }
     };
-    if(accessToken){
+    if (accessToken) {
       getTest();
     }
   }, [accessToken]);
@@ -118,10 +118,11 @@ export default function Dashboard() {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     <ReactMarkdown
-                      children={`${currentTest.question}`}
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeRaw]}
-                    />
+                    >
+                      {currentTest.question}
+                    </ReactMarkdown>
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

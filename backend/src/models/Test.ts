@@ -7,6 +7,7 @@ export interface ITest extends Document {
   link: string;
   duration: number;
   question: string;
+  conversationSid: string;
   teacherId: Types.ObjectId;
 }
 
@@ -17,6 +18,7 @@ const TestSchema: Schema = new Schema({
   link: { type: String, required: true },
   duration: { type: Number, required: true },
   question: { type: String, required: true },
+  conversationSid: { type: String, required: true },
   teacherId: { type: Schema.Types.ObjectId, ref: "User" },
 });
 

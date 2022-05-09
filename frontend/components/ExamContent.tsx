@@ -2,8 +2,8 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 import Router from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import CodeArea from "./CodeArea";
-import QuestionArea2 from "./QuestionArea2";
-import Timer2 from "./Timer2";
+import QuestionArea2 from "./QuestionArea";
+import Timer2 from "./Timer";
 import InstructionModal from "./InstructionModal";
 import AlertModal from "./AlertModal";
 import useFullScreen from "../hooks/useFullScreen";
@@ -15,6 +15,8 @@ import useAccessToken from "../hooks/useAccessToken";
 import { captureScreen, savedToCloudinary } from "../util/captureScreen";
 import ConfirmModal from "./ConfirmModal";
 import LoadingModal from "./LoadingModal";
+import useTwilioConversation from "../hooks/useTwilioConversation";
+import { useMsal } from "@azure/msal-react";
 import FaceRecognition from "./FaceRecognition";
 
 interface ExamContentProps {
@@ -23,6 +25,8 @@ interface ExamContentProps {
 }
 
 const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
+  const user = useMsal().accounts[0];
+
   const [run, setRun] = useState(false);
   const [language, setLanguage] = useState("javascript");
   const [content, setContent] = useState("");
@@ -40,6 +44,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   const isFullscreen = useFullScreen();
   const isFocused = useWindowFocus();
   const count = useRef(0);
+  const { sendMessage } = useTwilioConversation(test.conversationSid);
 
   const handleStartExam = async () => {
     setShowInstruction(false);
@@ -110,59 +115,83 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   }, [accessToken, content, isFullscreen, onDone, recordId, test._id]);
 
   const handleCloseWarning = async () => {
-    const image = await captureScreen().catch((err) => console.log(err));
     setShowAlertMessage(false);
     if (!isFullscreen && remainingTime !== 0) {
       await document.documentElement
         .requestFullscreen()
         .catch((err) => console.log(err));
     }
-    let evidence;
-    if (image) {
-      evidence = await savedToCloudinary(image).catch((err) =>
-        console.log(err)
-      );
-    }
-    if (recordId) {
-      await patchRequest({
-        url: `/records/${recordId}`,
-        body: { evidence },
-        token: accessToken,
-      }).catch((err) => console.log(err));
-    }
   };
+
+  // Capture evidence
+  useEffect(() => {
+    const capturedEvidence = async () => {
+      const image = await captureScreen().catch((err) => console.log(err));
+      let evidence;
+      if (image) {
+        evidence = await savedToCloudinary(image).catch((err) =>
+          console.log(err)
+        );
+      }
+      if (recordId) {
+        await patchRequest({
+          url: `/records/${recordId}`,
+          body: { evidence },
+          token: accessToken,
+        }).catch((err) => console.log(err));
+      }
+    };
+    if (showAlertMessage) {
+      capturedEvidence();
+    }
+  }, [accessToken, recordId, showAlertMessage]);
 
   // Detect navigate outside webste
   useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
-      setAlertMessage("you are trying to navigate outside of the web page");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+      if (!showAlertMessage) {
+        setAlertMessage("you are trying to navigate outside of the web page");
+        setShowAlertMessage(true);
+        setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+        sendMessage(
+          `${user.username} is trying to navigate outside of the web page`
+        );
+      }
     }
-  }, [isFocused, showInstruction]);
+  }, [isFocused, showInstruction, sendMessage, user.username]);
 
   // Detect minimize fullscreen
-  useEffect(() => {
-    if (showInstruction) return;
-    if (!isFullscreen) {
-      count.current++;
-      if (count.current === 1) return;
-      setAlertMessage("you are trying to minimize the web page");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => (time > 0 ? time - 1 : 0));
-    }
-  }, [isFullscreen, showInstruction]);
+  // useEffect(() => {
+  //   console.log({ isFullscreen, showInstruction });
+  //   if (showInstruction) return;
+  //   if (!isFullscreen) {
+  //     count.current++;
+  //     if (count.current === 1) return;
+  //     if (!showAlertMessage) {
+  //       setAlertMessage("you are trying to minimize the web page");
+  //       setShowAlertMessage(true);
+  //       setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+  //       // sendMessage(`${user.username} is trying to minimize the web page`);
+  //     }
+  //   }
+  // }, [
+  //   isFullscreen,
+  //   showInstruction,
+  //   sendMessage,
+  //   user.username,
+  //   showInstruction,
+  // ]);
 
   // Detect glance tracking
-  /*   useEffect(() => {
-    if (showInstruction) return;
-    if (!isWatching) {
-      setAlertMessage("you are not looking at the screen");
-      setShowAlertMessage(true);
-      setRemainingTime((time) => time - 1);
-    }
-  }, [isWatching, showInstruction]); */
+  // useEffect(() => {
+  //   if (showInstruction) return;
+  //   if (!isWatching) {
+  //     setAlertMessage("you are not looking at the screen");
+  //     setShowAlertMessage(true);
+  //     setRemainingTime((time) => time - 1);
+  //   }
+  // }, [isWatching, showInstruction]);
 
   // Detect face recognization
   // useEffect(() => {
