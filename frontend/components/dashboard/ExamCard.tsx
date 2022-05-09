@@ -1,7 +1,9 @@
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from "react";
 import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 import Router from "next/router";
+dayjs.extend(isBetween);
 
 type Property = {
   prop: CreatedTests | any;
@@ -34,6 +36,11 @@ const ExamCard: React.FC<Property> = ({
     Router.push(`/dashboard/monitor/${prop.conversationSid}`);
   };
 
+  const isAvailable = dayjs().isBetween(
+    dayjs(new Date(prop.startedDate)),
+    dayjs(new Date(prop.endDate))
+  );
+
   return (
     <div
       key={prop._id}
@@ -64,7 +71,11 @@ const ExamCard: React.FC<Property> = ({
       {/* Button Edit and Delete */}
       <div className="flex mr-4 content-center justify-end gap-1 w-2/6">
         <div>
-          <button className="btn" onClick={handleMonitor}>
+          <button
+            className="btn disabled:cursor-not-allowed disabled:bg-slate-400"
+            onClick={handleMonitor}
+            disabled={!!!isAvailable}
+          >
             Monitor
           </button>
         </div>
