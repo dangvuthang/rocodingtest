@@ -28,7 +28,6 @@
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-<<<<<<< HEAD
     "react-hook-form": "^7.30.0",
     "react-hot-toast": "^2.2.0",
     "react-markdown": "^8.0.1",
@@ -37,13 +36,11 @@
     "recharts": "^2.1.9",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1"
-=======
     "react-markdown": "^8.0.1",
     "react-toastify": "^8.2.0",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "twilio": "^3.76.1"
->>>>>>> a495f8d0eae056d17769da1b93145ff015e6f8ab
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.0",
