@@ -9,7 +9,7 @@ interface FaceIdentityProps {
   onChange: Dispatch<SetStateAction<boolean>>;
 }
 
-const FaceIdentity: FC<FaceIdentityProps> = ({ onChange })  => {
+const FaceIdentity: FC<FaceIdentityProps> = ()  => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stream = useWebcam();
@@ -42,7 +42,7 @@ const FaceIdentity: FC<FaceIdentityProps> = ({ onChange })  => {
     const video = videoRef.current!;
     const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
     const p2 =  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
-    const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('./models')
+    const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('/models')
     Promise.all([p1,p2,p3]).then( async () => {
       const canvas = faceapi.createCanvas(video);
           if (canvas){
@@ -54,13 +54,17 @@ const FaceIdentity: FC<FaceIdentityProps> = ({ onChange })  => {
                 const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
                 const resizedDetections = faceapi.resizeResults(detections, displaySize)
                 canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height)
+                faceapi.draw.drawDetections(canvas, resizedDetections)
+                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
                 if (detections.length > 1) {
-                  onChange(false)
+                  console.log("False")
+                  return false
                 } else if (detections.length == 0 ){
-                  onChange(false)
+                  console.log("False")
+                  return false
                 } else {
-                  onChange(true)
-                  console.log('hi')
+                  console.log("True")
+                  return true
                 }
               }, 100)
             } catch (error) {
@@ -68,7 +72,7 @@ const FaceIdentity: FC<FaceIdentityProps> = ({ onChange })  => {
             }
           }
     })
-  }, [onChange]);
+  });
 
   return <>
     <canvas

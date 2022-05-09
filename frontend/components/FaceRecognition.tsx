@@ -18,7 +18,14 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const stream = useWebcam();
   const {user} = useUser();
+  const [photoUrl, setPhotoUrl] = useState<string>("");
   let similarityScore = 1;
+
+  useEffect(() => {
+    if(user?.photoUrl) {
+      setPhotoUrl(user.photoUrl);
+    }
+  }, [user]);
 
   useEffect(() => {
     const video = videoRef.current!;
@@ -66,11 +73,10 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
         try {
           const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
           const p2 =  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
-          const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('./models')
+          const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('/models')
           await Promise.all([p1,p2, p3]).then(async () => {
             if(imageUrl){
-              const REFERENCE_IMAGE = 'https://www2.deloitte.com/content/dam/Deloitte/nl/Images/promo_images/deloitte-nl-cm-digital-human-promo.jpg';
-              // const REFERENCE_IMAGE = user!.photoUrl;
+              const REFERENCE_IMAGE = user!.photoUrl;
               const QUERY_IMAGE = imageUrl;
               const tyniOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.5 })
 
@@ -80,28 +86,26 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
               referenceImage.setAttribute('crossOrigin', 'anonymous')
               queryImage.setAttribute('crossOrigin', 'anonymous')
 
-              const resultsQuery = await faceapi.detectAllFaces(queryImage, tyniOptions)
-              .withFaceLandmarks()
-              .withFaceDescriptors()
+              const resultsQuery = await faceapi.detectSingleFace(queryImage, tyniOptions).withFaceLandmarks().withFaceDescriptor()
 
-              const resultsRef = await faceapi.detectAllFaces(referenceImage, tyniOptions)
-              .withFaceLandmarks()
-              .withFaceDescriptors()
+              const resultsRef = await faceapi.detectSingleFace(referenceImage, tyniOptions).withFaceLandmarks().withFaceDescriptor()
 
               const faceMatcher = new faceapi.FaceMatcher(resultsRef)
 
-              console.log(faceMatcher)
-
-              const queryDrawBoxes = resultsQuery.map((res: { descriptor: any; }) => {
-                const bestMatch = faceMatcher.findBestMatch(res.descriptor)
-                similarityScore = bestMatch.distance
-              })
-              if (similarityScore < 0.5){
-                console.log("Similarity")
-                onChange(false);
+              if (faceMatcher & resultsQuery & resultsRef) {
+                const bestMatch = faceMatcher.findBestMatch(resultsQuery.descriptor)
+                similarityScore = bestMatch._distance
+                if (similarityScore < 0.2){
+                  onChange(true)
+                  console.log("Similarity")
+                } else {
+                  onChange(false)
+                  console.log("Not Similarity")
+                }
+              } else {
+                onChange(false)
+                console.log("Cannot compare the image, please try again")
               }
-              onChange(true);
-              console.log("Not Similarity")
             }
           })
         } catch (error) {
