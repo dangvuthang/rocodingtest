@@ -29,6 +29,10 @@ const ExamCard: React.FC<Property> = ({
   const handleNoti = () => {
     Router.push("/dashboard/notify");
   };
+  console.log(prop);
+  const handleMonitor = () => {
+    Router.push(`/dashboard/monitor/${prop.conversationSid}`);
+  };
 
   return (
     <div
@@ -59,6 +63,11 @@ const ExamCard: React.FC<Property> = ({
       </div>
       {/* Button Edit and Delete */}
       <div className="flex mr-4 content-center justify-end gap-1 w-2/6">
+        <div>
+          <button className="btn" onClick={handleMonitor}>
+            Monitor
+          </button>
+        </div>
         <div>
           <button
             onClick={() => {
