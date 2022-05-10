@@ -1,13 +1,15 @@
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from "react";
 import dayjs from "dayjs";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { toast } from "react-toastify";
 import isBetween from "dayjs/plugin/isBetween";
 import Router from "next/router";
 dayjs.extend(isBetween);
 
 type Property = {
   randomNum: number;
-  prop: CreatedTests | any;
+  prop?: CreatedTests | any;
   deleteExam: (deleteId: string) => void;
   editRow: (prop: CreatedTests | any) => void;
   showExam: (prop: CreatedTests | any) => void;
@@ -32,8 +34,7 @@ const ExamCard: React.FC<Property> = ({
 }) => {
   const handleNoti = () => {
     Router.push("/dashboard/notify");
-  };
-  console.log(prop);
+  }
   const handleMonitor = () => {
     Router.push(`/dashboard/monitor/${prop.conversationSid}`);
   };
@@ -44,25 +45,38 @@ const ExamCard: React.FC<Property> = ({
   );
 
   return (
+
     <div
       key={prop._id}
-      className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"
+      className="mt-4 ml-4 mr-4 h-32 lg:h-44  border border-black flex gap-3 items-center"
     >
       <div className="">
-        <img src={`https://picsum.photos/200/150?random=${randomNum}`} />
+        <img src={`https://picsum.photos/200/200?random=${randomNum}`} />
       </div>
       {/* Exam details */}
       <div className="grid justify-between items-center h-full w-4/6 gap-3">
-        <div>
+        <div className="flex">
           <h2
             onClick={() => {
               showExam(prop);
             }}
-            className="hover:cursor-pointer hover:text-sky-500 active:text-opacity-50 text-3xl"
+            className="hover:cursor-pointer hover:text-sky-500 active:text-opacity-50 text-3xl mr-2"
           >
             {prop.name}
           </h2>
+          <CopyToClipboard text={`http://localhost:3000/exam/${prop._id}`} onCopy={() => toast.success("Copied exam link to clipboard", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 4000,
+            icon: "🔥",
+          })}>
+            <button>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+          </CopyToClipboard>
         </div>
+
         <div>
           <h3 className="text-lg">{handleDuraionValue(prop.duration)}</h3>
         </div>
@@ -84,7 +98,7 @@ const ExamCard: React.FC<Property> = ({
         <div>
           <button
             onClick={() => {
-              handleNoti();
+              handleNoti()
             }}
             className="btn"
           >

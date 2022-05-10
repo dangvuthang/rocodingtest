@@ -109,7 +109,7 @@ export default function Sidebar() {
                 </button>
               </li>
               <li>
-                <Link href="#">
+                <Link href="/dashboard">
                   <a className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg  hover:bg-gray-100 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
