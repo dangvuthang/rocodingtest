@@ -15,7 +15,6 @@ const Submission = (props: any) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("hehe");
     const path = Router.query.id;
     const tid: string = props.router.query.tid;
     console.log(path);
@@ -26,15 +25,14 @@ const Submission = (props: any) => {
       });
       getSubmission
         .then((data) => {
-          setSubmission(data.data.data.submissions);
-          setEvidences(submission?.recordId.evidence);
+          const submission = data.data.data.submissions;
+          setSubmission(submission);
+          setEvidences(submission.recordId.evidence);
           setLoading(false);
         })
         .catch((err) => console.log(err));
     }
-  }, [accessToken, submission]);
-  console.log(submission);
-  console.log(props);
+  }, [accessToken, props.router.query.tid]);
 
   return (
     <div>
@@ -121,7 +119,7 @@ const Submission = (props: any) => {
                 <dt className="text-sm font-medium text-gray-500">
                   Student Submission
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 h-[30vh]">
                   <Editor
                     width="100%"
                     height="100%"
