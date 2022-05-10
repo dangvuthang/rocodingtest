@@ -95,7 +95,7 @@ const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
               if (faceMatcher & resultsQuery & resultsRef) {
                 const bestMatch = faceMatcher.findBestMatch(resultsQuery.descriptor)
                 similarityScore = bestMatch._distance
-                if (similarityScore < 0.2){
+                if (similarityScore < 0.4){
                   onChange(true)
                   console.log("Similarity")
                 } else {
