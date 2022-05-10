@@ -6,6 +6,7 @@ import Router from "next/router";
 dayjs.extend(isBetween);
 
 type Property = {
+  randomNum: number;
   prop: CreatedTests | any;
   deleteExam: (deleteId: string) => void;
   editRow: (prop: CreatedTests | any) => void;
@@ -23,6 +24,7 @@ const handleDuraionValue = (duraionNum: number) => {
 };
 
 const ExamCard: React.FC<Property> = ({
+  randomNum,
   prop,
   deleteExam,
   editRow,
@@ -47,7 +49,7 @@ const ExamCard: React.FC<Property> = ({
       className="mt-4 ml-4 mr-4 h-32  border border-black flex gap-3 items-center"
     >
       <div className="">
-        <img src="https://picsum.photos/200/150" />
+        <img src={`https://picsum.photos/200/150?random=${randomNum}`} />
       </div>
       {/* Exam details */}
       <div className="grid justify-between items-center h-full w-4/6 gap-3">
