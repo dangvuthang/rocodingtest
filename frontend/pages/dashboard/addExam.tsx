@@ -86,6 +86,7 @@ const AddExam = () => {
         icon: "⏳",
       });
     } else {
+      setDisabler(true)
       postRequest({
         url: `/tests`,
         body: test,
