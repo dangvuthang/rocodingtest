@@ -3,9 +3,9 @@ import * as React from "react";
 import dayjs from "dayjs";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
-import isBetween from "dayjs/plugin/isBetween";
 import Router from "next/router";
 import { ClipboardIcon, ClipboardCheckIcon } from "@heroicons/react/outline";
+import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
 type Property = {
@@ -38,6 +38,7 @@ const ExamCard: React.FC<Property> = ({
   const handleNoti = () => {
     Router.push("/dashboard/notify");
   };
+
   const handleMonitor = () => {
     Router.push(`/dashboard/monitor/${prop.conversationSid}`);
   };
@@ -46,7 +47,7 @@ const ExamCard: React.FC<Property> = ({
     dayjs(new Date(prop.startedDate)),
     dayjs(new Date(prop.endDate))
   );
-  console.log(prop);
+
   return (
     <div
       key={prop._id}
@@ -77,6 +78,15 @@ const ExamCard: React.FC<Property> = ({
       </div>
       {/* Button Edit and Delete */}
       <div className="flex mr-4 justify-end gap-4 w-2/6">
+        <div>
+          <button
+            className="btn disabled:cursor-not-allowed disabled:bg-slate-400"
+            onClick={handleMonitor}
+            disabled={!!!isAvailable}
+          >
+            Monitor
+          </button>
+        </div>
         <div>
           <button
             className="btn disabled:cursor-not-allowed disabled:bg-slate-400"
