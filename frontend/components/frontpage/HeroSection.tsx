@@ -59,7 +59,7 @@ const HeroSection = () => {
                 {isTeacher && (
                   <button
                     onClick={() => route.push({ pathname: "/dashboard" })}
-                    className="btn hover:text-blue-400 hover:bg-white"
+                    className="btn hover:text-indigo-600 hover:bg-white hover:border hover:border-indigo-600 transition"
                   >
                     Dashboard
                   </button>

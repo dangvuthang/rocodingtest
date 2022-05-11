@@ -25,7 +25,6 @@ export default function Dashboard() {
           token: accessToken,
         });
         const atest = request.data.data.test;
-        console.log(atest);
         setcurrentTest(atest);
       } catch (error) {
         console.log("No test was found here");
@@ -51,7 +50,6 @@ export default function Dashboard() {
         .catch((err) => console.log("There is no submission for this test!"));
     }
   }, [accessToken]);
-  console.log(submissions);
 
   const showSubmission = (id: string): void => {
     Router.push({

@@ -17,7 +17,6 @@ const Submission = (props: any) => {
   useEffect(() => {
     const path = Router.query.id;
     const tid: string = props.router.query.tid;
-    console.log(path);
     if (accessToken) {
       const getSubmission = getRequest({
         url: `/tests/${tid}/submissions/${path}`,
@@ -83,15 +82,27 @@ const Submission = (props: any) => {
                   )}
                 </dd>
               </div>
-              <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Number of Cheats
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {submission?.recordId?.numberOfCheats}
-                </dd>
-              </div>
-              {submission?.recordId?.numberOfCheats !== 0 && (
+              {submission?.recordId?.numberOfCheats ? (
+                <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Number of Cheats
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {submission?.recordId?.numberOfCheats}
+                  </dd>
+                </div>
+              ) : (
+                <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Number of Cheats
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    0
+                  </dd>
+                </div>
+              )}
+
+              {submission?.recordId?.numberOfCheats ? (
                 <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">
                     Evidence
@@ -113,6 +124,22 @@ const Submission = (props: any) => {
                     ))}
                   </div>
                 </div>
+              ) : (
+                <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Evidence
+                  </dt>
+                  <div className="col-span-2 grid grid-cols-2 gap-3">
+                    {evidences?.map((evidence: any) => (
+                      <div
+                        key={evidence}
+                        className="rounded overflow-hidden shadow-lg"
+                      >
+                        <p>There is no cheating commitment.</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
 
               <div className="bg-white border-b px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -122,7 +149,7 @@ const Submission = (props: any) => {
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 h-[30vh]">
                   <Editor
                     width="100%"
-                    height="100%"
+                    height="30vh"
                     theme="vs-dark"
                     value={submission?.content}
                   />

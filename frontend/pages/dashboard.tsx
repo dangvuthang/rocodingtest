@@ -171,8 +171,9 @@ export default function Dashboard() {
                     return el.name.toLowerCase().includes(inputSearch);
                   }
                 })
-                .map((test) => (
+                .map((test, index) => (
                   <ExamCard
+                    randomNum={index}
                     key={test._id}
                     showExam={showExam}
                     editRow={editRow}

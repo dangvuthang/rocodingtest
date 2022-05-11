@@ -12,6 +12,7 @@ const AddExam = () => {
   let [startedDate, setstartedDate] = React.useState("");
   let [endDate, setendDate] = React.useState("");
   let [duration_value, setduration_value] = React.useState<number>(0);
+  let [disable, setDisable] = React.useState<boolean>(false);
   const handleForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null>
   ): void => {
@@ -72,9 +73,6 @@ const AddExam = () => {
       endDate: formData.endDate,
       duration: formData.duration,
     };
-    {
-      /*setTests([...tests, test]);*/
-    }
     if (
       test.name === undefined ||
       test.question === undefined ||
@@ -88,6 +86,7 @@ const AddExam = () => {
         icon: "⏳",
       });
     } else {
+      setDisable(true);
       postRequest({
         url: `/tests`,
         body: test,
@@ -212,16 +211,13 @@ const AddExam = () => {
             </div>
             <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
               <button
-                disabled={formData === undefined ? true : false}
+                disabled={disable}
                 type="submit"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="btn disabled:text-white disabled:bg-slate-400 disabled:cursor-not-allowed"
               >
-                Save Exam
+                {disable ? "Saving..." : "Save Exam"}
               </button>
-              <button
-                onClick={() => Router.push(`/dashboard`)}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+              <button onClick={() => Router.push(`/dashboard`)} className="btn">
                 Cancel
               </button>
             </div>
