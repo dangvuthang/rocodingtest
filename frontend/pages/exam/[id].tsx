@@ -10,6 +10,7 @@ import Router from "next/router";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useUser } from "../../context/UserProvider";
+import LoadingSpinner from "../../components/LoadingSpinner";
 dayjs.extend(isBetween);
 const LoadScript = dynamic(() => import("../../components/LoadScript"), {
   loading: () => <p>Loading Model...</p>,
@@ -146,8 +147,9 @@ const Exam = () => {
     );
   } else {
     return (
-      <div className="h-screen flex justify-center items-center text-lg">
-        Loading...
+      <div className="h-screen flex flex-col justify-center items-center text-lg">
+        <span className="mb-3">Loading...</span>
+        <LoadingSpinner />
       </div>
     );
   }
