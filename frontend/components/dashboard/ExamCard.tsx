@@ -1,10 +1,11 @@
 import CreatedTests from "../interfaces/CreatedTests";
 import * as React from "react";
 import dayjs from "dayjs";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import isBetween from "dayjs/plugin/isBetween";
 import Router from "next/router";
+import { ClipboardIcon, ClipboardCheckIcon } from "@heroicons/react/outline";
 dayjs.extend(isBetween);
 
 type Property = {
@@ -36,7 +37,7 @@ const ExamCard: React.FC<Property> = ({
 
   const handleNoti = () => {
     Router.push("/dashboard/notify");
-  }
+  };
   const handleMonitor = () => {
     Router.push(`/dashboard/monitor/${prop.conversationSid}`);
   };
@@ -45,9 +46,8 @@ const ExamCard: React.FC<Property> = ({
     dayjs(new Date(prop.startedDate)),
     dayjs(new Date(prop.endDate))
   );
-
+  console.log(prop);
   return (
-
     <div
       key={prop._id}
       className="mt-4 ml-4 mr-4 h-32 lg:h-44  border border-black flex gap-3 items-center"
@@ -87,32 +87,9 @@ const ExamCard: React.FC<Property> = ({
           </button>
         </div>
         <div>
-          {copy ?
-            (<button className="cursor-not-allowed inline-flex justify-center py-2 px-7 border border-transparent shadow-sm text-sm rounded-md text-white bg-slate-400">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-            </button>)
-            :
-            (<CopyToClipboard text={`http://localhost:3000/exam/${prop._id}`} onCopy={() => toast.success("Copied exam link to clipboard", {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 4000,
-              icon: "🔥",
-              onOpen: () => setCopy(!copy)
-            })}>
-              <button
-                className="btn"
-              >
-                Share Exam
-              </button>
-            </CopyToClipboard>)}
-
-
-        </div>
-        <div>
           <button
             onClick={() => {
-              handleNoti()
+              handleNoti();
             }}
             className="btn"
           >
@@ -139,6 +116,28 @@ const ExamCard: React.FC<Property> = ({
           >
             Delete
           </button>
+        </div>
+        <div>
+          {copy ? (
+            <button className="py-2 px-4 text-white bg-slate-400">
+              <ClipboardCheckIcon className="w-5 h-5" />
+            </button>
+          ) : (
+            <CopyToClipboard
+              text={prop.link}
+              onCopy={() =>
+                toast.success("Copied exam link to clipboard", {
+                  position: toast.POSITION.TOP_RIGHT,
+                  icon: "🔥",
+                  onOpen: () => setCopy(!copy),
+                })
+              }
+            >
+              <button className="btn">
+                <ClipboardIcon className="w-5 h-5" />
+              </button>
+            </CopyToClipboard>
+          )}
         </div>
       </div>
     </div>
