@@ -1,5 +1,4 @@
 import { FC, Dispatch, useEffect, useRef, useState, SetStateAction } from "react";
-import { canvas } from './models';
 import useWebcam from "../hooks/useWebcam";
 import React from "react";
 import { useUser } from '../context/UserProvider';

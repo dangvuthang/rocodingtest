@@ -1,1 +1,0 @@
-export { canvas } from './env';
