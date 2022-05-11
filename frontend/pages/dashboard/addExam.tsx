@@ -12,7 +12,7 @@ const AddExam = () => {
   let [startedDate, setstartedDate] = React.useState("");
   let [endDate, setendDate] = React.useState("");
   let [duration_value, setduration_value] = React.useState<number>(0);
-  let [disabler, setDisabler] = React.useState<boolean>(false);
+  let [disable, setDisable] = React.useState<boolean>(false);
   const handleForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | null>
   ): void => {
@@ -86,7 +86,7 @@ const AddExam = () => {
         icon: "⏳",
       });
     } else {
-      setDisabler(true)
+      setDisable(true);
       postRequest({
         url: `/tests`,
         body: test,
@@ -210,8 +210,12 @@ const AddExam = () => {
               </div>
             </div>
             <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
-              <button disabled={disabler} type="submit" className="btn">
-                Save Exam
+              <button
+                disabled={disable}
+                type="submit"
+                className="btn disabled:text-white disabled:bg-slate-400 disabled:cursor-not-allowed"
+              >
+                {disable ? "Saving..." : "Save Exam"}
               </button>
               <button onClick={() => Router.push(`/dashboard`)} className="btn">
                 Cancel
