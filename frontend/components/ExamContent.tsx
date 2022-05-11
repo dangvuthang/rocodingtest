@@ -17,7 +17,7 @@ import ConfirmModal from "./ConfirmModal";
 import LoadingModal from "./LoadingModal";
 import useTwilioConversation from "../hooks/useTwilioConversation";
 import { useMsal } from "@azure/msal-react";
-import FaceRecognition from "./FaceRecognition";
+import { toast } from "react-toastify";
 
 interface ExamContentProps {
   test: Test;
@@ -39,12 +39,14 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   const [remainingTime, setRemainingTime] = useState(3);
   const [alertMessage, setAlertMessage] = useState("");
   const [isWatching, setIsWatching] = useState(true);
-
+  const [isDone, setIsDone] = useState(false);
   const accessToken = useAccessToken();
   const isFullscreen = useFullScreen();
   const isFocused = useWindowFocus();
   const count = useRef(0);
-  const { sendMessage } = useTwilioConversation(test.conversationSid);
+  const { sendMessage, conversation } = useTwilioConversation(
+    test.conversationSid
+  );
 
   const handleStartExam = async () => {
     setShowInstruction(false);
@@ -89,9 +91,10 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   };
 
   const handleSubmitCode = useCallback(async () => {
-    if (recordId) {
+    if (recordId && conversation) {
       setShowSubmissionConfirm(false);
       setLoading(true);
+      setIsDone(true);
       let request;
       try {
         request = await postRequest({
@@ -101,18 +104,17 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
         });
       } catch (error) {
         console.log(error);
+        setIsDone(false);
       } finally {
         setLoading(false);
         console.log(request);
         if (request?.data?.status === "success") {
-          if (isFullscreen) {
-            await document.exitFullscreen().catch((err) => console.log(err));
-          }
+          await conversation?.leave().catch((err) => console.log(err));
           onDone();
         }
       }
     }
-  }, [accessToken, content, isFullscreen, onDone, recordId, test._id]);
+  }, [accessToken, content, onDone, recordId, test._id, conversation]);
 
   const handleCloseWarning = async () => {
     setShowAlertMessage(false);
@@ -122,6 +124,26 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
         .catch((err) => console.log(err));
     }
   };
+
+  useEffect(() => {
+    const setUpListener = async () => {
+      conversation!.addListener("messageAdded", (message) => {
+        const index = message.body?.indexOf("|");
+        const username = message.body?.slice(0, index);
+        if (username === user.username) {
+          toast.warn(message.body?.slice(index! + 1), {
+            position: "top-right",
+          });
+        }
+      });
+    };
+    if (conversation && user.username) {
+      setUpListener();
+    }
+    return () => {
+      conversation?.removeAllListeners();
+    };
+  }, [conversation, user.username]);
 
   // Capture evidence
   useEffect(() => {
@@ -150,7 +172,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   useEffect(() => {
     if (showInstruction) return;
     if (!isFocused) {
-      if (!showAlertMessage) {
+      if (!showAlertMessage && !isDone) {
         setAlertMessage("you are trying to navigate outside of the web page");
         setShowAlertMessage(true);
         setRemainingTime((time) => (time > 0 ? time - 1 : 0));
@@ -162,36 +184,32 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   }, [isFocused, showInstruction, sendMessage, user.username]);
 
   // Detect minimize fullscreen
-  // useEffect(() => {
-  //   console.log({ isFullscreen, showInstruction });
-  //   if (showInstruction) return;
-  //   if (!isFullscreen) {
-  //     count.current++;
-  //     if (count.current === 1) return;
-  //     if (!showAlertMessage) {
-  //       setAlertMessage("you are trying to minimize the web page");
-  //       setShowAlertMessage(true);
-  //       setRemainingTime((time) => (time > 0 ? time - 1 : 0));
-  //       // sendMessage(`${user.username} is trying to minimize the web page`);
-  //     }
-  //   }
-  // }, [
-  //   isFullscreen,
-  //   showInstruction,
-  //   sendMessage,
-  //   user.username,
-  //   showInstruction,
-  // ]);
+  useEffect(() => {
+    if (showInstruction) return;
+    if (!isFullscreen) {
+      count.current++;
+      if (count.current === 1) return;
+      if (!showAlertMessage && !isDone) {
+        setAlertMessage("you are trying to minimize the web page");
+        setShowAlertMessage(true);
+        setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+        sendMessage(`${user.username} is trying to minimize the web page`);
+      }
+    }
+  }, [isFullscreen, showInstruction, sendMessage, user.username]);
 
   // Detect glance tracking
-  // useEffect(() => {
-  //   if (showInstruction) return;
-  //   if (!isWatching) {
-  //     setAlertMessage("you are not looking at the screen");
-  //     setShowAlertMessage(true);
-  //     setRemainingTime((time) => time - 1);
-  //   }
-  // }, [isWatching, showInstruction]);
+  useEffect(() => {
+    if (showInstruction) return;
+    if (!isWatching) {
+      if (!showAlertMessage && !isDone) {
+        setAlertMessage("you are not looking at the screen");
+        setShowAlertMessage(true);
+        setRemainingTime((time) => time - 1);
+        sendMessage(`${user.username} is not looking at the screen`);
+      }
+    }
+  }, [isWatching, showInstruction, sendMessage, user.username]);
 
   // Detect face recognization
   // useEffect(() => {
@@ -213,6 +231,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
     <>
       {/* <GlanceTracker onChange={setIsWatching} /> */}
       {/*<FaceRecognition onChange={setIsWatching}/>*/}
+      <GlanceTracker onChange={setIsWatching} />
       <LoadingModal open={loading} />
       <InstructionModal
         open={showInstruction}

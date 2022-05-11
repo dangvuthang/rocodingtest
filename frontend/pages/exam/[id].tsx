@@ -94,6 +94,13 @@ const Exam = () => {
     }
   }, [accessToken, stream]);
 
+  const handleOnDone = async () => {
+    setDone(true);
+    if (document.fullscreenElement) {
+      await document.exitFullscreen().catch((err) => console.log(err));
+    }
+  };
+
   if (count.current === 0) return <LoadScript />;
   if (!user) {
     return (
@@ -112,7 +119,7 @@ const Exam = () => {
     );
   }
   if (stream && user && test && permission && !done && isRunning) {
-    return <ExamContent test={test} onDone={() => setDone(true)} />;
+    return <ExamContent test={test} onDone={handleOnDone} />;
   } else if (done) {
     return (
       <div className="h-screen flex justify-center items-center text-lg">

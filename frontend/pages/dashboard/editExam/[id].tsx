@@ -15,6 +15,8 @@ export default function Dashboard() {
   let [endDate, setendDate] = React.useState<string>(``);
   let [duration_value, setduration_value] = React.useState<number>(0);
   const [loading, setLoading] = React.useState<Boolean>(true);
+  let [disable, setDisable] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     const getTest = async () => {
       const path = Router.query.id;
@@ -43,6 +45,7 @@ export default function Dashboard() {
     updatedTest: CreatedTests
   ) => {
     e.preventDefault();
+    setDisable(true);
     const path = Router.query.id;
     patchRequest({
       url: `/tests/${path}`,
@@ -50,10 +53,9 @@ export default function Dashboard() {
       token: accessToken,
     })
       .then((response) => {
-        console.log(response);
+        setDisable(false);
         toast.success("The exam updated successfully !", {
           position: toast.POSITION.TOP_RIGHT,
-          autoClose: 4000,
           icon: "🚀",
         });
         Router.push(`/dashboard`);
@@ -235,11 +237,11 @@ export default function Dashboard() {
                 </div>
                 <div className="space-x-2 px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
-                    disabled={exam === undefined ? true : false}
+                    disabled={disable}
                     type="submit"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:text-white disabled:bg-slate-400 disabled:cursor-not-allowed"
                   >
-                    Update Exam
+                    {disable ? "Saving..." : "Update Exam"}
                   </button>
                   <button
                     onClick={() => Router.push("/dashboard")}
