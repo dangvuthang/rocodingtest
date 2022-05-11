@@ -32,6 +32,8 @@ const ExamCard: React.FC<Property> = ({
   editRow,
   showExam,
 }) => {
+  const [copy, setCopy] = React.useState(false);
+
   const handleNoti = () => {
     Router.push("/dashboard/notify");
   }
@@ -55,7 +57,7 @@ const ExamCard: React.FC<Property> = ({
       </div>
       {/* Exam details */}
       <div className="grid justify-between items-center h-full w-4/6 gap-3">
-        <div className="flex">
+        <div>
           <h2
             onClick={() => {
               showExam(prop);
@@ -64,17 +66,6 @@ const ExamCard: React.FC<Property> = ({
           >
             {prop.name}
           </h2>
-          <CopyToClipboard text={`http://localhost:3000/exam/${prop._id}`} onCopy={() => toast.success("Copied exam link to clipboard", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 4000,
-            icon: "🔥",
-          })}>
-            <button>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-            </button>
-          </CopyToClipboard>
         </div>
 
         <div>
@@ -85,7 +76,7 @@ const ExamCard: React.FC<Property> = ({
         </div>
       </div>
       {/* Button Edit and Delete */}
-      <div className="flex mr-4 content-center justify-end gap-1 w-2/6">
+      <div className="flex mr-4 justify-end gap-4 w-2/6">
         <div>
           <button
             className="btn disabled:cursor-not-allowed disabled:bg-slate-400"
@@ -94,6 +85,29 @@ const ExamCard: React.FC<Property> = ({
           >
             Monitor
           </button>
+        </div>
+        <div>
+          {copy ?
+            (<button className="cursor-not-allowed inline-flex justify-center py-2 px-7 border border-transparent shadow-sm text-sm rounded-md text-white bg-slate-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </button>)
+            :
+            (<CopyToClipboard text={`http://localhost:3000/exam/${prop._id}`} onCopy={() => toast.success("Copied exam link to clipboard", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 4000,
+              icon: "🔥",
+              onOpen: () => setCopy(!copy)
+            })}>
+              <button
+                className="btn"
+              >
+                Share Exam
+              </button>
+            </CopyToClipboard>)}
+
+
         </div>
         <div>
           <button
