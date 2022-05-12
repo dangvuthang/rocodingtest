@@ -1,30 +1,15 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import React from 'react';
+import React from "react";
 import useWebcam from "../hooks/useWebcam";
 
-const width = 320;
-let height = 0;
-
 interface FaceIdentityProps {
-  onChange: Dispatch<SetStateAction<boolean>>;
+  onChange: Dispatch<SetStateAction<number>>;
 }
 
-const FaceIdentity: FC<FaceIdentityProps> = ()  => {
+const FaceIdentity: FC<FaceIdentityProps> = ({ onChange }) => {
+  // Hidden video => do not need to set width and height
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const stream = useWebcam();
-
-  useEffect(() => {
-    const video = videoRef.current!;
-    video.addEventListener(
-      "playing",
-      function (ev) {
-        height = video.videoHeight / (video.videoWidth / width);
-        video.setAttribute("width", width.toString());
-        video.setAttribute("height", height.toString());
-      },
-      false
-    );
-  }, []);
 
   useEffect(() => {
     if (stream) {
@@ -36,30 +21,40 @@ const FaceIdentity: FC<FaceIdentityProps> = ()  => {
 
   useEffect(() => {
     const video = videoRef.current!;
-    const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-    Promise.all([p1]).then( async () => {
+    const faceapi = (window as any).faceapi;
+    let id: NodeJS.Timer;
+    const detectFace = async () => {
       try {
-        setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-          if (detections.length > 1) {
-            console.log("False")
-            return false
-          } else if (detections.length == 0 ){
-            console.log("False")
-            return false
-          } else {
-            console.log("True")
-            return true
-          }
-        }, 1000)
+        const detections = await faceapi.detectAllFaces(
+          video,
+          new faceapi.TinyFaceDetectorOptions()
+        );
+        // differentiate between user disappear on the webcam cases and another person appear next to him/her
+        if (detections.length === 1) {
+          onChange(1);
+          console.log("Acceptable");
+        } else if (detections.length === 0) {
+          onChange(0);
+          console.log("No Face");
+        } else if (detections.length > 1) {
+          onChange(2);
+          console.log("TWO MORE FACES");
+        }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
-    })
-  });
+    };
+    if (faceapi) {
+      console.log("RERUN");
+      // save id for later cleanup after component unmount
+      id = setInterval(async () => await detectFace(), 3000);
+    }
+    return () => {
+      // Remove the interval to avoid memory leak
+      return clearInterval(id);
+    };
+  }, [onChange]);
 
-  return <>
-    <video ref={videoRef} width="720" height="560" id="faceIdentity" className="hidden"></video>
-  </>
-}
+  return <video ref={videoRef} className="hidden"></video>;
+};
 export default FaceIdentity;
