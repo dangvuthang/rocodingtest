@@ -15,20 +15,16 @@ export default function Page({
 }: Props): JSX.Element {
   return (
     <PageWrapper title={seoTitle ?? title} maxWidth={maxWidth}>
-      {title ? (
-        <h1 className='mb-2'>
-          {title}
-        </h1>
-      ) : null}
+      {title ? <h1 className="mb-2">{title}</h1> : null}
       {children}
     </PageWrapper>
   );
 }
 
-function PageWrapper({ children, title, maxWidth = "md" }: Props){
-  let titleString = "HACKERMIT";
+function PageWrapper({ children, title, maxWidth = "md" }: Props) {
+  let titleString = "hackermit";
   if (title) {
-    titleString = "HACKERMIT | " + title;
+    titleString = "hackermit | " + title;
   }
   if (maxWidth === false) {
     return (

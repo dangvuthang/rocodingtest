@@ -89,15 +89,6 @@ const ExamCard: React.FC<Property> = ({
         </div>
         <div>
           <button
-            className="btn disabled:cursor-not-allowed disabled:bg-slate-400"
-            onClick={handleMonitor}
-            disabled={!!!isAvailable}
-          >
-            Monitor
-          </button>
-        </div>
-        <div>
-          <button
             onClick={() => {
               handleNoti();
             }}
