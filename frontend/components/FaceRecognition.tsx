@@ -1,159 +1,142 @@
-import { FC, Dispatch, useEffect, useRef, useState, SetStateAction } from "react";
+/* eslint-disable @next/next/no-img-element */
+import {
+  FC,
+  Dispatch,
+  useEffect,
+  useRef,
+  SetStateAction,
+  useState,
+} from "react";
 import useWebcam from "../hooks/useWebcam";
 import React from "react";
-import { useUser } from '../context/UserProvider';
+import { toast } from "react-toastify";
 
 const width = 320;
 let height = 0;
-
 interface FaceRecognitionProps {
-  onChange: Dispatch<SetStateAction<boolean>>;
+  onCompare: Dispatch<SetStateAction<boolean>>;
+  photoUrl: string;
 }
 
-const FaceRecognition: FC<FaceRecognitionProps> = ({ onChange }) => {
+const FaceRecognition: FC<FaceRecognitionProps> = ({ onCompare, photoUrl }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [imageUrl, setImageUrl] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
   const stream = useWebcam();
-  const {user} = useUser();
-  const [photoUrl, setPhotoUrl] = useState<string>("");
-  let similarityScore = 1;
-
-  useEffect(() => {
-    if(user?.photoUrl) {
-      setPhotoUrl(user.photoUrl);
-    }
-  }, [user]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current!;
-    const canvas = canvasRef.current!;
     video.addEventListener(
       "playing",
       function (ev) {
+        // Set width and height to match the img from cloundinary
         height = video.videoHeight / (video.videoWidth / width);
         video.setAttribute("width", width.toString());
         video.setAttribute("height", height.toString());
-        canvas.setAttribute("width", width.toString());
-        canvas.setAttribute("height", height.toString());
       },
       false
     );
   }, []);
 
   useEffect(() => {
-    if (stream) {
-      const video = videoRef.current!;
+    const video = videoRef?.current;
+    if (stream && video) {
       video.srcObject = stream;
       video.play();
     }
   }, [stream]);
 
-  const handleImageTaken = async () => {
-    const video = videoRef.current!;
-    const canvas = canvasRef.current!;
-    const context = canvas.getContext("2d");
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context!.drawImage(video, 0, 0, width, height);
-      const data = canvas.toDataURL("image/png");
-      setImageUrl(data);
-    }
-  };
+  // Convert to <img /> tag without using canvas
+  useEffect(() => {
+    const img = imgRef.current!;
+    img.src = photoUrl;
+    img.crossOrigin = "anonymous";
+  }, [photoUrl]);
 
+  const handleSendImage = async () => {
+    const faceapi = (window as any).faceapi;
+    try {
+      if (photoUrl) {
+        setIsLoading(true);
+        const tyniOptions = new faceapi.TinyFaceDetectorOptions();
+        const useTinyModel = true;
+        const video = videoRef.current;
+        const img = imgRef.current;
 
-  const handleSendImage = () => {
+        // Get from video stream directly
+        const resultsQuery = await faceapi
+          .detectSingleFace(video, tyniOptions)
+          .withFaceLandmarks(useTinyModel)
+          .withFaceDescriptor();
 
-    const loadModel = async () => {
-      const FACEAPI = (window as any).FACEAPI;
-      if(!FACEAPI){
-        try {
-          const p1 = faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-          const p2 =  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
-          const p3 = faceapi.nets.faceRecognitionNet.loadFromUri('/models')
-          await Promise.all([p1,p2, p3]).then(async () => {
-            if(imageUrl){
-              const REFERENCE_IMAGE = user!.photoUrl;
-              const QUERY_IMAGE = imageUrl;
-              const tyniOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.5 })
+        // Get from img tag conversion above
+        const resultsRef = await faceapi
+          .detectSingleFace(img, tyniOptions)
+          .withFaceLandmarks(useTinyModel)
+          .withFaceDescriptor();
 
-              const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
-              const queryImage = await canvas.loadImage(QUERY_IMAGE)
-
-              referenceImage.setAttribute('crossOrigin', 'anonymous')
-              queryImage.setAttribute('crossOrigin', 'anonymous')
-
-              const resultsQuery = await faceapi.detectSingleFace(queryImage, tyniOptions).withFaceLandmarks().withFaceDescriptor()
-
-              const resultsRef = await faceapi.detectSingleFace(referenceImage, tyniOptions).withFaceLandmarks().withFaceDescriptor()
-
-              const faceMatcher = new faceapi.FaceMatcher(resultsRef)
-
-              if (faceMatcher & resultsQuery & resultsRef) {
-                const bestMatch = faceMatcher.findBestMatch(resultsQuery.descriptor)
-                similarityScore = bestMatch._distance
-                if (similarityScore < 0.4){
-                  onChange(true)
-                  console.log("Similarity")
-                } else {
-                  onChange(false)
-                  console.log("Not Similarity")
-                }
-              } else {
-                onChange(false)
-                console.log("Cannot compare the image, please try again")
-              }
-            }
-          })
-        } catch (error) {
-          console.error(error);
+        const faceMatcher = new faceapi.FaceMatcher(resultsRef);
+        if (faceMatcher && resultsQuery && resultsRef) {
+          const bestMatch = faceMatcher.findBestMatch(resultsQuery.descriptor);
+          const similarityScore = bestMatch._distance;
+          console.log(similarityScore);
+          if (similarityScore < 0.4) {
+            toast.success("Same person", {
+              autoClose: 500,
+              hideProgressBar: true,
+              onClose: () => onCompare(true),
+            });
+          } else {
+            setIsLoading(false);
+            toast.warn(
+              "Not the same person... Please try again if you think there is some error"
+            );
+          }
+        } else {
+          setIsLoading(false);
+          toast.info("Cannot compare the image, please try again");
         }
       }
+    } catch (error) {
+      console.error(error);
     }
-    loadModel();
   };
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col max-w-xs">
-          <h3 className="text-xl font-bold text-center">Face photo taken</h3>
-          <p className="text-xs text-gray-500 mt-2">
-            Please allow webcam to continue and take the image of your face to
-            finish the registration process
-          </p>
-        </div>
-        <div className="relative">
-          <video id="video" ref={videoRef} className="shadow-md mt-2">
-            Video stream not available.
-          </video>
-          <div className="absolute flex items-center justify-center bottom-1 w-full">
-            <button
-              onClick={handleImageTaken}
-              className="text-white bg-blue-500 text-sm px-2 py-0.5 hover:bg-blue-600"
-            >
-              Take photo
-            </button>
-          </div>
-        </div>
-        <div className="relative shadow-lg mt-5">
-          <canvas ref={canvasRef}>
-            <img src={imageUrl} alt="Image Taken" />
-          </canvas>
-          <div className="absolute top-0 left-0 text-sm text-white bg-indigo-500 px-2">
-            Preview
-          </div>
-        </div>
-        <button
-          className="px-7 py-1 mt-5 bg-indigo-500 text-sm text-white rounded-md hover:bg-indigo-600 disabled:bg-gray-400"
-          onClick={handleSendImage}
-          disabled={!!!imageUrl || isLoading}
-        >
-          {isLoading ? "Processing..." : "Done"}
-        </button>
+    <div className="container mx-auto flex flex-col items-center justify-center mt-2">
+      <h3 className="text-xl tracking-wide font-bold">
+        Comparing Faces before proceed
+      </h3>
+      <p className="text-sm text-gray-400 max-w-xs text-center">
+        We need to ensure that you are the same person that register the account
+      </p>
+      <div className="relative overflow-hidden mt-3">
+        <p className="text-sm absolute right-0 bg-indigo-500 text-white px-2 py-1 rounded-sm">
+          Webcam
+        </p>
+        <video id="video" ref={videoRef} className="mb-3">
+          Video stream not available.
+        </video>
       </div>
+      <div className="relative overflow-hidden mt-3">
+        <p className="text-sm absolute right-0 bg-indigo-500 text-white px-2 py-1 rounded-sm">
+          Photo in Database
+        </p>
+        <img
+          ref={imgRef}
+          alt="User face saved in db"
+          className={`${photoUrl ? "block" : "hidden"}`}
+        />
+      </div>
+      <button
+        onClick={handleSendImage}
+        className="px-3 py-1 bg-blue-500 rounded-sm text-white mt-3
+          disabled:bg-gray-400 disabled:text-white
+        "
+        disabled={isLoading}
+      >
+        {isLoading ? "Checking..." : "Compare"}
+      </button>
     </div>
   );
 };
