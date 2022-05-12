@@ -3,7 +3,6 @@ import { IPublicClientApplication } from "@azure/msal-browser";
 import { loginRequest } from "../../src/authConfig";
 import { postRequest } from "../../util/axiosInstance";
 import Router from "next/router";
-import { LoginIcon } from "@heroicons/react/outline";
 import { toast } from "react-toastify";
 import { User, useUser } from "../../context/UserProvider";
 
