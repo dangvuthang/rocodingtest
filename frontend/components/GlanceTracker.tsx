@@ -73,6 +73,7 @@ const GlanceTracker: FC<GlanceTrackerProps> = ({ onChange }) => {
       JEELIZGLANCETRACKER?.destroy();
     };
   }, [onChange]);
+  
 
   return (
     <canvas

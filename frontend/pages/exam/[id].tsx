@@ -10,6 +10,7 @@ import Router from "next/router";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { useUser } from "../../context/UserProvider";
+import FaceRecognition from "../../components/FaceRecognition";
 import LoadingSpinner from "../../components/LoadingSpinner";
 dayjs.extend(isBetween);
 const LoadScript = dynamic(() => import("../../components/LoadScript"), {
@@ -39,6 +40,7 @@ const Exam = () => {
   const [permission, setPermission] = useState(false);
   const [done, setDone] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
+  const [isSameFace, setIsSameFace] = useState(false);
 
   useEffect(() => {
     count.current++;
@@ -119,7 +121,15 @@ const Exam = () => {
       </div>
     );
   }
-  if (stream && user && test && permission && !done && isRunning) {
+  if (
+    stream &&
+    user &&
+    test &&
+    permission &&
+    !done &&
+    isRunning &&
+    isSameFace
+  ) {
     return <ExamContent test={test} onDone={handleOnDone} />;
   } else if (done) {
     return (
@@ -145,6 +155,8 @@ const Exam = () => {
         The exam is not available at the moment or has already finished...
       </div>
     );
+  } else if (permission && isRunning && user && !isSameFace) {
+    return <FaceRecognition onCompare={setIsSameFace} photoUrl={photoUrl!} />;
   } else {
     return (
       <div className="h-screen flex flex-col justify-center items-center text-lg">

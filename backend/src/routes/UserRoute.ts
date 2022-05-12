@@ -14,7 +14,7 @@ const route = express.Router();
 route.post("/register", checkMicrosoftLogin, checkAccountInDb, register);
 route.get("/me", checkMicrosoftLogin, checkAccountInDb, getMe);
 route.get("/:userId/tests", getTestsByTeacherId);
-route.use(checkMicrosoftLogin, checkAccountInDb, checkIfTeacher);
+route.use(checkMicrosoftLogin, checkAccountInDb);
 route.post("/send", sendEmail);
 
 export default route;

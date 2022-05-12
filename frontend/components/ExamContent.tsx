@@ -18,6 +18,7 @@ import LoadingModal from "./LoadingModal";
 import useTwilioConversation from "../hooks/useTwilioConversation";
 import { useMsal } from "@azure/msal-react";
 import { toast } from "react-toastify";
+import FaceIdentity from "./FaceIdentity";
 
 interface ExamContentProps {
   test: Test;
@@ -47,6 +48,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   const { sendMessage, conversation } = useTwilioConversation(
     test.conversationSid
   );
+  const [numberOfFaces, setNumberOfFaces] = useState(1);
 
   const handleStartExam = async () => {
     setShowInstruction(false);
@@ -211,6 +213,31 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
     }
   }, [isWatching, showInstruction, sendMessage, user.username]);
 
+  // Detect number of faces
+  useEffect(() => {
+    if (showInstruction) return;
+    if (numberOfFaces === 0 || numberOfFaces === 2) {
+      if (!showAlertMessage && !isDone) {
+        setAlertMessage(
+          `${
+            numberOfFaces === 0
+              ? "you do not appear on the webcam"
+              : "someone is next to you"
+          }`
+        );
+        setShowAlertMessage(true);
+        setRemainingTime((time) => time - 1);
+        sendMessage(
+          `${user.username} ${
+            numberOfFaces === 0
+              ? "does not appear on the webcam"
+              : "haas someone next to him/her"
+          }`
+        );
+      }
+    }
+  }, [numberOfFaces, showInstruction, sendMessage, user.username]);
+
   useEffect(() => {
     if (remainingTime === 0 && showAlertMessage === false) {
       handleSubmitCode();
@@ -219,7 +246,8 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
 
   return (
     <>
-      <GlanceTracker onChange={setIsWatching} />
+      <FaceIdentity onChange={setNumberOfFaces} />
+      {/* <GlanceTracker onChange={setIsWatching} /> */}
       <LoadingModal open={loading} />
       <InstructionModal
         open={showInstruction}
