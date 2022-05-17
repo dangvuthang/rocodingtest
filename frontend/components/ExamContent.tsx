@@ -37,7 +37,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   const [showSubmissionConfirm, setShowSubmissionConfirm] = useState(false);
   const [recordId, setRecordId] = useState("");
   const [loading, setLoading] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(3);
+  const [remainingTime, setRemainingTime] = useState(6);
   const [alertMessage, setAlertMessage] = useState("");
   const [isWatching, setIsWatching] = useState(true);
   const [isDone, setIsDone] = useState(false);
