@@ -130,7 +130,10 @@ const ExamCard: React.FC<Property> = ({
                 toast.success("Copied exam link to clipboard", {
                   position: toast.POSITION.TOP_RIGHT,
                   icon: "🔥",
-                  onOpen: () => setCopy(!copy),
+                  onOpen: () => setCopy(true),
+                  onClose: () => setCopy(false),
+                  autoClose: 1000,
+                  hideProgressBar: true,
                 })
               }
             >

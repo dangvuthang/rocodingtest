@@ -247,7 +247,7 @@ const ExamContent: FC<ExamContentProps> = ({ test, onDone }) => {
   return (
     <>
       <FaceIdentity onChange={setNumberOfFaces} />
-      {/* <GlanceTracker onChange={setIsWatching} /> */}
+      <GlanceTracker onChange={setIsWatching} />
       <LoadingModal open={loading} />
       <InstructionModal
         open={showInstruction}
