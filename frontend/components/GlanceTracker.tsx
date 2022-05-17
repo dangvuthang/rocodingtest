@@ -57,7 +57,7 @@ const GlanceTracker: FC<GlanceTrackerProps> = ({ onChange }) => {
           //   if he slightly turns his head,
           // * if 1, not very sensitive: the user has to turn the head a lot
           //   to loose the detection.
-          sensibility: 0.5,
+          sensibility: 1,
 
           // FACULTATIVE (default: current directory)
           // should be given without the NNC.json
@@ -73,7 +73,6 @@ const GlanceTracker: FC<GlanceTrackerProps> = ({ onChange }) => {
       JEELIZGLANCETRACKER?.destroy();
     };
   }, [onChange]);
-  
 
   return (
     <canvas
